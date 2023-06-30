@@ -17,7 +17,7 @@ model Renamedclass {
   type                                                 Int?
   shift                                                Int?
   uc                                                   uc?             @relation(fields: [uc_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student_class                                        student_class[] @ignore
+  student_class                                        student_class[]
   Renamedswitch_Renamedswitch_by_classToRenamedclass   Renamedswitch[] @relation("Renamedswitch_by_classToRenamedclass")
   Renamedswitch_Renamedswitch_with_classToRenamedclass Renamedswitch[] @relation("Renamedswitch_with_classToRenamedclass")
 
@@ -32,19 +32,18 @@ model student {
   email                                        String?         @db.VarChar(100)
   password                                     String?         @db.VarChar(100)
   is_admin                                     Boolean?
-  student_class                                student_class[] @ignore
+  student_class                                student_class[]
   Renamedswitch_Renamedswitch_by_idTostudent   Renamedswitch[] @relation("Renamedswitch_by_idTostudent")
   Renamedswitch_Renamedswitch_with_idTostudent Renamedswitch[] @relation("Renamedswitch_with_idTostudent")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model student_class {
+  id           Int           @id
   student_id   Int?
   class_id     Int?
   Renamedclass Renamedclass? @relation(fields: [class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   student      student?      @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@ignore
 }
 
 /// This model has been renamed to 'Renamedswitch' during introspection, because the original name 'switch' is reserved.
