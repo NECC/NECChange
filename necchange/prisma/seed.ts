@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient } from '@prisma/client'
 import schedule from '../public/data/input/schedule.json'
+import alocation from '../public/data/input/alocation.json'
 
 const prisma = new PrismaClient()
 
@@ -41,17 +42,8 @@ type_class['T'] = 1;
 type_class['TP'] = 2;
 type_class['PL'] = 3;
 
+let classes: { id: number;uc_id: number;weekday: number; start_time: string; end_time: string; local: string; type: number; shift: number; }[] = [];
 function populate_classes(){
-  let classes: { 
-    id: number;
-    uc_id: number;
-    weekday: number; 
-    start_time: string; 
-    end_time: string; 
-    local: string; 
-    type: number; 
-    shift: number; 
-  }[] = [];
   let i = 1;
 
   schedule.map((class_schedule) =>{
@@ -74,23 +66,58 @@ function populate_classes(){
   return classes
 }
 
+function populate_students(){
+    let i = 1;
+    let j = 1;
+    let students: {
+      id: number; number: string; firstname: string; lastname: string; email: string;
+      //password: null
+      is_admin: boolean;
+    }[] = [];
+
+    Object.keys(alocation).map((student_nr) =>{
+        let student = {
+          id: i,
+          number: student_nr,
+          firstname: "John",
+          lastname: "Doe",
+          email: student_nr + "@alunos.uminho.pt",
+          //password: null
+          is_admin: false
+        }
+        students.push(student);
+        i++;
+    })
+
+    return students;
+}
+
+
+
 async function main() {
   
-  let ucs: Prisma.ucCreateInput[] = populate_ucs();
-  let classes = populate_classes();
+    let ucs: Prisma.ucCreateInput[] = populate_ucs();
+    let classes = populate_classes();
+    let students = populate_students();
 
-  classes.map(async (class_add) =>{
-    await prisma.renamedclass.create({
-      data: class_add
+    /*
+    classes.map(async (class_add) =>{
+      await prisma.renamedclass.create({
+        data: class_add
+      })
+    });
+
+    ucs.map(async (uc) => {
+      await prisma.uc.create({
+        data: uc
+      })
+    });
+    */
+    students.map( async (student) => {
+      await prisma.student.create({
+        data: student
+      })
     })
-  })
-  
-  
-  ucs.map(async (uc) => {
-    await prisma.uc.create({
-      data: uc
-    })
-  })
   
    
 }

@@ -13,7 +13,7 @@ model Renamedclass {
   uc_id                                                Int?
   weekday                                              Int?
   start_time                                           String          @db.VarChar(10)
-  end_time                                           String          @db.VarChar(10)
+  end_time                                             String          @db.VarChar(10)
   local                                                String?         @db.VarChar(100)
   type                                                 Int?
   shift                                                Int?
@@ -27,7 +27,7 @@ model Renamedclass {
 
 model student {
   id                                           Int             @id
-  number                                       Int?
+  number                                       String?         @db.VarChar(20) @unique
   firstname                                    String?         @db.VarChar(100)
   lastname                                     String?         @db.VarChar(100)
   email                                        String?         @db.VarChar(100)
@@ -49,20 +49,20 @@ model student_class {
 
 /// This model has been renamed to 'Renamedswitch' during introspection, because the original name 'switch' is reserved.
 model Renamedswitch {
-  id                                                  Int           @id
+  id                                                  Int              @id
   by_id                                               Int?
   by_class                                            Int?
   with_id                                             Int?
   with_class                                          Int?
   status                                              Int?
-  start_date                                          DateTime?     @db.Date
-  start_time                                          DateTime?     @db.Time(6)
-  end_date                                            DateTime?     @db.Date
-  end_time                                            DateTime?     @db.Time(6)
-  Renamedclass_Renamedswitch_by_classToRenamedclass   Renamedclass? @relation("Renamedswitch_by_classToRenamedclass", fields: [by_class], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student_Renamedswitch_by_idTostudent                student?      @relation("Renamedswitch_by_idTostudent", fields: [by_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  Renamedclass_Renamedswitch_with_classToRenamedclass Renamedclass? @relation("Renamedswitch_with_classToRenamedclass", fields: [with_class], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student_Renamedswitch_with_idTostudent              student?      @relation("Renamedswitch_with_idTostudent", fields: [with_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  start_date                                          String?          @db.VarChar(10)
+  start_time                                          String?          @db.VarChar(10)
+  end_date                                            String?          @db.VarChar(10)
+  end_time                                            String?          @db.VarChar(10)
+  Renamedclass_Renamedswitch_by_classToRenamedclass   Renamedclass?    @relation("Renamedswitch_by_classToRenamedclass", fields: [by_class], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  student_Renamedswitch_by_idTostudent                student?         @relation("Renamedswitch_by_idTostudent", fields: [by_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Renamedclass_Renamedswitch_with_classToRenamedclass Renamedclass?    @relation("Renamedswitch_with_classToRenamedclass", fields: [with_class], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  student_Renamedswitch_with_idTostudent              student?         @relation("Renamedswitch_with_idTostudent", fields: [with_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("switch")
 }
