@@ -12,7 +12,8 @@ model Renamedclass {
   id                                                   Int             @id
   uc_id                                                Int?
   weekday                                              Int?
-  start_time                                           DateTime?       @db.Time(6)
+  start_time                                           String          @db.VarChar(10)
+  end_time                                           String          @db.VarChar(10)
   local                                                String?         @db.VarChar(100)
   type                                                 Int?
   shift                                                Int?
