@@ -1,10 +1,17 @@
-import Image from 'next/image'
+import StudentSchedule from '../components/trades/schedule/StudentSchedule'
 
-export default function StudentSchedule() {
-
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      This is a page created to display the Student Schedule
-    </main>
-  )
+export default function Home() {
+    return (
+        <div className='bg-white h-screen'>
+            <div className='flex justify-center p-8'>
+                Aqui vai ficar a Navbar
+            </div>
+            <div className='ml-auto mr-auto pl-32 pr-32'>
+                <StudentSchedule student_nr={'A94447'}/>
+            </div>
+        </div>
+        
+    )
+    
+  
 }
