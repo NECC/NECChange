@@ -5,6 +5,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import './calendar.styles.css';
 
 export default function StudentSchedule({student_nr}) {
     const minDate = new Date();
@@ -16,20 +17,57 @@ export default function StudentSchedule({student_nr}) {
     return (
         <FullCalendar
             plugins={[ dayGridPlugin , timeGridPlugin, interactionPlugin]}
+            customButtons={{
+                openTrades: {
+                    text: "Trocas de turnos",
+                    click: () => {
+                        alert("button clicked")
+                    },
+                }
+            }}
+
             initialView={"timeGridWeek"}
             weekends={false}
+
             headerToolbar={{
-                start: "today prev,next",
+                start: "today dayGridMonth,timeGridWeek,timeGridDay",
                 center: "title",
-                end: "dayGridMonth, timeGridWeek, timeGridDay",
+                end: "openTrades",
             }}
+            footerToolbar={{
+                center: "prev next"
+            }}
+            
+
+            titleRangeSeparator='/' // Jul 1/9
+
+            buttonText={{ // Capitalize button text
+                today: "Today",
+                month: "Month",
+                day: "Day",
+                week: "Week",
+            }}
+
+            nowIndicator={true} // Implement the red row indicating the hour
+
             slotMinTime="08:00:00" // Set the minimum time to 8am
-            slotMaxTime="20:00:00" // Set the maximum time to 8pm      
+            slotMaxTime="20:00:00" // Set the maximum time to 8pm   
+
+            slotLabelFormat={{ // Hour Format
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+
+            }}   
+
+            height={'80vh'}
+
             events={[
                 { 
                     title: 'Lançamento NECChange', 
                     start: '2023-07-03T09:00',
-                    end: '2023-07-03T11:00'
+                    end: '2023-07-03T11:00',
+                    //display: 'background',
                 },
                 { 
                     title: 'Começo das Aulas', 
@@ -37,7 +75,7 @@ export default function StudentSchedule({student_nr}) {
                     end: '2023-07-05T17:00'
                 }
             ]}
-            height={'80vh'}
+            
             
         />
     )

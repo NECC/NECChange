@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@300;400&display=swap');
+
+.fc-direction-ltr .fc-button-group > .fc-button:hover {
+    color: black;
+}
+
+.fc .fc-button:hover:not(:disabled):not(:active) {
+    color: black;
+}
+
+.fc-direction-ltr .fc-button-group > .fc-button-active {
+    color: black !important;
+    cursor: default;
+}
+
+.fc .fc-col-header-cell-cushion {
+    padding: 4px;
+    font-size: 1.1em;
+    font-weight: normal;
+}
+
+.fc-col-header-cell {
+    color: white;
+    background-color: #000405de;
+    font-family: 'Saira Condensed', sans-serif;
+}
+
+.fc-timegrid-axis-frame {
+    color: white;
+    font-family: "Saira Condensed", sans-serif;
+}
+
+.fc-timegrid-axis {
+    background-color: #000405de;
+}
+
+.fc-timegrid-slot-label-frame {
+    color: white;
+    font-family: "Saira Condensed";
+    font-size: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fc .fc-timegrid-slot-minor {
+    border-top-style: solid;
+}

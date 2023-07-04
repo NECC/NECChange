@@ -10,8 +10,5 @@ export default function Home() {
                 <StudentSchedule student_nr={'A94447'}/>
             </div>
         </div>
-        
     )
-    
-  
 }
