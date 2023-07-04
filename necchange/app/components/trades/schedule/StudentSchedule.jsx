@@ -26,17 +26,20 @@ export default function StudentSchedule({student_nr}) {
                 }
             }}
 
+            allDaySlot={false}
+
             initialView={"timeGridWeek"}
             weekends={false}
 
             headerToolbar={{
-                start: "today dayGridMonth,timeGridWeek,timeGridDay",
-                center: "title",
+                start: "today timeGridWeek",
+                center: "prev next",
                 end: "openTrades",
             }}
-            footerToolbar={{
-                center: "prev next"
-            }}
+            //footerToolbar={{
+            //    center: "prev next"
+            //}}
+            // start: "today dayGridMonth,timeGridWeek,timeGridDay",
             
 
             titleRangeSeparator='/' // Jul 1/9

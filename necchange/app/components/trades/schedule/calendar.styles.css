@@ -1,48 +1,75 @@
-@import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap');
 
-.fc-direction-ltr .fc-button-group > .fc-button:hover {
-    color: black;
-}
-
+/* header btn hover */
 .fc .fc-button:hover:not(:disabled):not(:active) {
     color: black;
+    background-color: white;
 }
 
+/* header btn active */
 .fc-direction-ltr .fc-button-group > .fc-button-active {
     color: black !important;
     cursor: default;
 }
 
+/* Header text */
 .fc .fc-col-header-cell-cushion {
     padding: 4px;
-    font-size: 1.1em;
+    font-size: 1.5em;
     font-weight: normal;
 }
 
+/* Header */
 .fc-col-header-cell {
     color: white;
-    background-color: #000405de;
-    font-family: 'Saira Condensed', sans-serif;
+    background-color: var(--outline-color);
+    font-family: 'Montserrat', sans-serif;
 }
 
+/* all day */
 .fc-timegrid-axis-frame {
     color: white;
-    font-family: "Saira Condensed", sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
+/* Left grid bg color*/
 .fc-timegrid-axis {
-    background-color: #000405de;
+    background-color: var(--outline-color);
 }
 
+/* hours */
 .fc-timegrid-slot-label-frame {
     color: white;
-    font-family: "Saira Condensed";
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    padding: 5px;
+
     font-size: 1em;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+
+/* 30min border */
 .fc .fc-timegrid-slot-minor {
-    border-top-style: solid;
+    padding: 5px;
+    border-top-style: dashed;
+    border-bottom: 1px solid;
+    border-color: rgb(123, 131, 250);
+}
+
+thead {
+    background-color: var(--outline-color);
+    padding-top: -10px;
+}
+
+.fc .fc-scroller::-webkit-scrollbar {
+    display: none;
+    width: 20px;
+}
+
+.fc .fc-scroller::-webkit-scrollbar-thumb {
+    background-color: var(--outline-color);
+    border-radius: 10px;
 }
