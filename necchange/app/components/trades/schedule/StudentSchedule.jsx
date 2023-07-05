@@ -1,4 +1,5 @@
-'use client'
+"use client";
+
 
 import React from 'react'
 import useWindowSize from '@rooks/use-window-size'
@@ -14,8 +15,8 @@ export default function StudentSchedule({student_nr, handleTradesPopUp}) {
     const minDate = new Date();
     minDate.setHours(8,0,0);
 
-    const maxDate = new Date();
-    maxDate.setHours(20,0,0);
+  const maxDate = new Date();
+  maxDate.setHours(20, 0, 0);
 
 
     return (
