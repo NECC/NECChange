@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Oswald:wght@400;500&display=swap');
 
 /* header btn hover */
-.fc .fc-button:hover:not(:disabled):not(:active) {
-    color: black;
-    background-color: white;
+
+
+.fc .fc-button {
+    @apply text-white font-semibold bg-blue-500 hover:bg-blue-600 border-0;
 }
 
 /* header btn active */
@@ -14,53 +15,37 @@
 
 /* Header text */
 .fc .fc-col-header-cell-cushion {
-    padding: 4px;
-    font-size: 1.5em;
-    font-weight: bold;
+    @apply text-2xl font-semibold p-2;
 }
 
 /* Header */
 .fc-col-header-cell {
-    color: white;
-    background-color: var(--outline-color);
-    font-family: 'Montserrat', sans-serif;
+    @apply bg-gray-900 text-white;
 }
 
 /* all day */
 .fc-timegrid-axis-frame {
-    color: white;
-    font-family: 'Montserrat', sans-serif;
+    @apply text-white;
 }
 
 /* Left grid bg color*/
 .fc-timegrid-axis {
-    background-color: var(--outline-color);
+    @apply bg-gray-900 text-white;
 }
 
 /* hours */
 .fc-timegrid-slot-label-frame {
-    color: white;
-    font-family: "Montserrat", sans-serif;
-    font-weight: 600;
-    padding: 5px;
-
-    font-size: 1em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @apply py-2;
 }
 
 /* 30min border */
 .fc .fc-timegrid-slot-minor {
-    padding: 5px;
-    border-top-style: dashed;
-    border-bottom: 1px solid;
-    border-color: rgb(88, 87, 94);
+    @apply border-gray-700 border-dashed py-2;
 }
 
 thead {
-    background-color: var(--outline-color);
-    padding-top: -10px;
+    /* background-color: var(--outline-color);
+    padding-top: -10px; */
 }
 
 .fc .fc-scroller::-webkit-scrollbar {
@@ -75,36 +60,33 @@ thead {
 }
 
 .fc .fc-toolbar-title {
-    display: none;
+    @apply hidden;
 }
 
 .fc-timegrid-event .fc-event-time {
-    font-size: 1em;
-    font-weight: bold;
-    padding-left: 10px;
-    padding-top: 5px;
+    @apply text-base pt-1 px-2;
 }
 
 .fc-v-event .fc-event-title {
-    padding-left: 10px;
-    font-size: 1.6em;
-    font-family: 'Oswald', sans-serif;
-    font-weight: normal;
+    @apply text-xl px-2;
 }
 
 .fc .fc-scroller-liquid-absolute {
-    background-color: rgba(255, 255, 255, 0.671);
+    @apply bg-white;
 }
 
 .fc .fc-view-harness {
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.473);
-    border: 1px solid black;
+    @apply shadow-md;
+}
 
+.fc-timegrid-col-events {
+    @apply w-full;
+}
+
+.fc-direction-ltr .fc-timegrid-col-events {
+    @apply ml-0;
 }
 
 .fc-timegrid-event-harness-inset .fc-timegrid-event, .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
-    border-radius: 0;
-    font-family: 'Oswald', sans-serif;
-    font-weight: normal;
-    box-shadow: 0px 0px 10px rgba(73, 70, 150, 0.507);
+    @apply rounded-none shadow-none;
 }
