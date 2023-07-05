@@ -10,16 +10,15 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import './calendar.styles.css';
 
-export default function StudentSchedule({student_nr, handleTradesPopUp}) {
+export default function StudentSchedule({events, handleTradesPopUp}) {
+    
     const {innerWidth, innerHeight} = useWindowSize(); // Get width and height size
 
-
-export default function StudentSchedule({events}) {
     const minDate = new Date();
     minDate.setHours(8,0,0);
 
-  const maxDate = new Date();
-  maxDate.setHours(20, 0, 0);
+    const maxDate = new Date();
+    maxDate.setHours(20, 0, 0);
 
 
     return (
