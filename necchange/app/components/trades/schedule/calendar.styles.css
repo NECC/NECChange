@@ -108,3 +108,19 @@ thead {
     font-weight: normal;
     box-shadow: 0px 0px 10px rgba(73, 70, 150, 0.507);
 }
+
+@media screen and (max-width: 640px) {
+    .fc-v-event .fc-event-title {
+        padding-left: 10px;
+        font-size: 1.2em;
+        font-family: 'Oswald', sans-serif;
+        font-weight: normal;
+    }
+
+    /* Header text */
+    .fc .fc-col-header-cell-cushion {
+        padding: 4px;
+        font-size: 1em;
+        font-weight: bold;
+    }
+}

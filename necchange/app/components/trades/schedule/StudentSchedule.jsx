@@ -1,27 +1,32 @@
 'use client'
 
 import React from 'react'
+import useWindowSize from '@rooks/use-window-size'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import './calendar.styles.css';
 
-export default function StudentSchedule({student_nr}) {
+export default function StudentSchedule({student_nr, handleTradesPopUp}) {
+    const {innerWidth, innerHeight} = useWindowSize(); // Get width and height size
+
     const minDate = new Date();
     minDate.setHours(8,0,0);
 
     const maxDate = new Date();
     maxDate.setHours(20,0,0);
 
+
     return (
         <FullCalendar
             plugins={[ dayGridPlugin , timeGridPlugin, interactionPlugin]}
+
             customButtons={{
                 openTrades: {
                     text: "Trocas de turnos",
                     click: () => {
-                        alert("button clicked")
+                        handleTradesPopUp()
                     },
                 }
             }}
@@ -41,8 +46,7 @@ export default function StudentSchedule({student_nr}) {
             // start: "today dayGridMonth,timeGridWeek,timeGridDay",
             
             dayHeaderFormat={{
-                weekday: 'long',
-                
+                weekday: innerWidth < 1100 ? 'short' : 'long', 
             }}
 
             titleRangeSeparator='/' // Jul 1/9
