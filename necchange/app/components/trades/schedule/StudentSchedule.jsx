@@ -33,11 +33,12 @@ export default function StudentSchedule({student_nr, handleTradesPopUp}) {
 
             allDaySlot={false}
 
-            initialView={"timeGridWeek"}
+            initialView={innerWidth < 640 ? "timeGridDay" : "timeGridWeek"}
             weekends={false}
             
 
             headerToolbar={{
+                start: innerWidth < 640 ? "prev next" : "",
                 end: "openTrades",
             }}
             //footerToolbar={{
