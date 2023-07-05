@@ -1,4 +1,9 @@
+'use client'
+
 import StudentSchedule from '../components/trades/schedule/StudentSchedule'
+import PopUp from '../components/trades/popUp/PopUp'
+import Image from 'next/image'
+import { useState } from 'react'
 
 import axios from 'axios'
 
@@ -22,7 +27,7 @@ export default async function Home() {
             <div className='ml-auto mr-auto pl-32 pr-32'>
                 <StudentSchedule events={classes}/>
             </div>
+            <PopUp handleTradesPopUp={handleTradesPopUp} isTradesOpened={isTradesOpened}/>
         </div>
-        
     ) 
 }
