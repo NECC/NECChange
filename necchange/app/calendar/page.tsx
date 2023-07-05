@@ -8,6 +8,7 @@ import googleCalendarPlugin from "@fullcalendar/google-calendar";
 import axios from "axios";
 import { use } from "react";
 import { useEffect, useState } from "react";
+import Sidebar from './sidebar';
 
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
@@ -15,8 +16,8 @@ export default function CalendarPage() {
     axios.get("api/getCalendar").then((res) => setEvents(res.data.response));
   }, []);
   return (
-    <main className="max-h-screen">
-      <div className="p-14 overflow-y-scroll max-h-[60%] calendar-container">
+    <Sidebar>
+      <div className="p-14 overflow-y-scroll calendar-container">
         <FullCalendar
           plugins={[dayGridPlugin, googleCalendarPlugin]}
           headerToolbar={{
@@ -30,6 +31,6 @@ export default function CalendarPage() {
           height="80vh"
         />
       </div>
-    </main>
+    </Sidebar>
   );
 }
