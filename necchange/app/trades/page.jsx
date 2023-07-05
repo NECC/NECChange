@@ -5,17 +5,29 @@ import PopUp from '../components/trades/popUp/PopUp'
 import Image from 'next/image'
 import { useState } from 'react'
 
-export default function Home() {
-    const [isTradesOpened, setIsTradesOpened] = useState(false);
+import axios from 'axios'
 
-    const handleTradesPopUp = () => setIsTradesOpened(!isTradesOpened);
+export default async function Home() {
+    const student_nr = 'A92898'
+
+    const getEvents = async () => {
+        // depois alterar este path
+        let classes = await axios.get(`http://localhost:3000/api/trades/student_schedule/${student_nr}`);
+
+        return classes.data.response;
+    } 
+
+    const classes = await getEvents()    
 
     return (
-        <div className='bg-blue-100 h-screen pt-8 overflow-hidden'>
-            <div className='mx-auto w-full pl-4 pr-4 relative lg:pl-32 lg:pr-32 md:pr-16 md:pl-16 sm:pl-8 sm:pr-8'>
-                <StudentSchedule handleTradesPopUp={handleTradesPopUp} student_nr={'A94447'}/>
+        <div className='bg-white h-screen'>
+            <div className='flex justify-center p-8'>
+                Aqui vai ficar a Navbar
+            </div>
+            <div className='ml-auto mr-auto pl-32 pr-32'>
+                <StudentSchedule events={classes}/>
             </div>
             <PopUp handleTradesPopUp={handleTradesPopUp} isTradesOpened={isTradesOpened}/>
         </div>
-    )
+    ) 
 }
