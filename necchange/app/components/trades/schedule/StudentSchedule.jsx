@@ -30,10 +30,9 @@ export default function StudentSchedule({student_nr}) {
 
             initialView={"timeGridWeek"}
             weekends={false}
+            
 
             headerToolbar={{
-                start: "today timeGridWeek",
-                center: "prev next",
                 end: "openTrades",
             }}
             //footerToolbar={{
@@ -41,6 +40,10 @@ export default function StudentSchedule({student_nr}) {
             //}}
             // start: "today dayGridMonth,timeGridWeek,timeGridDay",
             
+            dayHeaderFormat={{
+                weekday: 'long',
+                
+            }}
 
             titleRangeSeparator='/' // Jul 1/9
 
@@ -70,6 +73,42 @@ export default function StudentSchedule({student_nr}) {
                     title: 'Lançamento NECChange', 
                     start: '2023-07-03T09:00',
                     end: '2023-07-03T11:00',
+                    //display: 'background',
+                },
+                { 
+                    title: 'Análise - [TP1]', 
+                    start: '2023-07-03T12:00',
+                    end: '2023-07-03T14:00',
+                    //display: 'background',
+                },
+                { 
+                    title: 'Sistemas de Computação - [PL3]', 
+                    start: '2023-07-06T09:00',
+                    end: '2023-07-06T11:00',
+                    //display: 'background',
+                },
+                { 
+                    title: 'Laboratórios de Algoritmia 1 - [PL4]', 
+                    start: '2023-07-04T10:00',
+                    end: '2023-07-04T12:00',
+                    //display: 'background',
+                },
+                { 
+                    title: 'Matemática Discreta - [TP2]', 
+                    start: '2023-07-07T10:00',
+                    end: '2023-07-07T12:00',
+                    //display: 'background',
+                },
+                { 
+                    title: 'Geometria - [TP2]', 
+                    start: '2023-07-05T09:00',
+                    end: '2023-07-05T12:00',
+                    //display: 'background',
+                },
+                { 
+                    title: 'Programação Imperativa - [T1]', 
+                    start: '2023-07-05T12:00',
+                    end: '2023-07-05T14:00',
                     //display: 'background',
                 },
                 { 
