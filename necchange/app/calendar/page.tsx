@@ -8,7 +8,7 @@ import googleCalendarPlugin from "@fullcalendar/google-calendar";
 import axios from "axios";
 import { use } from "react";
 import { useEffect, useState } from "react";
-import Sidebar from '../components/CalendarSidebar/CalendarSidebar';
+import Sidebar from '../components/calendar/CalendarSidebar';
 
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
