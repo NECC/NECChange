@@ -2,8 +2,8 @@
 
 import StudentSchedule from '../components/trades/schedule/StudentSchedule'
 import PopUp from '../components/trades/popUp/PopUp'
-import { useState, useEffect } from 'react'
 
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 export default function Home() {
@@ -16,7 +16,7 @@ export default function Home() {
     useEffect(() => {
       const getEvents = async () => {
         try {
-          const response = await axios.get(`http://localhost:3000/api/trades/student_schedule/${student_nr}`);
+          const response = await axios.get(`api/trades/student_schedule/${student_nr}`);
           setClasses(response.data.response);
           console.log(classes)
         } catch (error) {
@@ -25,14 +25,11 @@ export default function Home() {
       };
   
       getEvents();
-    }, []); // The empty array [] ensures the effect is only run once, on the initial render
+    }, []); 
     
 
     return (
-      <div className='bg-white h-screen'>
-        <div className='flex justify-center p-8'>
-          Aqui vai ficar a Navbar
-        </div>
+      <div className='bg-white h-screen pt-8'>
         <div className='ml-auto mr-auto pl-32 pr-32'>
           <StudentSchedule events={classes} handleTradesPopUp={handleTradesPopUp} />
         </div>
