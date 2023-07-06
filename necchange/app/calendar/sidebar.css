@@ -2,14 +2,12 @@
     @apply px-2 py-2 border rounded-md font-bold;
 }
 
-.react-checkbox-tree>ol>li.rct-node.rct-node-parent>ol>li.rct-node.rct-node-parent {
-    >ol {
-        @apply border-b pb-3;
-    }
+.react-checkbox-tree>ol>li.rct-node.rct-node-parent>ol>li.rct-node.rct-node-parent>ol {
+    @apply border-b pb-3;
+}
 
-    >.rct-text {
-        @apply pt-3;
-    }
+.react-checkbox-tree>ol>li.rct-node.rct-node-parent>ol>li.rct-node.rct-node-parent>.rct-text {
+    @apply pt-3;
 }
 
 .react-checkbox-tree>ol>li.rct-node.rct-node-parent>span>button {

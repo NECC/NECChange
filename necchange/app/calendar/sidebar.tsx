@@ -3,7 +3,7 @@ import React, { useState, useId } from 'react';
 import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 
-import './sidebar.scss';
+import './sidebar.css';
 
 const nodes = [{
   value: 'testes',
