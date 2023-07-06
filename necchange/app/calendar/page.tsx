@@ -12,9 +12,11 @@ import Sidebar from './sidebar';
 
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
+  
   useEffect(() => {
-    axios.get("api/getCalendar").then((res) => setEvents(res.data.response));
+    axios.get("api/calendar/getCalendar").then((res) => setEvents(res.data.response));
   }, []);
+
   return (
     <Sidebar>
       <div className="p-14 overflow-y-scroll calendar-container">
