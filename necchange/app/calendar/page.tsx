@@ -8,17 +8,22 @@ import googleCalendarPlugin from "@fullcalendar/google-calendar";
 import axios from "axios";
 import { use } from "react";
 import { useEffect, useState } from "react";
-import Sidebar from './sidebar';
+import Sidebar from '../components/CalendarSidebar/CalendarSidebar';
 
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
+  const [ucs, setUcs] = useState([]);
   
   useEffect(() => {
     axios.get("api/calendar/getCalendar").then((res) => setEvents(res.data.response));
   }, []);
 
+  useEffect(() => {
+    axios.get("api/calendar/getUCS").then((res) => setUcs(res.data.response));
+  }, []);
+
   return (
-    <Sidebar>
+    <Sidebar ucs={ucs}>
       <div className="p-14 overflow-y-scroll calendar-container">
         <FullCalendar
           plugins={[dayGridPlugin, googleCalendarPlugin]}

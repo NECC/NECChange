@@ -18,9 +18,13 @@
     @apply mt-5;
 }
 
+.react-checkbox-tree>ol>li.rct-node.rct-node-parent>ol>li.rct-node.rct-node-parent>span>label>span.rct-title {
+    @apply text-sm font-semibold;
+}
+
 .rct-node>.rct-text,
 .rct-node-parent>.rct-text {
-    @apply px-5 py-2;
+    @apply py-2;
 }
 
 .rct-node-icon {
