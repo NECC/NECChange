@@ -61,7 +61,7 @@ export default function Sidebar({
 
   return (
     <>
-      <div className="flex h-screen antialiased text-gray-900 bg-white dark:bg-dark dark:text-light">
+      <div className="flex h-screen-full antialiased text-gray-900 bg-white dark:bg-dark dark:text-light pt-20">
         <aside className="z-10 w-96 border-r dark:border-orange-600 dark:bg-darker focus:outline-none">
           <div className="flex flex-col h-full px-5 py-14">
             <CheckboxTree
