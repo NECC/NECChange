@@ -23,11 +23,6 @@
     @apply bg-gray-900 text-white;
 }
 
-/* all day */
-.fc-timegrid-axis-frame {
-    @apply text-white;
-}
-
 /* Left grid bg color*/
 .fc-timegrid-axis {
     @apply bg-gray-900 text-white;
@@ -35,17 +30,22 @@
 
 /* hours */
 .fc-timegrid-slot-label-frame {
-    @apply py-2;
+    @apply py-2 text-white;
 }
+
+/* Overwritten classes */
+.fc-timegrid-event-harness-inset:not(:first-child) .fc-timegrid-event {
+    @apply border-l-black
+}
+
+.fc-timegrid-event-harness-inset .fc-timegrid-event:not(:first-child) {
+    @apply w-1/2
+}
+
 
 /* 30min border */
 .fc .fc-timegrid-slot-minor {
     @apply border-gray-700 border-dashed py-2;
-}
-
-thead {
-    /* background-color: var(--outline-color);
-    padding-top: -10px; */
 }
 
 .fc .fc-scroller::-webkit-scrollbar {

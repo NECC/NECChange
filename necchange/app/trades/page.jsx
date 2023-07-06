@@ -29,8 +29,8 @@ export default function Home() {
     
 
     return (
-      <div className='bg-white h-screen pt-8'>
-        <div className='ml-auto mr-auto pl-32 pr-32'>
+      <div className='bg-white h-screen pt-24'>
+        <div className='ml-auto mr-auto px-8 md:px-16'>
           <StudentSchedule events={classes} handleTradesPopUp={handleTradesPopUp} />
         </div>
         <PopUp handleTradesPopUp={handleTradesPopUp} isTradesOpened={isTradesOpened} />

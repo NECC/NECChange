@@ -1,5 +1,5 @@
 import "./globals.css";
-import Navbar from "./components/globals/Navbar";
+import Navbar from "./components/globals/navbar/Navbar";
 
 export const metadata = {
   title: "Necchange",
