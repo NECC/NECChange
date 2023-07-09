@@ -1,5 +1,8 @@
 import { Prisma, PrismaClient } from '@prisma/client'
+import { Faker, pt_PT } from '@faker-js/faker';
+
 import schedule from '../public/data/input/schedule.json'
+import ucs from '../public/data/input/ucs.json'
 import * as alocationJson from '../public/data/input/alocation.json';
 
 type AlocationEntry = {
@@ -22,24 +25,21 @@ interface id_uc{
 const ucs_ids: {[id: string]: id_uc} = {}
 
 function populate_ucs(){
-  let ucs: Prisma.ucCreateInput[] = [];
-  let ucs_names: Array<string> = [];
+  let result_ucs: Prisma.ucCreateInput[] = [];
   let i = 1;
-  schedule.map((class_schedule) => {
-    if(!ucs_names.includes(class_schedule.uc)){
-      ucs_names.push(class_schedule.uc);
-      let uc = {
-        id: i,
-        name: class_schedule.uc,
-        year: parseInt(class_schedule.year),
-        semester: parseInt(class_schedule.semester)
-      }
-      ucs.push(uc);
-      ucs_ids[class_schedule.uc] = {id: i};
-      i++;
+  ucs.map((uc) => {
+    let uc_to_add = {
+      id: i,
+      name: uc.uc,
+      year: uc.ano,
+      semester: uc.semestre
     }
+    result_ucs.push(uc_to_add);
+    ucs_ids[uc.uc] = {id: i};
+    i++;
   })
-  return ucs;
+  console.log(result_ucs)
+  return result_ucs;
 } 
 
 const weekdays: Record<string, number> = {};
@@ -88,7 +88,6 @@ function populate_classes(){
 }
 
 
-
 let students: {
   id: number; 
   number: string; 
@@ -100,13 +99,14 @@ let students: {
 }[] = [];
 function populate_students(){
     let i = 1;
+    const portugueseFaker = new Faker({ locale: [pt_PT] });
 
     Object.keys(alocation).map((student_nr) =>{
         let student = {
           id: i,
           number: student_nr,
-          firstname: "John",
-          lastname: "Doe",
+          firstname: portugueseFaker.person.firstName(),
+          lastname: portugueseFaker.person.lastName(),
           email: student_nr + "@alunos.uminho.pt",
           //password: null
           is_admin: false
@@ -175,14 +175,15 @@ async function main() {
     let students = populate_students();
     let students_classes = populate_student_class()
 
-    //nuclear_bomb()
-    
+    await nuclear_bomb()
+
     ucs.map(async (uc) => {
       await prisma.uc.create({
         data: uc
       })
     });
 
+    
     students.map( async (student) => {
       await prisma.student.create({
         data: student
