@@ -1,0 +1,290 @@
+[
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "8501Q5",
+    "uc": "Álgebra Linear CC"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "8501Q6",
+    "uc": "Cálculo"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "8501Q8",
+    "uc": "Programação Funcional"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "8501Q7",
+    "uc": "Tópicos de Matemática"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U004",
+    "uc": "Matemática das Coisas"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U020",
+    "uc": "Educação, Cidadania e Direitos Humanos"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U028",
+    "uc": "Inglês Académico"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U170",
+    "uc": "Cidadania Digital"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U171",
+    "uc": "Sustentabilidade Ambiental, Social e Económica"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U238",
+    "uc": "Literacia Fotográfica da Física à Mensagem"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U239",
+    "uc": "Substâncias que Mudaram o Mundo"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U240",
+    "uc": "Tópicos de Astronomia e Cosmologia"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U253",
+    "uc": "Introdução à Língua e Cultura Russa"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U255",
+    "uc": "Bilinguismo"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U274",
+    "uc": "Democracia Plena, Responsabilidade e Estado de Direito"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U275",
+    "uc": "Direito Laboral"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U278",
+    "uc": "Princípios de Gestão de Inventários"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U79H",
+    "uc": "Matemática das Coisas"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U79I",
+    "uc": "A China no Mundo"
+  },
+  {
+    "ano": 1,
+    "semestre": 1,
+    "código": "85U79J",
+    "uc": "Desporto e Saúde"
+  },
+  {
+    "ano": 1,
+    "semestre": 2,
+    "código": "8502N6",
+    "uc": "Sistemas de Computação"
+  },
+  {
+    "ano": 1,
+    "semestre": 2,
+    "código": "8502T1",
+    "uc": "Análise"
+  },
+  {
+    "ano": 1,
+    "semestre": 2,
+    "código": "8502T2",
+    "uc": "Geometria"
+  },
+  {
+    "ano": 1,
+    "semestre": 2,
+    "código": "8502T3",
+    "uc": "Matemática Discreta"
+  },
+  {
+    "ano": 1,
+    "semestre": 2,
+    "código": "8502T4",
+    "uc": "Programação Imperativa"
+  },
+  {
+    "ano": 1,
+    "semestre": 2,
+    "código": "8502T5",
+    "uc": "Laboratório de Algoritmia I"
+  },
+  {
+    "ano": 2,
+    "semestre": 1,
+    "código": "8503N5",
+    "uc": "Lógica CC"
+  },
+  {
+    "ano": 2,
+    "semestre": 1,
+    "código": "8503O6",
+    "uc": "Álgebra"
+  },
+  {
+    "ano": 2,
+    "semestre": 1,
+    "código": "8503O7",
+    "uc": "Análise Numérica"
+  },
+  {
+    "ano": 2,
+    "semestre": 1,
+    "código": "8503O8",
+    "uc": "Algoritmos e Complexidade"
+  },
+  {
+    "ano": 2,
+    "semestre": 1,
+    "código": "8503O9",
+    "uc": "Sistemas de Comunicações e Redes"
+  },
+  {
+    "ano": 2,
+    "semestre": 2,
+    "código": "8504P1",
+    "uc": "Laboratório de Algoritmia II"
+  },
+  {
+    "ano": 2,
+    "semestre": 2,
+    "código": "8504P2",
+    "uc": "Autómatos e Linguagens Formais"
+  },
+  {
+    "ano": 2,
+    "semestre": 2,
+    "código": "8504P3",
+    "uc": "Cálculo de Programas"
+  },
+  {
+    "ano": 2,
+    "semestre": 2,
+    "código": "8504P4",
+    "uc": "Programação Orientada aos Objetos"
+  },
+  {
+    "ano": 2,
+    "semestre": 2,
+    "código": "8504P5",
+    "uc": "Sistemas Operativos"
+  },
+  {
+    "ano": 2,
+    "semestre": 2,
+    "código": "8504P6",
+    "uc": "Álgebra Universal e Categorias"
+  },
+  {
+    "ano": 3,
+    "semestre": 1,
+    "código": "8505N6",
+    "uc": "Bases de Dados"
+  },
+  {
+    "ano": 3,
+    "semestre": 1,
+    "código": "8505O4",
+    "uc": "Computabilidade e Complexidade"
+  },
+  {
+    "ano": 3,
+    "semestre": 1,
+    "código": "8505O5",
+    "uc": "Lógica Computacional"
+  },
+  {
+    "ano": 3,
+    "semestre": 1,
+    "código": "8505O6",
+    "uc": "Probabilidades e Aplicações"
+  },
+  {
+    "ano": 3,
+    "semestre": 1,
+    "código": "8505O7",
+    "uc": "Processamento de Linguagens e Compiladores"
+  },
+  {
+    "ano": 3,
+    "semestre": 2,
+    "código": "8506N7",
+    "uc": "Computação Gráfica"
+  },
+  {
+    "ano": 3,
+    "semestre": 2,
+    "código": "8506O5",
+    "uc": "Teoria de Números Computacional"
+  },
+  {
+    "ano": 3,
+    "semestre": 2,
+    "código": "8506O6",
+    "uc": "Programação Concorrente"
+  },
+  {
+    "ano": 3,
+    "semestre": 2,
+    "código": "8506O7",
+    "uc": "Interação e Concorrência"
+  },
+  {
+    "ano": 3,
+    "semestre": 2,
+    "código": "8506O8",
+    "uc": "Semântica das Linguagens de Programação"
+  },
+  {
+    "ano": 3,
+    "semestre": 2,
+    "código": "8506O9",
+    "uc": "Projeto"
+  }
+]

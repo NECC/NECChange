@@ -69,7 +69,7 @@ model Renamedswitch {
 
 model uc {
   id           Int            @id
-  name         String?        @db.VarChar(50)
+  name         String?        @db.VarChar(100)
   year         Int?
   semester     Int?
   Renamedclass Renamedclass[]
