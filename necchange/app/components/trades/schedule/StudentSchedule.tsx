@@ -9,9 +9,15 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import './calendar.styles.css';
+import { Classes } from '@/app/trades/page';
 
-export default function StudentSchedule({events, handleTradesPopUp}) {
-    
+interface CalendarProps {
+    events?: Classes[],
+    handleTradesPopUp: () => void,
+}
+
+export default function StudentSchedule(props: CalendarProps) {
+    const {events, handleTradesPopUp} = props
     const {innerWidth, innerHeight} = useWindowSize(); // Get width and height size
 
     const minDate = new Date();
@@ -19,6 +25,8 @@ export default function StudentSchedule({events, handleTradesPopUp}) {
 
     const maxDate = new Date();
     maxDate.setHours(20, 0, 0);
+
+    console.table(events)
 
     return (
         <FullCalendar
@@ -32,10 +40,10 @@ export default function StudentSchedule({events, handleTradesPopUp}) {
             }}
 
             allDaySlot={false}
-            initialView={innerWidth < 640 ? "timeGridDay" : "timeGridWeek"}
+            initialView={innerWidth && innerWidth < 640 ? "timeGridDay" : "timeGridWeek"}
             weekends={false}
             headerToolbar={{
-                start: innerWidth < 640 ? "prev next" : "",
+                start: innerWidth && innerWidth < 640 ? "prev next" : "",
                 end: "openTrades",
             }}
             //footerToolbar={{
@@ -44,7 +52,7 @@ export default function StudentSchedule({events, handleTradesPopUp}) {
             // start: "today dayGridMonth,timeGridWeek,timeGridDay",
             
             dayHeaderFormat={{
-                weekday: innerWidth < 1100 ? 'short' : 'long', 
+                weekday: innerWidth && innerWidth < 1100 ? 'short' : 'long', 
             }}
 
             titleRangeSeparator='/' // Jul 1/9

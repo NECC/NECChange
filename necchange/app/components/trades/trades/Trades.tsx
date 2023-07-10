@@ -1,24 +1,31 @@
 'use client'
 
-import React, { useRef } from "react";
+import React, { MutableRefObject, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { Trade } from "../popUp/PopUp";
 
+interface Trades {
+    shift: Trade,
+    setTrades: (trades: Trade[]) => void,
+    trades: Trade[]
+}
 
-export default function Trade({shift, setTrades, trades}) {
-    const tradeRef = useRef();
+export default function Trades(props: Trades) {
+    const { setTrades,shift,trades } = props
+    const tradeRef = useRef<any>();
 
     const removeTrade = () => {
         const tradeID = tradeRef.current.id;
-        const actualTrades = trades.filter((trade) => trade.tradeID != tradeID);
+        const actualTrades = trades.filter((trade: Trade) => trade.tradeID != tradeID);
         setTrades(actualTrades);
     }
 
 
     return (
-        <div className="group text-center bg-blue-500 p-6 rounded-lg relative mt-2 w-full" id={shift.tradeID} ref={tradeRef} >
+        <div className="group text-center bg-blue-500 p-6 rounded-lg relative mt-2 w-full" id={`${shift.tradeID}`} ref={tradeRef} >
             <div className="text-white text-2xl flex justify-between items-center">
                 <div className="flex-1 truncate text-left font-popUp">{shift.fromUC}</div>
                 <span className="font-popUp font-bold">- {shift.from} </span>
