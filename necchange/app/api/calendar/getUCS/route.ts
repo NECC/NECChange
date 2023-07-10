@@ -5,6 +5,7 @@ export async function GET(req: any, res: any) {
     const prisma = new PrismaClient();
     const ucs = await prisma.uc.findMany({
         select: {
+            id: true,
             name: true,
             year: true,
             semester: true,

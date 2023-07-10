@@ -5,6 +5,7 @@ import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import './CalendarSidebarStyles.css';
 
 export type UC = {
+  id: number,
   name: string,
   year: number,
   semester: number,
@@ -21,16 +22,17 @@ function convertUCStoNodes(ucs: Array<UC>) {
 
   // Group objects by '$year - $semester', and put in CheckboxTree node form {value, label, children: Node[]}, ChatGPT
   const ucs_as_nodes = ucs.reduce((acc: any[], course) => {
-    const { name, year, semester } = course;
+    const { id, name, year, semester } = course;
     const label = `${year} ANO - ${semester} SEMESTRE`;
     const value = `${year}a${semester}s`;
     const formattedName = name.replace(/á/g, 'a').replace(/ç/g, 'c').replace(/\s+/g, ' ');
+    const leafValue = id;
 
     const existingItem = acc.find((item) => item.label === label);
     if (existingItem) {
-      existingItem.children.push({ value: formattedName.toLowerCase().replace(/\s+/g, '_'), label: formattedName });
+      existingItem.children.push({ value: leafValue, label: formattedName });
     } else {
-      acc.push({ value, label, children: [{ value: formattedName.toLowerCase().replace(/\s+/g, '_'), label: formattedName }] });
+      acc.push({ value, label, children: [{ value: leafValue, label: formattedName }] });
     }
 
     return acc;
