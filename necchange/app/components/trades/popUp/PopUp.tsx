@@ -27,10 +27,10 @@ export default function PopUp(props: PopUp) {
 
     const addTrade = () => {
         const newTrade = {
-            from: "TP2",
-            to: "TP1",
-            fromUC: "Default 1", // UC name 
-            toUC: "Default 2", // UC name
+            from: "",
+            to: "",
+            fromUC: "", // UC name 
+            toUC: "", // UC name
             tradeID: tradeNumber,
         }
         setTradeNumber(tradeNumber + 1)
@@ -55,6 +55,7 @@ export default function PopUp(props: PopUp) {
 
                 </div>
             </div>
+            <button className="mx-16 absolute right-16 p-3 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-800 border border-black" type="submit">Submit</button>
             <button onClick={addTrade} className="mx-16 absolute right-0 p-3 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-800 border border-black"><FontAwesomeIcon icon={faPlus} /></button>
 
 

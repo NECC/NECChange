@@ -26,7 +26,7 @@ export default function StudentSchedule(props: CalendarProps) {
     const maxDate = new Date();
     maxDate.setHours(20, 0, 0);
 
-    console.table(events)
+    //console.table(events)
 
     return (
         <FullCalendar
