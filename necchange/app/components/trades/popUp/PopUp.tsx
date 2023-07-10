@@ -1,14 +1,29 @@
 'use client'
 
 import React, { useState } from "react"
-import Trade from '../../../components/trades/trade/Trade'
+import Trades from "../trades/Trades";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+interface PopUp {
+    handleTradesPopUp: () => void,
+    isTradesOpened: boolean,
+}
 
-export default function PopUp({ handleTradesPopUp, isTradesOpened }) {
+export interface Trade {
+    from: string,
+    to: string,
+    fromUC: string,
+    toUC: string,
+    tradeID: number,
+}
+
+export default function PopUp(props: PopUp) {
+    
+    const {handleTradesPopUp, isTradesOpened} = props;
+
     const [tradeNumber, setTradeNumber] = useState(0);
-    const [trades, setTrades] = useState([]);
+    const [trades, setTrades] = useState<Array<Trade>>([]);
 
     const addTrade = () => {
         const newTrade = {
@@ -34,7 +49,7 @@ export default function PopUp({ handleTradesPopUp, isTradesOpened }) {
 
                     {
                         trades.map((trade) => (
-                            <Trade key={trade.tradeID} shift={trade} setTrades={setTrades} trades={trades}/>
+                            <Trades key={trade.tradeID} shift={trade} setTrades={setTrades} trades={trades}/>
                         ))
                     }
 

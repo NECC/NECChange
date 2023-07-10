@@ -6,6 +6,13 @@ import PopUp from '../components/trades/popUp/PopUp'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+export interface Classes {
+  title: string,
+  start: string,
+  end: string,
+}
+
+
 export default function Home() {
     const student_nr = 'A96516';
     const [isTradesOpened, setIsTradesOpened] = useState(false);

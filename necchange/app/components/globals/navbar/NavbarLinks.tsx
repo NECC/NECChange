@@ -1,6 +1,11 @@
 import React from "react";
 
-function NavbarLinks({ containerDinamicClass, isMobile }) {
+interface NavbarLinksProps {
+    containerDinamicClass: string,
+}
+
+function NavbarLinks(props: NavbarLinksProps) {
+    const { containerDinamicClass } = props;
     return (
         <ul className={`text-gray-800 font-semibold sm:flex ${containerDinamicClass}`}>
             <li>
