@@ -20,7 +20,6 @@ export default function StudentSchedule({events, handleTradesPopUp}) {
     const maxDate = new Date();
     maxDate.setHours(20, 0, 0);
 
-
     return (
         <FullCalendar
             plugins={[ dayGridPlugin , timeGridPlugin, interactionPlugin]}
@@ -28,9 +27,7 @@ export default function StudentSchedule({events, handleTradesPopUp}) {
             customButtons={{
                 openTrades: {
                     text: "Trocas de turnos",
-                    click: () => {
-                        handleTradesPopUp()
-                    },
+                    click: () => handleTradesPopUp(),
                 }
             }}
 
