@@ -2,7 +2,7 @@ import React, { useState, useId } from 'react';
 import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 
-import './styles.css';
+import './CalendarSidebarStyles.css';
 
 export type UC = {
   name: string,

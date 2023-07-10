@@ -13,7 +13,7 @@ import Sidebar from '../components/calendar/CalendarSidebar';
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
   const [ucs, setUcs] = useState([]);
-  
+
   useEffect(() => {
     axios.get("api/calendar/getCalendar").then((res) => setEvents(res.data.response));
   }, []);
