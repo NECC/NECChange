@@ -5,7 +5,7 @@ export async function GET(req: any, res: any) {
   const { data } = await axios.get(
     `https://www.googleapis.com/calendar/v3/calendars/${process.env.NEXT_PUBLIC_GOOGLECALENDAR_CALENDAR_ID}/events?key=${process.env.NEXT_PUBLIC_GOOGLECALENDAR_API_KEY}`
   );
-
+  
   const events = data.items.map((event: any) => {
     return {
       title: event.summary,

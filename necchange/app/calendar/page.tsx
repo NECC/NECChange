@@ -16,9 +16,6 @@ export default function CalendarPage() {
 
   useEffect(() => {
     axios.get("api/calendar/getCalendar").then((res) => setEvents(res.data.response));
-  }, []);
-
-  useEffect(() => {
     axios.get("api/calendar/getUCS").then((res) => setUcs(res.data.response));
   }, []);
 
@@ -30,7 +27,7 @@ export default function CalendarPage() {
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth",
+            
           }}
           initialView="dayGridMonth"
           displayEventTime={false}
