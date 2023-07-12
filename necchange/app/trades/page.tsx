@@ -8,6 +8,9 @@ import axios from 'axios'
 
 export interface Classes {
   title: string,
+  uc_name: any
+  shift: number,
+  type: string,
   start: string,
   end: string,
 }
@@ -25,7 +28,6 @@ export default function Home() {
         try {
           const response = await axios.get(`api/trades/student_schedule/${student_nr}`);
           setClasses(response.data.response);
-          console.log(classes)
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -40,7 +42,7 @@ export default function Home() {
         <div className='ml-auto mr-auto px-8 md:px-16'>
           <StudentSchedule events={classes} handleTradesPopUp={handleTradesPopUp} />
         </div>
-        <PopUp handleTradesPopUp={handleTradesPopUp} isTradesOpened={isTradesOpened} />
+        <PopUp handleTradesPopUp={handleTradesPopUp} isTradesOpened={isTradesOpened} classes={classes} student_nr={student_nr}/>
       </div>
     );
 }

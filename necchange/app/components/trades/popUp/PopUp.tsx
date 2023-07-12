@@ -1,41 +1,57 @@
 'use client'
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Trades from "../trades/Trades";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface PopUp {
+    student_nr: string,
     handleTradesPopUp: () => void,
     isTradesOpened: boolean,
+    classes: Array<any>
 }
 
 export interface Trade {
-    from: string,
-    to: string,
-    fromUC: string,
-    toUC: string,
+    fromUC: string,     // UC name             
+    fromType: number,    // UC Type
+    fromShift: number,   // UC Shift
+    toUC: string, 
+    toType: number,
+    toShift: number,
     tradeID: number,
 }
 
 export default function PopUp(props: PopUp) {
     
-    const {handleTradesPopUp, isTradesOpened} = props;
-
+    const {handleTradesPopUp, isTradesOpened, classes, student_nr} = props;
     const [tradeNumber, setTradeNumber] = useState(0);
     const [trades, setTrades] = useState<Array<Trade>>([]);
+    const [ucNames, setUcNames] = useState([""]);
 
     const addTrade = () => {
         const newTrade = {
-            from: "",
-            to: "",
-            fromUC: "", // UC name 
-            toUC: "", // UC name
+            fromUC: "",     // UC name             
+            fromType: 0,    // UC Type
+            fromShift: 0,   // UC Shift
+            toUC: "", 
+            toType: 0,
+            toShift: 0,
             tradeID: tradeNumber,
         }
         setTradeNumber(tradeNumber + 1)
         setTrades([...trades, newTrade]);
     }
+
+    useEffect(() =>{
+        const getUcNames = () => {
+            const uc_names = classes.map((uc_class) => uc_class.uc_name);
+            // remove repeated ucs
+            return Array.from(new Set(uc_names));
+        }
+        const ucNames = getUcNames();
+        setUcNames(ucNames)
+    }, [classes])
 
     //console.table(trades)
 
@@ -49,7 +65,7 @@ export default function PopUp(props: PopUp) {
 
                     {
                         trades.map((trade) => (
-                            <Trades key={trade.tradeID} shift={trade} setTrades={setTrades} trades={trades}/>
+                            <Trades key={trade.tradeID} trade={trade} trades={trades} setTrades={setTrades} ucNames={ucNames} student_nr={student_nr}/>
                         ))
                     }
 
