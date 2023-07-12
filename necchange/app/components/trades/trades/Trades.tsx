@@ -31,7 +31,7 @@ export default function Trades(props: Trades) {
     const [newTrade, setNewTrade] = useState({fromUC: "", fromType: 0,fromShift: 0, toUC: "", toType: 0, toShift: 0, tradeID: trade.tradeID});
     
     // [ [T], [TP], [PL]]
-    const [allClasses, setAllClasses] = useState([[],[],[]])     // 
+    const [allClasses, setAllClasses] = useState([[],[],[]])
     const [studentClasses, setStudentClasses] = useState([[],[],[]])
 
     const removeTrade = () => {
@@ -77,13 +77,19 @@ export default function Trades(props: Trades) {
         
     }
     
+    const restore_data = () =>{
+        setNewTrade(prevTrade => ({...prevTrade, fromUC: "", fromType: 0,fromShift: 0, toUC: "", toType: 0, toShift: 0}));
+        setAllClasses([[],[],[]]);
+        setStudentClasses([[],[],[]]);
+    }
+
     console.log(newTrade)
     return (
 
         <div className="group text-center bg-blue-500 p-6 rounded-lg relative mt-2 w-full" id={`${trade.tradeID}`}>
             <div className="text-white text-xl flex justify-between items-center">
                 <select className="flex-1 truncate text-left font-popUp mx-2 bg-blue-400/50 p-3 rounded-xl outline-none hover:bg-blue-600">
-                    <option onClick={() => setNewTrade(prevTrade => ({...prevTrade, fromUC: "", fromType: 0,fromShift: 0, toUC: "", toType: 0, toShift: 0}))}></option>
+                    <option onClick={restore_data}></option>
                     {
                         ucNames.map((ucName, index) => {
                             return(
