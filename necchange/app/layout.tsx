@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navbar from "./components/globals/navbar/Navbar";
+import Provider from "./components/Provider";
 
 export const metadata = {
   title: "Necchange",
@@ -14,8 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        {children}
+        <Provider>
+          <Navbar />
+          {children}
+        </Provider>
       </body>
     </html>
   );

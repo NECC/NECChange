@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/getCalendar/route.ts", "app/api/trades/student_schedule/[student_nr]/route.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/getCalendar/route.ts", "app/api/trades/student_schedule/[student_nr]/route.js", "app/layout.jsx", "app/api/auth/signinemail.jsx"],
   "exclude": ["node_modules"]
 }
