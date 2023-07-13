@@ -6,7 +6,7 @@ import {PrismaClient} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const NextAuth = {
+export const authOptions  = {
   providers: [
     // GoogleProvider({
     //   clientId: process.env.GOOGLE_CLIENT_ID,
