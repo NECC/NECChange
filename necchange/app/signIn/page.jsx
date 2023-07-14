@@ -1,9 +1,11 @@
 'use client'
 import Image from "next/image";
-import {useSession, signIn, signOut} from 'next-auth/react';
+import {useSession, signIn, signOut, getSession} from 'next-auth/react';
 
 export default function Home() {
     
+  console.log(getSession());
+
   return (
     <main className="flex min-h-screen  items-center justify-between  bg-white">
       <aside className="w-1/2 h-screen border-r dark:border-gray-200 dark:bg-darker focus:outline-none">
@@ -40,7 +42,6 @@ export default function Home() {
                   <button
                     type="submit"
                     className="flex w-full justify-center rounded-md bg-[#018ccb]  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={() => signIn()}
                     >
                     Sign in
                   </button>
