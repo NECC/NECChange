@@ -38,7 +38,7 @@ export default function Home() {
     
 
     return (
-      <div className='bg-white h-screen pt-24'>
+      <div className='bg-white h-screen pt-24 '>
         <div className='ml-auto mr-auto px-8 md:px-16'>
           <StudentSchedule events={classes} handleTradesPopUp={handleTradesPopUp} />
         </div>

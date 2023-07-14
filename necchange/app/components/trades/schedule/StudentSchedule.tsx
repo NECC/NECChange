@@ -77,7 +77,7 @@ export default function StudentSchedule(props: CalendarProps) {
             }}   
 
             events={events}
-            height={'80vh'}
+            height={'85vh'}
         />
     )
 }

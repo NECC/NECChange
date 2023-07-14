@@ -55,7 +55,7 @@ export default function Trades(props: Trades) {
     }
 
     const handleClickUcField = (ucName: string) => {
-        setNewTrade(prevTrade => ({...prevTrade, fromUC: ucName, fromType: 0,fromShift: 0, toUC: ucName, toType: 0, toShift: 0}))
+        setNewTrade({fromUC: ucName, fromType: 0,fromShift: 0, toUC: ucName, toType: 0, toShift: 0, tradeID: trade.tradeID})
 
         axios.get(`api/trades/shifts/${student_nr}/${ucName}`)
             .then( (response) =>{
@@ -78,7 +78,7 @@ export default function Trades(props: Trades) {
     }
     
     const restore_data = () =>{
-        setNewTrade(prevTrade => ({...prevTrade, fromUC: "", fromType: 0,fromShift: 0, toUC: "", toType: 0, toShift: 0}));
+        setNewTrade({fromUC: "", fromType: 0,fromShift: 0, toUC: "", toType: 0, toShift: 0, tradeID: trade.tradeID})
         setAllClasses([[],[],[]]);
         setStudentClasses([[],[],[]]);
     }
@@ -86,7 +86,7 @@ export default function Trades(props: Trades) {
     console.log(newTrade)
     return (
 
-        <div className="group text-center bg-blue-500 p-6 rounded-lg relative mt-2 w-full" id={`${trade.tradeID}`}>
+        <div className="group text-center bg-blue-500 p-6 rounded-2xl relative mt-2 w-full">
             <div className="text-white text-xl flex justify-between items-center">
                 <select className="flex-1 truncate text-left font-popUp mx-2 bg-blue-400/50 p-3 rounded-xl outline-none hover:bg-blue-600">
                     <option onClick={restore_data}></option>
@@ -165,7 +165,7 @@ export default function Trades(props: Trades) {
                 <div onClick={submitChangesInput} className={`${inputMode ? "hidden" : ""} border border-green-500 text-green-400 p-2 ml-2 rounded-full cursor-pointer hover:bg-green-400 hover:text-black transition-all duration-300`}><FontAwesomeIcon icon={faCheck}/></div>
             </div>
 
-            <div className={`${inputMode ? "" : "hidden"} flex bg-white/0 w-full h-full rounded-xl justify-end absolute right-0 top-1/2 -translate-y-1/2 pr-4 group-hover:backdrop-blur-sm transition-all duration-150`}>
+            <div className={`${inputMode ? "" : "hidden"} flex bg-white/0 w-full h-full rounded-xl justify-end absolute right-0 top-1/2 -translate-y-1/2 pr-4 transition-all duration-150`}>
                 <button onClick={changeShiftInput} className="text-4xl hidden group-hover:block px-4 py-1 rounded text-black/90 hover:text-green-500">
                     <FontAwesomeIcon icon={faPencilAlt}  />
                 </button>
