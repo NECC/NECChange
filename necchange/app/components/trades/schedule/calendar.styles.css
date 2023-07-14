@@ -20,23 +20,24 @@
 
 /* Header */
 .fc-col-header-cell {
-    @apply bg-gray-900 text-white;
+    @apply bg-gray-800 text-white;
 }
 
 /* Left grid bg color*/
 .fc-timegrid-axis {
-    @apply bg-gray-900 text-white;
+    @apply bg-gray-800 text-white;
 }
 
-/* hours */
-.fc-timegrid-slot-label-frame {
-    @apply py-2 text-white;
-}
 
-/* Overwritten classes */
+
+.fc-event-time {
+    @apply hidden
+}
+/* Overwritten classes 
 .fc-timegrid-event-harness-inset:not(:first-child) .fc-timegrid-event {
-    @apply border-l-black
+    @apply border-black
 }
+*/
 
 .fc-timegrid-event-harness-inset .fc-timegrid-event:not(:first-child) {
     @apply w-1/2
@@ -45,7 +46,7 @@
 
 /* 30min border */
 .fc .fc-timegrid-slot-minor {
-    @apply border-gray-700 border-dashed py-2;
+    @apply border-gray-800 border-none py-2;
 }
 
 .fc .fc-scroller::-webkit-scrollbar {
@@ -68,7 +69,7 @@
 }
 
 .fc-v-event .fc-event-title {
-    @apply text-xl px-2;
+    @apply text-lg px-2;
 }
 
 .fc .fc-scroller-liquid-absolute {
@@ -88,8 +89,11 @@
 }
 
 .fc-timegrid-event-harness-inset .fc-timegrid-event, .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
+    @apply rounded-none shadow-none ;
+}
 
-    @apply rounded-none shadow-none;
+.fc-timegrid-event-harness .fc-timegrid-event-harness-inset{
+   @apply flex w-1/2 
 }
 
 @media screen and (max-width: 640px) {

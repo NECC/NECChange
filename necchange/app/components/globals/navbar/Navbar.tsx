@@ -6,7 +6,7 @@ import NavbarLinks from './NavbarLinks'
 import MobileNavbarLinks from './MobileNavbarLinks';
 
 function Navbar() {
-  const [isMenuOpened, setIsMenuOpened] = useState(false);
+  const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
 
   const toggleMenu = () => setIsMenuOpened(!isMenuOpened);
 
