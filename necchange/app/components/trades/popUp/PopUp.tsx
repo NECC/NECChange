@@ -1,32 +1,16 @@
 'use client'
 
 import React, { useEffect, useState } from "react"
+import { TradeI, PopUpI } from "../interfaces/interfaces";
 import Trades from "../trades/Trades";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-interface PopUp {
-    student_nr: string,
-    handleTradesPopUp: () => void,
-    isTradesOpened: boolean,
-    classes: Array<any>
-}
 
-export interface Trade {
-    fromUC: string,     // UC name             
-    fromType: number,    // UC Type
-    fromShift: number,   // UC Shift
-    toUC: string, 
-    toType: number,
-    toShift: number,
-    tradeID: number,
-}
-
-export default function PopUp(props: PopUp) {
-    
+export default function PopUp(props: PopUpI) {
     const {handleTradesPopUp, isTradesOpened, classes, student_nr} = props;
     const [tradeNumber, setTradeNumber] = useState(0);
-    const [trades, setTrades] = useState<Array<Trade>>([]);
+    const [trades, setTrades] = useState<Array<TradeI>>([]);
     const [ucNames, setUcNames] = useState([""]);
 
     const addTrade = () => {

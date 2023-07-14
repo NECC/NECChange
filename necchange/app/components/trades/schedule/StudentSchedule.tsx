@@ -9,10 +9,10 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import './calendar.styles.css';
-import { Classes } from '@/app/trades/page';
+import { ClassesI } from '../interfaces/interfaces';
 
 interface CalendarProps {
-    events?: Classes[],
+    events?: ClassesI[],
     handleTradesPopUp: () => void,
 }
 

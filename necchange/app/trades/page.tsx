@@ -2,18 +2,8 @@
 
 import StudentSchedule from '../components/trades/schedule/StudentSchedule'
 import PopUp from '../components/trades/popUp/PopUp'
-
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-
-export interface Classes {
-  title: string,
-  uc_name: any
-  shift: number,
-  type: string,
-  start: string,
-  end: string,
-}
 
 
 export default function Home() {

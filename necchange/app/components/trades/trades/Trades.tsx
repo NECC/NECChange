@@ -7,16 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-
-import { Trade } from "../popUp/PopUp";
-
-interface Trades {
-    student_nr: string,
-    ucNames: Array<string>,
-    setTrades: (trades: Trade[]) => void,
-    trade: Trade,
-    trades: Array<Trade>
-}
+import { TradesI, TradeI } from "../interfaces/interfaces";
 
 const types_class: any = {
     1: "T",
@@ -24,7 +15,7 @@ const types_class: any = {
     3: "PL"
 }
 
-export default function Trades(props: Trades) {
+export default function Trades(props: TradesI) {
     const { trade, trades, setTrades, ucNames, student_nr} = props
 
     const [inputMode, setInputMode] = useState(true);
@@ -36,7 +27,7 @@ export default function Trades(props: Trades) {
 
     const removeTrade = () => {
         const tradeID = trade.tradeID;
-        const actualTrades = trades.filter((trade: Trade) => trade.tradeID != tradeID);
+        const actualTrades = trades.filter((trade: TradeI) => trade.tradeID != tradeID);
         setTrades(actualTrades);
     }
 
