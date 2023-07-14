@@ -38,6 +38,7 @@
     @apply border-black
 }
 */
+
 .fc-timegrid-event-harness-inset .fc-timegrid-event:not(:first-child) {
     @apply w-1/2
 }
@@ -88,7 +89,6 @@
 }
 
 .fc-timegrid-event-harness-inset .fc-timegrid-event, .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
-
     @apply rounded-none shadow-none ;
 }
 
