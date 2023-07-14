@@ -11,17 +11,19 @@
 
 
   /* FullCalendar */
-  --fc-border-color: black;
+  --fc-border-color: black; 
+
   --fc-button-text-color: white;
   --fc-button-bg-color: var(--btn);
   --fc-button-hover-text-color: black;
   --fc-button-hover-bg-color: rgb(255, 255, 255);
   --fc-button-active-bg-color: var(--btn);
-  --fc-button-active-border-color: black;
-  --fc-event-bg-color: #3788d8;
+/*  --fc-button-active-border-color: black; */
+  --fc-event-bg-color: #3c7dbe;
   --fc-event-text-color: white;
   --fc-event-border-color: #3788d8;
-  --fc-today-bg-color: rgba(236, 231, 155, 0.432);
+/*  --fc-today-bg-color: rgba(255, 251, 198, 0.432); */
+
   --outline-color: #0b223a;
 }
 

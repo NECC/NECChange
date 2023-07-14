@@ -68,8 +68,20 @@ export async function GET(request, context){
     let start = new Date(year + "-" + month + "-" + day + "T" + studentClass.Renamedclass.start_time);
     let end = new Date(year + "-" + month + "-" + day + "T" + studentClass.Renamedclass.end_time);
 
+    let type_class = {
+      1: "T",
+      2: "TP",
+      3: "PL"
+    }
+
+    let shift = studentClass.Renamedclass.shift;
+    let type = type_class[studentClass.Renamedclass.type];
+    let uc_name = studentClass.Renamedclass.uc.name;
     classes.push({
-      title: studentClass.Renamedclass.uc.name + " - " + studentClass.Renamedclass.local,
+      title: uc_name + " - " + type + shift + " - " + studentClass.Renamedclass.local,
+      uc_name: uc_name,
+      type: type,
+      shift: shift,
       start: start,
       end: end
     })
