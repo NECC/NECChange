@@ -83,7 +83,7 @@ export default function Feed() {
     ]
 
     return (
-        <div className="pt-24 p-4 h-screen flex ">
+        <div className="pt-24 p-4 h-screen flex bg-white">
             <div className=""></div>
 
             <FeedPost postsArray={feedData}/>
