@@ -1,5 +1,6 @@
 'use client'
-import { TradeI } from "@/app/components/trades/interfaces/interfaces";
+import { FeedPostI } from "@/app/components/trades/interfaces/interfaces";
+import FeedPost from "@/app/components/trades/feed-posts/FeedPosts";
 
 export default function Feed() {
 
@@ -8,7 +9,7 @@ export default function Feed() {
     // 2 -> TP
     // 3 -> PL
 
-    const feedData: Array<TradeI> = [
+    const feedData: Array<FeedPostI> = [
         {
             fromUC: "Laboratórios de Algoritmia I",     // UC name             
             fromType: 2,    // UC Type
@@ -17,6 +18,11 @@ export default function Feed() {
             toType: 2,
             toShift: 1,
             tradeID: 1,
+            studentNumber: 102504,
+            displayName: "Pedro Camargo",
+            studentYear: 2,
+            timePassed: 0,
+            profilePic: 'PC',
         },
         {
             fromUC: "Sistemas de Computação",     // UC name             
@@ -26,6 +32,11 @@ export default function Feed() {
             toType: 3,
             toShift: 1,
             tradeID: 2,
+            studentNumber: 903845,
+            displayName: "Simão Quintela",
+            studentYear: 4,
+            timePassed: 1,
+            profilePic: 'SQ',
         },
         {
             fromUC: "Matemática Discreta",     // UC name             
@@ -35,6 +46,11 @@ export default function Feed() {
             toType: 1,
             toShift: 2,
             tradeID: 3,
+            studentNumber: 100000,
+            displayName: "José Bernardo",
+            studentYear: 2,
+            timePassed: 3,
+            profilePic: 'JB',
         },
         {
             fromUC: "Programação Funcional",     // UC name             
@@ -44,6 +60,11 @@ export default function Feed() {
             toType: 2,
             toShift: 2,
             tradeID: 4,
+            studentNumber: 100000,
+            displayName: "Bruno Jardim",
+            studentYear: 5,
+            timePassed: 24,
+            profilePic: 'BJ',
         },
         {
             fromUC: "Programação Orientada a Objetos",     // UC name             
@@ -53,12 +74,19 @@ export default function Feed() {
             toType: 3,
             toShift: 1,
             tradeID: 5,
+            studentNumber: 100000,
+            displayName: "Testando",
+            studentYear: 3,
+            timePassed: 1,
+            profilePic: 'TT',
         },
     ]
 
     return (
-        <div className="pt-24 h-screen">
-            <h1>Aqui fica o feed</h1>
+        <div className="pt-24 p-4 h-screen flex ">
+            <div className=""></div>
+
+            <FeedPost postsArray={feedData}/>
         </div>
     );
 }
