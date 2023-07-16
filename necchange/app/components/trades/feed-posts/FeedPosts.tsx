@@ -41,21 +41,21 @@ export default function FeedPost(props: FeedPostsI) {
                         <span className="px-4 pb-4">{post.displayName} solicitou uma troca de turno da UC <strong>{post.fromUC}</strong></span>
 
 
-                        <div className="flex justify-start p-4 items-center text-white">
-                            <div className="w-10 h-10 rounded-full border flex justify-center items-center mr-2 bg-red-500">
-                                <span className="text-black">TP{post.fromType}</span>
+                        <div className="flex justify-start p-4 items-center">
+                            <div className="w-10 h-10 rounded-full border flex justify-center items-center mr-1 bg-red-500 border-black">
+                                <span className="text-white">TP{post.fromType}</span>
                             </div>
                             <div className="text-black">
                                 <FiChevronRight size={24} />
                             </div>
-                            <div className="w-10 h-10 rounded-full border flex justify-center items-center ml-2 bg-green-500">
-                                <span className="text-black">TP{post.fromShift}</span>
+                            <div className="w-10 h-10 rounded-full border flex justify-center items-center m1-2 bg-green-500 border-black">
+                                <span className="text-white">TP{post.fromShift}</span>
                             </div>
                         </div>
 
 
-                        <div className="absolute bottom-0 right-0 mb-4 mr-2 flex justify-end text-sm border-black border-black/25 shadow-lg hover:bg-gray-300 hover:scale-110 hover:rounded-lg hover:border-black hover:border-2">
-                            <button className="py-2 px-4 rounded-lg border">
+                        <div className="absolute bottom-0 right-0 mb-4 mr-4 flex justify-end text-sm border-black/25 shadow-lg hover:bg-gray-100 rounded-lg">
+                            <button className="py-2 px-3 rounded-lg border">
                                 Aceitar Troca
                             </button>
                         </div>

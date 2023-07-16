@@ -27,6 +27,24 @@
   --outline-color: #0b223a;
 }
 
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(84, 160, 190); /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Border radius of the thumb */
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgba(248, 248, 248, 0.774);
+}
+
+::-webkit-scrollbar-track:hover {
+  background-color: rgba(248, 248, 248, 0.774); /* Background color of the scrollbar track on hover */
+}
+
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
