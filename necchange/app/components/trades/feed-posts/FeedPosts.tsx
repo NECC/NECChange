@@ -1,10 +1,12 @@
 import { FeedPostsI } from "../interfaces/interfaces";
+import { FiChevronRight, } from 'react-icons/fi';
+
 
 
 
 export default function FeedPost(props: FeedPostsI) {
     const { postsArray } = props
-    
+
     // 1°, 2°, 3°, 4°, 5° ano
     const yearColor = [
         'text-green-500',
@@ -37,6 +39,27 @@ export default function FeedPost(props: FeedPostsI) {
                         </div>
 
                         <span className="px-4 pb-4">{post.displayName} solicitou uma troca de turno da UC <strong>{post.fromUC}</strong></span>
+
+
+                        <div className="flex justify-start p-4 items-center">
+                            <div className="w-10 h-10 rounded-full border flex justify-center items-center mr-1 bg-red-500 border-black">
+                                <span className="text-white">TP{post.fromType}</span>
+                            </div>
+                            <div className="text-black">
+                                <FiChevronRight size={24} />
+                            </div>
+                            <div className="w-10 h-10 rounded-full border flex justify-center items-center m1-2 bg-green-500 border-black">
+                                <span className="text-white">TP{post.fromShift}</span>
+                            </div>
+                        </div>
+
+
+                        <div className="absolute bottom-0 right-0 mb-4 mr-4 flex justify-end text-sm border-black/25 shadow-lg hover:bg-gray-100 rounded-lg">
+                            <button className="py-2 px-3 rounded-lg border">
+                                Aceitar Troca
+                            </button>
+                        </div>
+
 
                     </div>
                 ))
