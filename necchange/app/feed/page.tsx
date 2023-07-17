@@ -1,5 +1,5 @@
 'use client'
-import { FeedPostI } from "@/app/components/trades/interfaces/interfaces";
+import { FeedPostI } from "./interface";
 import FeedPost from "@/app/components/trades/feed-posts/FeedPosts";
 
 export default function Feed() {

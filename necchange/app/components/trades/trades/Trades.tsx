@@ -2,12 +2,11 @@
 
 import React, { useState } from "react";
 import axios from 'axios';
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { TradesI, TradeI } from "../interfaces/interfaces";
+import { TradesI, TradeI } from "./interface";
 
 const types_class: any = {
     1: "T",

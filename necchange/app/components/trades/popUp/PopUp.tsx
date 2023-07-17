@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useEffect, useState } from "react"
-import { TradeI, PopUpI } from "../interfaces/interfaces";
+import { PopUpI } from "./interface";
+import { TradeI } from "../trades/interface";
 import Trades from "../trades/Trades";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

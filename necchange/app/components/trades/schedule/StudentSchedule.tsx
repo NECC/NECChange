@@ -9,12 +9,8 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import './calendar.styles.css';
-import { ClassesI } from '../interfaces/interfaces';
+import { CalendarProps } from './interface';
 
-interface CalendarProps {
-    events?: ClassesI[],
-    handleTradesPopUp: () => void,
-}
 
 export default function StudentSchedule(props: CalendarProps) {
     const {events, handleTradesPopUp} = props
