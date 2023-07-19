@@ -73,7 +73,6 @@ export async function GET(req: NextRequest, context: any) {
             uc_shifts[type].push(uc_shift.shift);
         }
     })
-
+  
     return new NextResponse(JSON.stringify({uc_shifts: uc_shifts, student_classes: student_classes}))
-    
 }

@@ -5,21 +5,13 @@ import PopUp from '../components/trades/popUp/PopUp'
 
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-
-export interface Classes {
-  title: string,
-  uc_name: any
-  shift: number,
-  type: string,
-  start: string,
-  end: string,
-}
+import { ClassesI } from './interface'
 
 
 export default function Home() {
     const student_nr = 'A96516';
     const [isTradesOpened, setIsTradesOpened] = useState(false);
-    const [classes, setClasses] = useState([]);
+    const [classes, setClasses] = useState<Array<ClassesI>>([]);
   
     const handleTradesPopUp = () => setIsTradesOpened(!isTradesOpened);
   
