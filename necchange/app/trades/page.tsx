@@ -2,6 +2,7 @@
 
 import StudentSchedule from '../components/trades/schedule/StudentSchedule'
 import PopUp from '../components/trades/popUp/PopUp'
+
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ClassesI } from './interface'

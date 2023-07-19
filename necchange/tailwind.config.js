@@ -17,6 +17,7 @@ module.exports = {
       },
       fontFamily: {
         popUp: "Montserrat, sans-serif"
+
       },
       scrollbar: {
         width: '10px', // Width of the scrollbar

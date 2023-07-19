@@ -2,10 +2,12 @@
 
 import React, { useState } from "react";
 import axios from 'axios';
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+
 import { TradesI, TradeI } from "./interface";
 
 const types_class: any = {
@@ -13,6 +15,7 @@ const types_class: any = {
     2: "TP",
     3: "PL"
 }
+
 
 export default function Trades(props: TradesI) {
     const { trade, trades, setTrades, ucNames, student_nr} = props
@@ -26,6 +29,7 @@ export default function Trades(props: TradesI) {
 
     const removeTrade = () => {
         const tradeID = trade.tradeID;
+
         const actualTrades = trades.filter((trade: TradeI) => trade.tradeID != tradeID);
         setTrades(actualTrades);
     }
