@@ -74,9 +74,6 @@ export async function GET(req: NextRequest, context: any) {
         }
     })
 
-    try{ 
-        return new NextResponse(JSON.stringify({uc_shifts: uc_shifts, student_classes: student_classes}))
-    } finally{
-        prisma.$disconnect();
-    }
+    return new NextResponse(JSON.stringify({uc_shifts: uc_shifts, student_classes: student_classes}))
+    
 }
