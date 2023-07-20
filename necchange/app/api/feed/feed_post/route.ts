@@ -10,7 +10,7 @@ export async function POST(req: NextRequest, context: any){
 
     console.log(trade)
 
-    const class_from_id = await prisma.renamedclass.findFirst({
+    const class_from_id = await prisma.renamedclass.findMany({
         where:{
             uc:{
                 name: trade.fromUC
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest, context: any){
         }
     });
 
-    const class_to_id = await prisma.renamedclass.findFirst({
+    const class_to_id = await prisma.renamedclass.findMany({
         where:{
             uc:{
                 name: trade.toUC
@@ -50,15 +50,17 @@ export async function POST(req: NextRequest, context: any){
         return new NextResponse(JSON.stringify({ error: "Not found" }));
     }else{
         const date = new Date()
-        const new_switch = await prisma.renamedswitch.create({
-            data:{
-                student_id: student_id.id,
-                class_from_id: class_from_id.id,
-                class_to_id: class_to_id.id,
-                status: Status.PENDING,
-                publish_time: date,
-                close_time: date
-            }
+
+        class_from_id.map(async (class_from, i) => {
+            const new_switch = await prisma.renamedswitch.create({
+                data:{
+                    from_student_id: student_id.id,
+                    class_from_id: class_from.id,
+                    class_to_id: class_to_id[i].id,
+                    status: Status.PENDING,
+                    publish_time: date,
+                }
+            })
         })
 
         return new NextResponse(JSON.stringify({response: "Success"}));

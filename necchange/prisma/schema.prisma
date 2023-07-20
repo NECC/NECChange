@@ -9,32 +9,33 @@ datasource db {
 
 /// This model has been renamed to 'Renamedclass' during introspection, because the original name 'class' is reserved.
 model Renamedclass {
-  id                                                   Int             @id
-  uc_id                                                Int?
-  weekday                                              Int?
-  start_time                                           String          @db.VarChar(10)
-  end_time                                             String          @db.VarChar(10)
-  local                                                String?         @db.VarChar(100)
-  type                                                 Int?
-  shift                                                Int?
-  uc                                                   uc?             @relation(fields: [uc_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student_class                                        student_class[]
-  fromSwitch                                           Renamedswitch[] @relation("class_from_id")
-  toSwitch                                             Renamedswitch[] @relation("class_to_id")
+  id            Int             @id
+  uc_id         Int?
+  weekday       Int?
+  start_time    String          @db.VarChar(10)
+  end_time      String          @db.VarChar(10)
+  local         String?         @db.VarChar(100)
+  type          Int?
+  shift         Int?
+  uc            uc?             @relation(fields: [uc_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  student_class student_class[]
+  fromSwitch    Renamedswitch[] @relation("class_from_id")
+  toSwitch      Renamedswitch[] @relation("class_to_id")
 
   @@map("class")
 }
 
 model student {
-  id                                           Int             @id
-  number                                       String?         @db.VarChar(20) @unique
-  firstname                                    String?         @db.VarChar(100)
-  lastname                                     String?         @db.VarChar(100)
-  email                                        String?         @db.VarChar(100)
-  password                                     String?         @db.VarChar(100)
-  is_admin                                     Boolean?
-  student_class                                student_class[]
-  renamedSwitch                                Renamedswitch[]
+  id                Int             @id
+  number            String?         @unique @db.VarChar(20)
+  firstname         String?         @db.VarChar(100)
+  lastname          String?         @db.VarChar(100)
+  email             String?         @db.VarChar(100)
+  password          String?         @db.VarChar(100)
+  is_admin          Boolean?
+  student_class     student_class[]
+  fromRenamedSwitch Renamedswitch[] @relation("from_student_id")
+  toRenamedSwitch   Renamedswitch[] @relation("to_student_id")
 }
 
 model student_class {
@@ -43,21 +44,22 @@ model student_class {
   class_id     Int?
   Renamedclass Renamedclass? @relation(fields: [class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   student      student?      @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
 }
 
 /// This model has been renamed to 'Renamedswitch' during introspection, because the original name 'switch' is reserved.
 model Renamedswitch {
-  id                                                  Int              @id @default(autoincrement())
-  student_id                                          Int
-  class_from_id                                       Int
-  class_to_id                                         Int
-  status                                              Status?
-  publish_time                                        DateTime          
-  close_time                                          DateTime
-  classFrom                                           Renamedclass @relation("class_from_id", fields: [class_from_id], references: [id])
-  classTo                                             Renamedclass @relation("class_to_id", fields: [class_to_id], references: [id])
-  student                                             student @relation(fields: [student_id], references: [id])
+  id              Int          @id @default(autoincrement())
+  from_student_id Int
+  to_student_id   Int?
+  class_from_id   Int
+  class_to_id     Int
+  status          Status?
+  publish_time    DateTime
+  close_time      DateTime?
+  classFrom       Renamedclass @relation("class_from_id", fields: [class_from_id], references: [id])
+  classTo         Renamedclass @relation("class_to_id", fields: [class_to_id], references: [id])
+  from_student    student      @relation("from_student_id", fields: [from_student_id], references: [id])
+  to_student      student?      @relation("to_student_id", fields: [to_student_id], references: [id])
 
   @@map("switch")
 }
@@ -69,7 +71,6 @@ model uc {
   semester     Int?
   Renamedclass Renamedclass[]
 }
-
 
 enum Status {
   REMOVED

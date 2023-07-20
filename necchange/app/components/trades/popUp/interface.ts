@@ -1,4 +1,4 @@
-import { ClassesI } from "../interfaces/interfaces";
+import { ClassesI } from "@/app/trades/interface"
 
 export interface PopUpI {
     student_nr: string,
