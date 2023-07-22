@@ -58,10 +58,10 @@ export default function Feed() {
             dataTo: 'LaboratorioDeAlgoritmiaI',
         },
         {
-            fromUC: "Koe",     // UC name             
+            fromUC: "Laboratório de Algoritmia I",     // UC name             
             fromType: 2,    // UC Type
             fromShift: 1,   // UC Shift
-            toUC: "Koe", 
+            toUC: "Laboratório de Algoritmia I", 
             toType: 2,
             toShift: 1,
             tradeID: 3,
@@ -74,10 +74,10 @@ export default function Feed() {
             dataTo: 'LaboratorioDeAlgoritmiaI',
         },
         {
-            fromUC: "Koe",     // UC name             
+            fromUC: "Laboratório de Algoritmia I",     // UC name             
             fromType: 2,    // UC Type
             fromShift: 1,   // UC Shift
-            toUC: "Koe", 
+            toUC: "Laboratório de Algoritmia I", 
             toType: 2,
             toShift: 1,
             tradeID: 4,
@@ -90,10 +90,10 @@ export default function Feed() {
             dataTo: 'LaboratorioDeAlgoritmiaI',
         },
         {
-            fromUC: "Koe",     // UC name             
+            fromUC: "Sistemas de Computação",     // UC name             
             fromType: 2,    // UC Type
             fromShift: 1,   // UC Shift
-            toUC: "Koe", 
+            toUC: "Sistemas de Computação", 
             toType: 2,
             toShift: 1,
             tradeID: 5,
