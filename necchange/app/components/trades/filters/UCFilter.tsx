@@ -1,10 +1,47 @@
-import { useState } from "react";
+import { UnidadesCurricularesI } from "@/app/feed/interface";
+import { useState, Dispatch, SetStateAction } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
-export default function UCFilter() {
+interface UcsFilterProps {
+    setUcsFilter: Dispatch<SetStateAction<UnidadesCurricularesI>>,
+    ucsFilter: UnidadesCurricularesI,
+    ucsArray: string[],
+}
+
+
+export default function UCFilter(props: UcsFilterProps) {
+    const {
+        ucsArray,
+        ucsFilter,
+        setUcsFilter
+    } = props;
+
     const [isVisible, setIsVisible] = useState(false);
     const toggleIsVisible = () => setIsVisible(!isVisible);
 
+    // function to change the filter state
+    const handleFilter = (e: any) => {
+        const newFilter = {
+            ...ucsFilter,
+            [e.target.id]: e.target.checked,
+        }
+        setUcsFilter(newFilter);
+    }
+    
+
+    // This little code snippet will transform a portuguese phrase in a concatenated with each word capitalized string
+    // without accents and ç
+    // Álgebra Universal e Categorias = AlgebraUniversalECategorias
+    const arraySanitization = (array: string[]): string[] => (
+        array.map((item: string) => ((item
+                        .split(" ")
+                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                        .join(" "))
+                        .replace(/[,\s]/g, ""))
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+        )
+    )
 
     return (
         <div className="border-b pb-3"> 
@@ -17,22 +54,15 @@ export default function UCFilter() {
             </div>
             {isVisible && (
                 <form className="mt-2 accent-blue-500 ">
-                    <form>
-                        <div>
-                            <input type="checkbox" id=" Álgebra Linear CC " name="uc" value="Álgebra Linear CC" className="mb-2" />
-                            <label htmlFor=" Álgebra Linear CC " className="mr-2 "> Álgebra Linear CC </label>
-                        </div>
+                    {
+                        ucsArray.map((uc, index) => (
+                            <div key={index}>
+                                <input onClick={handleFilter} type="checkbox" id={`${arraySanitization(ucsArray)[index]}`} name="uc" value={`${arraySanitization(ucsArray)[index]}`} className="mb-2"/>
+                                <label htmlFor={`${arraySanitization(ucsArray)[index]}`} className="mr-2 "> {uc} </label>
+                            </div>
+                        ))
+                    }
 
-                        <div>
-                            <input type="checkbox" id="Cálculo" name="uc" value="Cálculo" className="mb-2" />
-                            <label htmlFor="Cálculo" className="mr-2">Cálculo</label>
-                        </div>
-
-                        <div>
-                            <input type="checkbox" id="Programação Funcional" name="uc" value="Programação Funcional" className="mb-2" />
-                            <label htmlFor="Programação Funcional" className="mr-2">Programação Funcional</label>
-                        </div>
-                    </form>
                 </form>
             )}
         </div>
