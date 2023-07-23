@@ -8,7 +8,7 @@ datasource db {
 }
 
 /// This model has been renamed to 'Renamedclass' during introspection, because the original name 'class' is reserved.
-model Renamedclass {
+model uc_class {
   id            Int             @id
   uc_id         Int?
   weekday       Int?
@@ -19,8 +19,8 @@ model Renamedclass {
   shift         Int?
   uc            uc?             @relation(fields: [uc_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   student_class student_class[]
-  fromSwitch    Renamedswitch[] @relation("class_from_id")
-  toSwitch      Renamedswitch[] @relation("class_to_id")
+  fromSwitch    class_switch[] @relation("class_from_id")
+  toSwitch      class_switch[] @relation("class_to_id")
 
   @@map("class")
 }
@@ -34,20 +34,20 @@ model student {
   password          String?         @db.VarChar(100)
   is_admin          Boolean?
   student_class     student_class[]
-  fromRenamedSwitch Renamedswitch[] @relation("from_student_id")
-  toRenamedSwitch   Renamedswitch[] @relation("to_student_id")
+  fromRenamedSwitch class_switch[] @relation("from_student_id")
+  toRenamedSwitch   class_switch[] @relation("to_student_id")
 }
 
 model student_class {
   id           Int           @id
   student_id   Int?
   class_id     Int?
-  Renamedclass Renamedclass? @relation(fields: [class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  uc_class uc_class? @relation(fields: [class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   student      student?      @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 /// This model has been renamed to 'Renamedswitch' during introspection, because the original name 'switch' is reserved.
-model Renamedswitch {
+model class_switch {
   id              Int          @id @default(autoincrement())
   from_student_id Int
   to_student_id   Int?
@@ -56,8 +56,8 @@ model Renamedswitch {
   status          Status?
   publish_time    DateTime
   close_time      DateTime?
-  classFrom       Renamedclass @relation("class_from_id", fields: [class_from_id], references: [id])
-  classTo         Renamedclass @relation("class_to_id", fields: [class_to_id], references: [id])
+  classFrom       uc_class @relation("class_from_id", fields: [class_from_id], references: [id])
+  classTo         uc_class @relation("class_to_id", fields: [class_to_id], references: [id])
   from_student    student      @relation("from_student_id", fields: [from_student_id], references: [id])
   to_student      student?      @relation("to_student_id", fields: [to_student_id], references: [id])
 
@@ -69,7 +69,7 @@ model uc {
   name         String?        @db.VarChar(100)
   year         Int?
   semester     Int?
-  Renamedclass Renamedclass[]
+  uc_class uc_class[]
 }
 
 enum Status {

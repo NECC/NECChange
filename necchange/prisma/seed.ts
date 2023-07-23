@@ -191,7 +191,7 @@ async function main() {
     })
 
     classes.map(async (class_add) =>{
-      await prisma.renamedclass.create({
+      await prisma.uc_class.create({
         data: class_add
       })
     });
@@ -219,7 +219,7 @@ main()
 
 async function nuclear_bomb(){
   await prisma.student_class.deleteMany()
-  await prisma.renamedclass.deleteMany();
+  await prisma.uc_class.deleteMany();
   await prisma.student.deleteMany();
   await prisma.uc.deleteMany();
 }
