@@ -9,7 +9,7 @@ import { ClassesI } from './interface'
 
 
 export default function Home() {
-    const student_nr = 'A94447';
+    const student_nr = 'A81597';
     const [isTradesOpened, setIsTradesOpened] = useState(false);
     const [classes, setClasses] = useState<Array<ClassesI>>([]);
   

@@ -13,7 +13,7 @@ function NavbarLinks(props: NavbarLinksProps) {
                 <Link className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/feed">Feed</Link>
             </li>
             <li>
-                <Link className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/trades">Trocas</Link>
+                <Link className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/trades">Horário</Link>
             </li>
             <li>
                 <Link className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/calendar">Calendário</Link>

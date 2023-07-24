@@ -32,6 +32,14 @@ export default function Filters(props: FilterProps) {
 
     return (
             <div className="px-10 mt-4 w-1/4 border-r">
+                <div className="flex w-full font-bold">
+                    <div className="w-1/2 p-3 border-e flex justify-center hover:bg-slate-50 hover:cursor-pointer">
+                        My Trades
+                    </div>
+                    <div className="w-1/2 p-3 flex justify-center hover:bg-slate-50 hover:cursor-pointer">
+                        All Trades
+                    </div>
+                </div>
                 <YearFilter setFilter={setYearFilter} filter={yearFilter}/>
                 <UCFilter setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter}/>
             </div>

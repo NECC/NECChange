@@ -58,9 +58,7 @@ export default function PopUp(props: PopUp) {
 
 
     const submitTrades = () => {
-        trades.map((trade) => {
-            axios.post('api/feed/feed_post', {params: {trade: trade, student_nr: student_nr}})
-        })
+        axios.post('api/feed/feed_post', {params: {trades: trades, student_nr: student_nr}}).then((response) => console.log(response))
     }
 
 

@@ -10,7 +10,7 @@ interface YearFilterProps {
 
 export default function YearFilter(props: YearFilterProps) {
     const { setFilter, filter } = props
-    const years = [ "1°Ano", "2°Ano", "3°Ano", "4°Ano", "5°Ano" ]
+    const years = [ "1°Ano", "2°Ano", "3°Ano"]
 
 
     // Open & Close Year Filter
