@@ -218,8 +218,11 @@ main()
 
 
 async function nuclear_bomb(){
-  await prisma.student_class.deleteMany()
+  await prisma.class_switch.deleteMany();
+
+  await prisma.trade.deleteMany();
   await prisma.uc_class.deleteMany();
+  await prisma.student_class.deleteMany()
   await prisma.student.deleteMany();
   await prisma.uc.deleteMany();
 }
