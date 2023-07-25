@@ -1,4 +1,4 @@
-import { ClassesI } from "@/app/trades/interface"
+import { ClassesI } from "@/app/horario/interface"
 
 export interface CalendarProps {
     events?: ClassesI[],
