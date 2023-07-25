@@ -13,7 +13,7 @@ export async function GET(request, context){
       select: {
         student_class: {
           select: {
-            Renamedclass: {
+            uc_class: {
               select: {
                 weekday: true,
                 start_time: true,
@@ -42,7 +42,7 @@ export async function GET(request, context){
     if(month < 10) month = "0" + month;
 
     let days_in_month = new Date(year, month, 0).getDate();
-    let day = date.getDate() + studentClass.Renamedclass.weekday - date.getDay();
+    let day = date.getDate() + studentClass.uc_class.weekday - date.getDay();
 
     if (day > days_in_month) {
       day = day % days_in_month;
@@ -65,8 +65,8 @@ export async function GET(request, context){
       day = "0" + day;
     }
 
-    let start = new Date(year + "-" + month + "-" + day + "T" + studentClass.Renamedclass.start_time);
-    let end = new Date(year + "-" + month + "-" + day + "T" + studentClass.Renamedclass.end_time);
+    let start = new Date(year + "-" + month + "-" + day + "T" + studentClass.uc_class.start_time);
+    let end = new Date(year + "-" + month + "-" + day + "T" + studentClass.uc_class.end_time);
 
     let type_class = {
       1: "T",
@@ -74,11 +74,12 @@ export async function GET(request, context){
       3: "PL"
     }
 
-    let shift = studentClass.Renamedclass.shift;
-    let type = type_class[studentClass.Renamedclass.type];
-    let uc_name = studentClass.Renamedclass.uc.name;
+    let shift = studentClass.uc_class.shift;
+    let type = type_class[studentClass.uc_class.type];
+    let uc_name = studentClass.uc_class.uc.name;
     classes.push({
-      title: uc_name + " - " + type + shift + " - " + studentClass.Renamedclass.local,
+      title: uc_name + " - " + type + shift + " - " + studentClass.uc_class.local,
+
       uc_name: uc_name,
       type: type,
       shift: shift,

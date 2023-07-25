@@ -1,9 +1,12 @@
 'use client'
-
 import React, { useEffect, useState } from "react"
 import Trades from "../trades/Trades";
+
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import axios from 'axios'
+
 
 interface PopUp {
     student_nr: string,
@@ -27,6 +30,8 @@ export default function PopUp(props: PopUp) {
     const {handleTradesPopUp, isTradesOpened, classes, student_nr} = props;
     const [tradeNumber, setTradeNumber] = useState(0);
     const [trades, setTrades] = useState<Array<Trade>>([]);
+
+
     const [ucNames, setUcNames] = useState([""]);
 
     const addTrade = () => {
@@ -53,7 +58,12 @@ export default function PopUp(props: PopUp) {
         setUcNames(ucNames)
     }, [classes])
 
-    //console.table(trades)
+
+    const submitTrades = () => {
+        axios.post('api/feed/feed_post/add_trade', {params: {trades: trades, student_nr: student_nr}}).then((response) => console.log(response))
+    }
+
+
 
     return (
         <div className={`w-10/12 h-5/6 z-[51] absolute bg-slate-100  rounded-2xl left-1/2 -translate-x-1/2 top-24 ${isTradesOpened ? 'absolute' : 'hidden'} overflow-auto`}>
@@ -69,9 +79,8 @@ export default function PopUp(props: PopUp) {
                     }
                 </div>
             </div>
-            <button className="mr-14 absolute right-16 p-3 px-4 bg-blue-500 text-white rounded-2xl hover:bg-blue-800" type="submit">Submit</button>
+            <button className="mr-14 absolute right-16 p-3 px-4 bg-blue-500 text-white rounded-2xl hover:bg-blue-800" type="submit" onClick={submitTrades}>Submit</button>
             <button onClick={addTrade} className="mr-16 absolute right-0 p-3 px-4 bg-blue-500 text-white rounded-2xl hover:bg-blue-800 "><FontAwesomeIcon icon={faPlus} /></button>
-
 
         </div>
 

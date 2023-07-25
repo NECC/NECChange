@@ -17,6 +17,13 @@ module.exports = {
       },
       fontFamily: {
         popUp: "Montserrat, sans-serif"
+
+      },
+      scrollbar: {
+        width: '10px', // Width of the scrollbar
+        track: 'rgba(0, 0, 0, 0.1)', // Background color of the scrollbar track
+        thumb: 'rgba(255, 255, 255, 0.3)', // Color of the scrollbar thumb
+
       }
     },
   },
