@@ -11,18 +11,21 @@ const type_class: any = {
 }
 
 
-export default function FeedPost({post}: any) {
+const yearColor = ['text-red-500', 'text-blue-500', 'text-purple-500', 'text-orange-500'];
+
+export default function FeedPost({ post }: any) {
     const [fromStudentNr, setFromStudentNr] = useState<string>(post[0].tradeId.from_student.number)
     const [tradeId, setTradeId] = useState<number>(post[0].tradeId.id);
-    console.log({"posts": post})
+    console.log({ "posts": post })
 
     return (
-        <div className="w-2/3 rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
+        <div className="w-2/3 rounded-lg text-lg bg-white p-8 m-4 ml-10 border-2 shadow-lg">
             <div className="font-bold pb-10">
                 <div className="float-left text-2xl">
-                    <div>
-                        {fromStudentNr}
-                    </div>
+
+                    {fromStudentNr}
+                    <span className="ml-1 text-lg font-normal" > - solicitou uma troca de turno da UC</span>
+
                 </div>
                 <div className="text-end">
                     Publicado há ...
@@ -36,13 +39,16 @@ export default function FeedPost({post}: any) {
                     let toShift = class_switch.classTo.shift
 
                     console.log(class_switch);
-                    return(
+                    return (
                         <div key={i} className="flex flex-row">
                             <div className="font-bold">
                                 {class_switch.classFrom.uc.name}
                             </div>
-                            <div>
-                                {' (' + class_switch.classFrom.uc.year}º ano{') - ' + type + fromShift + ' para ' + type + toShift}
+                            <span className={`ml-1 font-bold ${yearColor[class_switch.classFrom.uc.year - 1]}`}>
+                                ( {class_switch.classFrom.uc.year}º Ano )
+                            </span>
+                            <div className="ml-1">
+                                {'- ' + type + fromShift + ' para ' + type + toShift}
                             </div>
                         </div>
                     );
@@ -54,4 +60,3 @@ export default function FeedPost({post}: any) {
         </div>
     );
 }
-
