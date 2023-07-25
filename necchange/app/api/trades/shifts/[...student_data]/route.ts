@@ -19,14 +19,14 @@ export async function GET(req: NextRequest, context: any) {
             student:{
                 number: student_nr
             },
-            Renamedclass:{
+            uc_class:{
                 uc:{
                     name: uc_name
                 }
             }
         },
         select:{
-            Renamedclass:{
+            uc_class:{
                 select: {
                     type: true,
                     shift: true
@@ -42,15 +42,15 @@ export async function GET(req: NextRequest, context: any) {
     }
 
     student_classes_uc.map((student_class_uc) =>{
-        if(student_class_uc.Renamedclass?.type){
-            let type = type_class[student_class_uc.Renamedclass.type]
-            student_classes[type].push(student_class_uc.Renamedclass.shift)
+        if(student_class_uc.uc_class?.type){
+            let type = type_class[student_class_uc.uc_class.type]
+            student_classes[type].push(student_class_uc.uc_class.shift)
         }
     })
 
 
     // this query gets all classes from a given uc
-    const uc_shifts_query = await prisma.renamedclass.findMany({
+    const uc_shifts_query = await prisma.uc_class.findMany({
         where:{
             uc:{
                 name: uc_name
@@ -73,10 +73,6 @@ export async function GET(req: NextRequest, context: any) {
             uc_shifts[type].push(uc_shift.shift);
         }
     })
-
-    try{ 
-        return new NextResponse(JSON.stringify({uc_shifts: uc_shifts, student_classes: student_classes}))
-    } finally{
-        prisma.$disconnect();
-    }
+  
+    return new NextResponse(JSON.stringify({uc_shifts: uc_shifts, student_classes: student_classes}))
 }
