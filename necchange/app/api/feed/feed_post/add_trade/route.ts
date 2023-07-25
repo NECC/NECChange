@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import {Trade} from "@/app/api/feed/feed_post/add_trade/interface"
 import { PrismaClient, Status } from "@prisma/client";
-import {Trade} from "@/app/api/feed/feed_post/interface"
+import { NextRequest, NextResponse } from "next/server";
 
 
 export async function POST(req: NextRequest, context: any){
@@ -81,91 +81,4 @@ export async function POST(req: NextRequest, context: any){
     }
 
     return new NextResponse(JSON.stringify({response: "Success"}));
-}
-
-
-
-
-export async function GET(req: NextRequest, context: any) {
-
-    const prisma = new PrismaClient();
-
-    const pendingClassSwitches: Array<any> = await prisma.class_switch.findMany({
-        where: {
-          tradeId: {
-            status: 'PENDING'
-          }
-        },
-        select: {
-          tradeId: {
-            select: {
-                id: true,
-                from_student:{
-                    select: {
-                        number: true
-                    }
-                },
-                //to_student:{
-                //    select: {
-                //        number: true
-                //    }
-                //}
-                publish_time: true
-            },
-          },
-          classFrom:{
-            select:{
-                uc: {
-                    select:{
-                        name: true,
-                        year: true
-                    }
-                },
-                weekday: true,
-                start_time: true,
-                end_time: true,
-                type: true,
-                shift: true
-            }
-          },
-          classTo:{
-            select:{
-                uc: {
-                    select:{
-                        name: true,
-                        year: true
-                    }
-                },
-                weekday: true,
-                start_time: true,
-                end_time: true,
-                type: true,
-                shift: true
-            }
-          }
-        },
-        orderBy: {
-          tradeId: {
-            publish_time: 'asc'
-          }
-        }
-    });
-
-    //console.log(pendingClassSwitches)
-      
-   // Grouping the results manually by trade_id
-    const groupedResult: Array<Array<any>> = pendingClassSwitches.reduce((acc, record) => {
-        const foundGroup_aux = acc.find((group: any) => group.length > 0 && group[0].tradeId.id === record.tradeId.id);
-        if (foundGroup_aux) {
-            foundGroup_aux.push(record);
-        } else {
-            acc.push([record]);
-            
-        }
-        return acc;
-    }, []);
-
-    //console.log(groupedResult);
-        
-    return new NextResponse(JSON.stringify({response: groupedResult}))
 }
