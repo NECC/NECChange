@@ -24,7 +24,7 @@ export default function Feed() {
     useEffect(() => {
         const startingFeed = async () => {
             try {
-                axios.get(`api/feed/feed_post/landing/${6}`).then((res) => {
+                axios.get(`api/feed/feed_post/landing/${2}`).then((res) => {
                     setDbCursor(res.data.cursor);
                     setFeedData(res.data.response);
                 })
