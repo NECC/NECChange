@@ -17,6 +17,7 @@ function NavbarLinks(props: NavbarLinksProps) {
             </li>
             <li>
                 <Link className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/calendar">Calendário</Link>
+
             </li>
         </ul>
     );

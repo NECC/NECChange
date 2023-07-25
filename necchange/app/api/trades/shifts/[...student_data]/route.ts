@@ -20,6 +20,7 @@ export async function GET(req: NextRequest, context: any) {
                 number: student_nr
             },
             uc_class:{
+
                 uc:{
                     name: uc_name
                 }
@@ -27,6 +28,7 @@ export async function GET(req: NextRequest, context: any) {
         },
         select:{
             uc_class:{
+
                 select: {
                     type: true,
                     shift: true
@@ -45,12 +47,14 @@ export async function GET(req: NextRequest, context: any) {
         if(student_class_uc.uc_class?.type){
             let type = type_class[student_class_uc.uc_class.type]
             student_classes[type].push(student_class_uc.uc_class.shift)
+
         }
     })
 
 
     // this query gets all classes from a given uc
     const uc_shifts_query = await prisma.uc_class.findMany({
+
         where:{
             uc:{
                 name: uc_name
@@ -75,4 +79,5 @@ export async function GET(req: NextRequest, context: any) {
     })
   
     return new NextResponse(JSON.stringify({uc_shifts: uc_shifts, student_classes: student_classes}))
+
 }

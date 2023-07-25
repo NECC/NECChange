@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import axios from 'axios'
 
+
 interface PopUp {
     student_nr: string,
     handleTradesPopUp: () => void,
@@ -29,6 +30,7 @@ export default function PopUp(props: PopUp) {
     const {handleTradesPopUp, isTradesOpened, classes, student_nr} = props;
     const [tradeNumber, setTradeNumber] = useState(0);
     const [trades, setTrades] = useState<Array<Trade>>([]);
+
 
     const [ucNames, setUcNames] = useState([""]);
 
@@ -60,6 +62,7 @@ export default function PopUp(props: PopUp) {
     const submitTrades = () => {
         axios.post('api/feed/feed_post/add_trade', {params: {trades: trades, student_nr: student_nr}}).then((response) => console.log(response))
     }
+
 
 
     return (

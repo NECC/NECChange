@@ -12,6 +12,7 @@ import './calendar.styles.css';
 import { CalendarProps } from './interface';
 
 
+
 export default function StudentSchedule(props: CalendarProps) {
     const {events, handleTradesPopUp} = props
     const {innerWidth, innerHeight} = useWindowSize(); // Get width and height size

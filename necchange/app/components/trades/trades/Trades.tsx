@@ -10,6 +10,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 import { TradesI, TradeI } from "./interface";
 
+
 const types_class: any = {
     1: "T",
     2: "TP",
@@ -18,6 +19,7 @@ const types_class: any = {
 
 
 export default function Trades(props: TradesI) {
+
     const { trade, trades, setTrades, ucNames, student_nr} = props
 
     const [inputMode, setInputMode] = useState(true);
@@ -31,6 +33,7 @@ export default function Trades(props: TradesI) {
         const tradeID = trade.tradeID;
 
         const actualTrades = trades.filter((trade: TradeI) => trade.tradeID != tradeID);
+
         setTrades(actualTrades);
     }
 

@@ -79,6 +79,7 @@ export async function GET(request, context){
     let uc_name = studentClass.uc_class.uc.name;
     classes.push({
       title: uc_name + " - " + type + shift + " - " + studentClass.uc_class.local,
+
       uc_name: uc_name,
       type: type,
       shift: shift,
