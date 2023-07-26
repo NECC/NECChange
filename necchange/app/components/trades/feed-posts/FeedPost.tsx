@@ -10,6 +10,7 @@ const type_class: any = {
     3: "PL"
 }
 
+const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
 
 export default function FeedPost({post}: any) {
     const [fromStudentNr, setFromStudentNr] = useState<string>(post.from_student.number)
@@ -19,9 +20,10 @@ export default function FeedPost({post}: any) {
         <div className="w-2/3 rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
             <div className="font-bold pb-10">
                 <div className="float-left text-2xl">
-                    <div>
-                        {fromStudentNr}
-                    </div>
+                    <span className="ml-1 text-lg font-normal">
+                        <strong className="text-xl">{fromStudentNr}</strong>
+                        - solicitou uma troca de turno da UC
+                    </span>
                 </div>
                 <div className="text-end">
                     Publicado há ...
@@ -40,8 +42,11 @@ export default function FeedPost({post}: any) {
                             <div className="font-bold">
                                 {class_switch.classFrom.uc.name}
                             </div>
-                            <div>
-                                {' (' + class_switch.classFrom.uc.year}º ano{') - ' + type + fromShift + ' para ' + type + toShift}
+                            <span className={`ml-1 font-bold ${yearColor[class_switch.classFrom.uc.year - 1]}`}>
+                                ( {class_switch.classFrom.uc.year}º Ano )
+                            </span>
+                            <div className="ml-1">
+                                {'- ' + type + fromShift + ' para ' + type + toShift}
                             </div>
                         </div>
                     );
