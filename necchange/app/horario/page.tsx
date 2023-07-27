@@ -1,7 +1,6 @@
 'use client'
 
-import StudentSchedule from '../components/trades/schedule/StudentSchedule'
-import PopUp from '../components/trades/popUp/PopUp'
+import StudentSchedule from '../components/schedule/StudentSchedule'
 
 import { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -10,11 +9,8 @@ import { ClassesI } from './interface'
 
 export default function Home() {
     const student_nr = 'A94447';
-    const [isTradesOpened, setIsTradesOpened] = useState(false);
     const [classes, setClasses] = useState<Array<ClassesI>>([]);
-  
-    const handleTradesPopUp = () => setIsTradesOpened(!isTradesOpened);
-  
+    
     useEffect(() => {
       const getEvents = async () => {
         try {
@@ -32,9 +28,8 @@ export default function Home() {
     return (
       <div className='bg-white h-screen pt-24 '>
         <div className='ml-auto mr-auto px-8 md:px-16'>
-          <StudentSchedule events={classes} handleTradesPopUp={handleTradesPopUp} />
+          <StudentSchedule events={classes} />
         </div>
-        <PopUp handleTradesPopUp={handleTradesPopUp} isTradesOpened={isTradesOpened} classes={classes} student_nr={student_nr}/>
       </div>
     );
 }

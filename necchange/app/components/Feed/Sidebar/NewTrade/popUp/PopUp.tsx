@@ -1,19 +1,14 @@
 'use client'
 import React, { useEffect, useState } from "react"
-import Trades from "../trades/Trades";
+import TradeEntry from "./TradeEntry";
 
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { PopUpInterface } from "./interface";
+
 import axios from 'axios'
 
-
-interface PopUp {
-    student_nr: string,
-    handleTradesPopUp: () => void,
-    isTradesOpened: boolean,
-    classes: Array<any>
-}
 
 export interface Trade {
     fromUC: string,     // UC name             
@@ -25,12 +20,11 @@ export interface Trade {
     tradeID: number,
 }
 
-export default function PopUp(props: PopUp) {
+export default function PopUp(props: PopUpInterface) {
     
-    const {handleTradesPopUp, isTradesOpened, classes, student_nr} = props;
+    const {handleTradesPopUp, isTradesOpened, student_nr} = props;
     const [tradeNumber, setTradeNumber] = useState(0);
     const [trades, setTrades] = useState<Array<Trade>>([]);
-
 
     const [ucNames, setUcNames] = useState([""]);
 
@@ -50,31 +44,30 @@ export default function PopUp(props: PopUp) {
 
     useEffect(() =>{
         const getUcNames = () => {
-            const uc_names = classes.map((uc_class) => uc_class.uc_name);
-            // remove repeated ucs
-            return Array.from(new Set(uc_names));
+            axios.get(`api/trades/student_ucs/${student_nr}`).then((res) =>{
+                setUcNames(res.data.ucs);
+            })
         }
-        const ucNames = getUcNames();
-        setUcNames(ucNames)
-    }, [classes])
-
+        getUcNames()
+    }, [])
 
     const submitTrades = () => {
-        axios.post('api/feed/feed_post/add_trade', {params: {trades: trades, student_nr: student_nr}}).then((response) => console.log(response))
+        axios.post('api/feed/feed_post/add_trade', {params: {trades: trades, student_nr: student_nr}})
+        .then(
+            (response) => console.log(response)
+        )
     }
 
-
-
     return (
-        <div className={`w-10/12 h-5/6 z-[51] absolute bg-slate-100  rounded-2xl left-1/2 -translate-x-1/2 top-24 ${isTradesOpened ? 'absolute' : 'hidden'} overflow-auto`}>
+        <div className={`w-5/12 h-5/6 z-[51] absolute bg-slate-200  rounded-2xl left-1/2 -translate-x-1/2 top-24 ${isTradesOpened ? 'absolute' : 'hidden'} overflow-auto`}>
 
             <button onClick={handleTradesPopUp} className={`text-red-600 text-sm absolute right-0 px-3 py-1 m-3 mr-4 rounded-full border border-red-600 hover:text-white hover:bg-red-500 hover:border-white cursor-pointer transition-all`}>x</button>
 
             <div className="flex justify-center mt-4">
-                <div className="flex-grow m-6 mx-16 w-11/12">
+                <div className="flex-grow m-6 mx-16 w-1/3">
                     {
                         trades.map((trade) => (
-                            <Trades key={trade.tradeID} trade={trade} trades={trades} setTrades={setTrades} ucNames={ucNames} student_nr={student_nr}/>
+                            <TradeEntry key={trade.tradeID} trade={trade} trades={trades} setTrades={setTrades} ucNames={ucNames} student_nr={student_nr}/>
                         ))
                     }
                 </div>

@@ -1,11 +1,11 @@
 'use client'
 import { useState, useEffect } from "react";
-import { FilterI } from "../components/trades/filters/interface";
-import { FeedPostI } from "./interface";
+import { FilterI } from "../components/Feed/Sidebar/interface";
+//import { FeedPostI } from "./interface";
 import { UnidadesCurricularesI } from "./interface";
 
-import FeedPost from "@/app/components/trades/feed-posts/FeedPost";
-import Filters from "@/app/components/trades/filters/Filters";
+import FeedPost from "@/app/components/Feed/Feed-Posts/FeedPost";
+import Sidebar from "@/app/components/Feed/Sidebar/Sidebar";
 import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,7 +19,7 @@ export default function Feed() {
 
     const student_nr = 'A182920';
     const [feedPosts, setFeedData] = useState<any>([]);
-    const [dbCursor, setDbCursor] = useState()
+    const [dbCursor, setDbCursor] = useState();
 
     useEffect(() => {
         const startingFeed = async () => {
@@ -38,7 +38,7 @@ export default function Feed() {
 
     const getMorePosts = async () => {
         try{
-            console.log(dbCursor);
+            //console.log(dbCursor);
             axios.get(`api/feed/feed_post/${2}/${dbCursor}`).then((res) => {
                 if(res.data.response.length > 0){
                     setDbCursor(res.data.cursor);
@@ -52,7 +52,7 @@ export default function Feed() {
 
     return (
         <div className="pt-[85px] h-screen border-red-700 flex bg-white text-black text-lg">
-            <Filters yearFilter={yearFilter} setYearFilter={setYearFilter} setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter}/>
+            <Sidebar yearFilter={yearFilter} setYearFilter={setYearFilter} setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter}/>
             <div className="flex flex-col flex-grow px-12 overflow-auto">
                 {
                     

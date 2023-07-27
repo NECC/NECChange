@@ -17,8 +17,7 @@ const types_class: any = {
     3: "PL"
 }
 
-
-export default function Trades(props: TradesI) {
+export default function TradeEntry(props: TradesI) {
 
     const { trade, trades, setTrades, ucNames, student_nr} = props
 
@@ -115,17 +114,11 @@ export default function Trades(props: TradesI) {
                         })
                     }   
                 </select>
+                
+                <div className="px-8 text-4xl">
+                    <FontAwesomeIcon icon={faArrowRight} size="lg" />
+                </div>
 
-
-                <div className="px-8 text-4xl"><FontAwesomeIcon icon={faArrowRight} size="lg" /></div>
-
-                <select className="flex-1 truncate text-left font-popUp mx-2 bg-blue-400/50 p-3 rounded-xl outline-none hover:bg-blue-600" name="toUC" id="toUC">
-                    <option className="p-3 truncate text-left font-popUp mx-2 bg-white text-black">
-                        {newTrade.toUC}
-                    </option>
-                    
-                </select>
-                -
                 <select className="truncate text-left font-popUp mx-2 bg-blue-400/50 p-3 rounded-xl outline-none hover:bg-blue-600" name="to" id="to">
                     <option value="" onClick={() => setNewTrade(prevTrade => ({...prevTrade, toShift: 0})) }></option>
                     {

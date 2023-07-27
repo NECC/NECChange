@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FiChevronDown } from 'react-icons/fi';
 import { Dispatch, SetStateAction } from "react";
-import { FilterI } from "./interface";
+import { FilterI } from "../interface";
 
 interface YearFilterProps {
     setFilter: Dispatch<SetStateAction<FilterI>>,

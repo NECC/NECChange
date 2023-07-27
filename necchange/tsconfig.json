@@ -23,7 +23,7 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/getCalendar/route.ts", "app/api/trades/student_schedule/[student_nr]/route.js", "app/components/trades/schedule/StudentSchedule.tsx", "app/components/trades/trades/Trades.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/getCalendar/route.ts", "app/api/trades/student_schedule/[student_nr]/route.js", "app/components/schedule/StudentSchedule.tsx", "app/components/Feed/Sidebar/NewTrade/popUp/TradeEntry.tsx"],
 
   "exclude": ["node_modules"]
 }
