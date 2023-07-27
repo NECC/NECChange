@@ -64,7 +64,7 @@ export default function Feed() {
                         )
                     })
                 }
-                <div className="flex w-2/3 p-8 m-4 ml-10">
+                <div className="flex p-8 m-4 ml-10">
                     <button className="p-2 px-4 m-2 ml-auto mr-auto rounded-full bg-[#018ccb] hover:bg-[#007cb6]" 
                             onClick={getMorePosts}>
                         <FontAwesomeIcon icon={faArrowDownLong} style={{color: "white"}} />

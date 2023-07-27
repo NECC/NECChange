@@ -31,7 +31,7 @@ export default function Filters(props: FilterProps) {
 
 
     return (
-            <div className="px-10 mt-4 w-1/4 border-r">
+            <div className="px-10 mt-4 w-1/4 border-r hidden lg:block">
                 <div className="flex w-full font-bold">
                     <div className="w-1/2 p-3 border-e flex justify-center hover:bg-slate-50 hover:cursor-pointer">
                         My Trades
