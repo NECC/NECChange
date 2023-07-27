@@ -51,10 +51,10 @@ export default function Trades(props: TradesI) {
         setTrades(actualTrades);
     }
 
-    const handleClickUcField = (ucName: string) => {
-        setNewTrade({fromUC: ucName, fromType: 0,fromShift: 0, toUC: ucName, toType: 0, toShift: 0, tradeID: trade.tradeID})
+    const handleClickUcField = async (e: any) => {
+        setNewTrade({fromUC: e.target.value, fromType: 0,fromShift: 0, toUC: e.target.value, toType: 0, toShift: 0, tradeID: trade.tradeID});
 
-        axios.get(`api/trades/shifts/${student_nr}/${ucName}`)
+        axios.get(`api/trades/shifts/${student_nr}/${e.target.value}`)
             .then( (response) =>{
                 // here i get all classes from a given uc
                 const newShifts = response.data.uc_shifts;
@@ -62,6 +62,7 @@ export default function Trades(props: TradesI) {
                 const TP_shifts = newShifts.TP;
                 const PL_shifts = newShifts.PL;
                 setAllClasses([T_shifts, TP_shifts, PL_shifts]);
+                console.log(allClasses);
                 
                 // here i get all classes of a student from a given uc
                 const newStudentClasses = response.data.student_classes;
@@ -85,12 +86,12 @@ export default function Trades(props: TradesI) {
 
         <div className="group text-center bg-blue-500 p-6 rounded-2xl relative mt-2 w-full">
             <div className="text-white text-xl flex justify-between items-center">
-                <select className="flex-1 truncate text-left font-popUp mx-2 bg-blue-400/50 p-3 rounded-xl outline-none hover:bg-blue-600">
-                    <option onClick={restore_data}></option>
+                <select className="flex-1 truncate text-left font-popUp mx-2 bg-blue-400/50 p-3 rounded-xl outline-none hover:bg-blue-600" onChange={handleClickUcField}>
+                    <option onClick={restore_data} value=""></option>
                     {
                         ucNames.map((ucName, index) => {
                             return(
-                                <option key={index} onClick={() => handleClickUcField(ucName)}>
+                                <option key={index} value={ucName}>
                                     {ucName}
                                 </option>
                             )

@@ -27,6 +27,7 @@ export default function Feed() {
                 axios.get(`api/feed/feed_post/landing/${2}`).then((res) => {
                     setDbCursor(res.data.cursor);
                     setFeedData(res.data.response);
+                    console.log(feedPosts);
                 })
             } catch (error) {
                 console.error('Error fetching data:', error);

@@ -17,16 +17,16 @@ export default function FeedPost({post}: any) {
     const [tradeId, setTradeId] = useState<number>(post.id);
 
     return (
-        <div className="w-2/3 rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
+        <div className="w-full rounded-md text-lg bg-white p-8 my-3 border shadow-md">
             <div className="font-bold pb-10">
                 <div className="float-left text-2xl">
                     <span className="ml-1 text-lg font-normal">
                         <strong className="text-xl">{fromStudentNr}</strong>
-                        - solicitou uma troca de turno da UC
+                        - solicitou uma troca de turno da UC 
                     </span>
                 </div>
-                <div className="text-end">
-                    Publicado há ...
+                <div className="text-end text-sm">
+                    Publicado há menos de 1 hora
                 </div>
 
             </div>
