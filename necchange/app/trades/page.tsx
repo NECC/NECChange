@@ -15,7 +15,6 @@ export interface Classes {
   end: string,
 }
 
-
 export default function Home() {
     const student_nr = 'A96516';
     const [isTradesOpened, setIsTradesOpened] = useState(false);
