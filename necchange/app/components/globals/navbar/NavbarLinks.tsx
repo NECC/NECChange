@@ -17,15 +17,15 @@ function NavbarLinks(props: NavbarLinksProps) {
             <li>
                 <a className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/trades">Calendário</a>
             </li>
-            {
+            {    
             (session) ? 
-            <li>
-                <a className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" onClick={() => signOut()}>Logout</a>
-            </li>
-            :
-            <li>
-                <a className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" onClick={() => signIn()}>Login</a>
-            </li>
+                <li>
+                    <button className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" onClick={() => signOut()}>Logout</button>
+                </li>
+                :
+                <li>
+                    <button className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" onClick={() => signIn()}>Login</button>
+                </li>
             }
         </ul>
     );
