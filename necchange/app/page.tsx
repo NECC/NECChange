@@ -1,38 +1,42 @@
-'use client'
+"use client";
 import Image from "next/image";
-import {useSession, signIn, signOut} from 'next-auth/react';
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import googleCalendarPlugin from "@fullcalendar/google-calendar";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Sidebar from './components/calendar/CalendarSidebar';
 
-export default function Home() {
+export default function CalendarPage() {
+  const [events, setEvents] = useState([]);
+  const [ucs, setUcs] = useState([]);
 
-const {data: session} = useSession();
-  if(session){
+  useEffect(() => {
+    axios.get("api/calendar/getCalendar").then((res) => setEvents(res.data.response));
+  }, []);
+
+  useEffect(() => {
+    axios.get("api/calendar/getUCS").then((res) => setUcs(res.data.response));
+  }, []);
+  
   return (
-    <section className='py-24'>
-      <div className='container'>
-      <button
-                    type="submit"
-                    className="flex w-full justify-center rounded-md bg-[#018ccb]  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={() => signOut()}
-                    >
-                    Sign out
-                  </button>
+    <Sidebar ucs={ucs}>
+      <div className="p-14 overflow-y-scroll calendar-container">
+        <FullCalendar
+          plugins={[dayGridPlugin, googleCalendarPlugin]}
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth",
+          }}
+          initialView="dayGridMonth"
+          displayEventTime={false}
+          events={events}
+          height="80vh"
+        />
       </div>
-    </section>
-  )
-}
-else{
-  return (
-    <section className='py-24'>
-      <div className='container'>
-      <button
-                    type="submit"
-                    className="flex w-full justify-center rounded-md bg-[#018ccb]  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={() => signIn()}
-                    >
-                    Sign In
-                  </button>
-      </div>
-    </section>
-  )
-}
+    </Sidebar>
+  );
 }
