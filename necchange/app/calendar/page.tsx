@@ -6,7 +6,6 @@ import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import googleCalendarPlugin from "@fullcalendar/google-calendar";
 import axios from "axios";
-import { use } from "react";
 import { useEffect, useState } from "react";
 import Sidebar from '../components/calendar/CalendarSidebar';
 
@@ -21,7 +20,7 @@ export default function CalendarPage() {
   useEffect(() => {
     axios.get("api/calendar/getUCS").then((res) => setUcs(res.data.response));
   }, []);
-
+  
   return (
     <Sidebar ucs={ucs}>
       <div className="p-14 overflow-y-scroll calendar-container">
