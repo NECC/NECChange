@@ -1,170 +1,117 @@
-'use client'
+"use client";
+import React, { useEffect, useState } from "react";
+import { FaArrowRightArrowLeft, FaMinus } from "react-icons/fa6";
+import Select from "@/app/components/globals/Select";
 
-import React, { useState } from "react";
-import axios from 'axios';
+const classMap: any = {
+  1: "T",
+  2: "TP",
+  3: "PL",
+};
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-
-import { TradesI, TradeI } from "./interface";
-
-
-const types_class: any = {
-    1: "T",
-    2: "TP",
-    3: "PL"
+interface TradeEntryI {
+  updateTrade: any;
+  enrolledClasses: any;
+  availableClasses: any;
 }
 
-export default function TradeEntry(props: TradesI) {
+export default function TradeEntry(props: TradeEntryI) {
+  const { updateTrade, enrolledClasses, availableClasses } = props;
+  // selection controls
+  const [ucSelection, setUcSelection] = useState("");
+  const [fromSelection, setFromSelection] = useState("");
+  const [toSelection, setToSelection] = useState("");
+  // selection options
+  const [from, setFrom] = useState([]);
+  const [to, setTo] = useState([]);
 
-    const { trade, trades, setTrades, ucNames, student_nr} = props
-
-    const [inputMode, setInputMode] = useState(true);
-    const [newTrade, setNewTrade] = useState({fromUC: "", fromType: 0,fromShift: 0, toUC: "", toType: 0, toShift: 0, tradeID: trade.tradeID});
-    
-    // [ [T], [TP], [PL]]
-    const [allClasses, setAllClasses] = useState([[],[],[]])
-    const [studentClasses, setStudentClasses] = useState([[],[],[]])
-
-    const removeTrade = () => {
-        const tradeID = trade.tradeID;
-
-        const actualTrades = trades.filter((trade: TradeI) => trade.tradeID != tradeID);
-
-        setTrades(actualTrades);
-    }
-
-    const changeShiftInput = () => {
-        setInputMode(!inputMode)
-    }
-    
-    const submitChangesInput = () => {       
-        const actualTrades = trades.map((trade) => {
-            if (trade.tradeID === newTrade.tradeID) return newTrade;
-            return trade;
-        });
-        
-        setInputMode(!inputMode);
-        setTrades(actualTrades);
-    }
-
-    const handleClickUcField = (ucName: string) => {
-        setNewTrade({fromUC: ucName, fromType: 0,fromShift: 0, toUC: ucName, toType: 0, toShift: 0, tradeID: trade.tradeID})
-
-        axios.get(`api/trades/shifts/${student_nr}/${ucName}`)
-            .then( (response) =>{
-                // here i get all classes from a given uc
-                const newShifts = response.data.uc_shifts;
-                const T_shifts = newShifts.T;
-                const TP_shifts = newShifts.TP;
-                const PL_shifts = newShifts.PL;
-                setAllClasses([T_shifts, TP_shifts, PL_shifts]);
-                
-                // here i get all classes of a student from a given uc
-                const newStudentClasses = response.data.student_classes;
-                const T_classes = newStudentClasses.T;
-                const TP_classes = newStudentClasses.TP;
-                const PL_classes = newStudentClasses.PL;
-                setStudentClasses([T_classes, TP_classes, PL_classes])
-            }
-        )        
-        
-    }
-    
-    const restore_data = () =>{
-        setNewTrade({fromUC: "", fromType: 0,fromShift: 0, toUC: "", toType: 0, toShift: 0, tradeID: trade.tradeID})
-        setAllClasses([[],[],[]]);
-        setStudentClasses([[],[],[]]);
-    }
-
-    console.log(newTrade)
-    return (
-
-        <div className="group text-center bg-blue-500 p-6 rounded-2xl relative mt-2 w-full">
-            <div className="text-white text-xl flex justify-between items-center">
-                <select className="flex-1 truncate text-left font-popUp mx-2 bg-blue-400/50 p-3 rounded-xl outline-none hover:bg-blue-600">
-                    <option onClick={restore_data}></option>
-                    {
-                        ucNames.map((ucName, index) => {
-                            return(
-                                <option key={index} onClick={() => handleClickUcField(ucName)}>
-                                    {ucName}
-                                </option>
-                            )
-                        })
-                    }
-                </select>
-                -
-                <select className="truncate text-left font-popUp mx-2 bg-blue-400/50 p-3 rounded-xl outline-none hover:bg-blue-600">
-                    <option onClick={() => setNewTrade(prevTrade => ({...prevTrade, fromType: 0, fromShift: 0, toType: 0, toShift: 0}))}></option>
-                    {
-                        studentClasses.map( (type, index)  => {
-                            return(
-                                type.map((shift, id) =>{
-                                    {
-                                        return(
-                                            <option key={id} onClick={() => setNewTrade(prevTrade => ({...prevTrade, fromType: index+1, fromShift: shift, toType: index+1}))}>
-                                                {types_class[index+1]}{shift}
-                                            </option>)
-                                    }
-                                })
-                            )
-                        })
-                    }   
-                </select>
-                
-                <div className="px-8 text-4xl">
-                    <FontAwesomeIcon icon={faArrowRight} size="lg" />
-                </div>
-
-                <select className="truncate text-left font-popUp mx-2 bg-blue-400/50 p-3 rounded-xl outline-none hover:bg-blue-600" name="to" id="to">
-                    <option value="" onClick={() => setNewTrade(prevTrade => ({...prevTrade, toShift: 0})) }></option>
-                    {
-
-                        allClasses.map((uc_class, index) =>{
-                            if(newTrade.fromType != 0 && index+1 == newTrade.fromType){
-                                return(
-                                    uc_class.map((shift, id) =>{
-                                        if(shift != newTrade.fromShift){
-                                            return(
-                                                <option key={id} onClick={() => setNewTrade(prevTrade => ({...prevTrade, toType: index+1, toShift: shift})) }>
-                                                    {types_class[index+1]}{shift}
-                                                </option>
-                                            )
-                                        }
-                                    })
-
-                                );
-                            } else if(newTrade.fromType == 0){
-                                return(
-                                    uc_class.map((shift, id) =>{
-                                        return(
-                                            <option key={id} onClick={() => setNewTrade(prevTrade => ({...prevTrade, toType: index+1, toShift: shift})) }>
-                                                {types_class[index+1]}{shift}
-                                            </option>
-                                        )
-                                    })
-
-                                );
-                            }
-                        })
-                    }
-                </select>
-                <div onClick={submitChangesInput} className={`${inputMode ? "hidden" : ""} border border-green-500 text-green-400 p-2 ml-2 rounded-full cursor-pointer hover:bg-green-400 hover:text-black transition-all duration-300`}><FontAwesomeIcon icon={faCheck}/></div>
-            </div>
-
-            <div className={`${inputMode ? "" : "hidden"} flex bg-white/0 w-full h-full rounded-xl justify-end absolute right-0 top-1/2 -translate-y-1/2 pr-4 transition-all duration-150`}>
-                <button onClick={changeShiftInput} className="text-4xl hidden group-hover:block px-4 py-1 rounded text-black/90 hover:text-green-500">
-                    <FontAwesomeIcon icon={faPencilAlt}  />
-                </button>
-                <button onClick={removeTrade} className="text-4xl hidden group-hover:block px-4 py-1 rounded text-black/90 hover:text-red-500">
-                    <FontAwesomeIcon icon={faTrash} />
-                </button>
-            </div>
-
-
-        </div>
+  useEffect(() => {
+    if (Object.keys(enrolledClasses).length === 0) return;
+    const name = Object.keys(enrolledClasses)[Number(ucSelection)];
+    const enrolled = enrolledClasses[name].classes.map(
+      ({ type, shift }: any, index: number) => [
+        index,
+        `${classMap[type]}${shift}`,
+      ]
     );
+
+    updateTrade({
+      ucId: enrolledClasses[name].ucId,
+    });
+
+    setFrom(enrolled);
+  }, [ucSelection]);
+
+  useEffect(() => {
+    if (Object.keys(enrolledClasses).length === 0) return;
+    const name = Object.keys(enrolledClasses)[Number(ucSelection)];
+    const from = enrolledClasses[name].classes[Number(fromSelection)];
+
+    const available = availableClasses[name].classes
+      .filter(
+        ({ type, shift }: any) => type === from.type && shift !== from.shift
+      )
+      .map(({ type, shift }: any, index: number) => [
+        index,
+        `${classMap[type]}${shift}`,
+      ]);
+
+    updateTrade({
+      type: from.type,
+      fromShift: from.shift,
+    });
+
+    console.log("from", from, available);
+    setTo(available);
+  }, [fromSelection]);
+
+  useEffect(() => {
+    if (Object.keys(availableClasses).length === 0) return;
+    const name = Object.keys(enrolledClasses)[Number(ucSelection)];
+    const to = availableClasses[name].classes[Number(toSelection)];
+    console.log("to", name, to);
+    updateTrade({
+      toShift: to.shift,
+    });
+  }, [toSelection]);
+
+  return (
+    <div className="text-center bg-slate-100 p-6 rounded-2xl w-full">
+      <div className="text-white grid grid-cols-12 gap-4 items-center">
+        <div className="col-span-6">
+          <Select
+            options={Object.keys(enrolledClasses).map((name: string, index) => [
+              index,
+              name,
+            ])}
+            setter={setUcSelection}
+            selected={"-1"}
+            placeholder="Selecione a UC"
+          />
+        </div>
+
+        <FaMinus className="text-2xl text-blue-500 w-12" />
+
+        <div className="col-span-2">
+          <Select
+            options={from}
+            setter={setFromSelection}
+            selected={"-1"}
+            placeholder="TP*"
+          />
+        </div>
+
+        <FaArrowRightArrowLeft className="text-2xl text-blue-500 w-12" />
+
+        <div className="col-span-2">
+          <Select
+            options={to}
+            setter={setToSelection}
+            selected={"-1"}
+            placeholder="TP*"
+          />
+        </div>
+      </div>
+    </div>
+  );
 }
