@@ -12,12 +12,21 @@ function NavbarLinks(props: NavbarLinksProps) {
     const {data: session} = useSession();
     return (
         <ul className={`text-gray-800 font-semibold sm:flex ${containerDinamicClass}`}>
-            <li>
-                <Link className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/feed">Feed</Link>
-            </li>
-            <li>
-                <Link className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/horario">Horário</Link>
-            </li>
+            {
+                (session) ?
+                    <>
+                        <li>
+                            <Link className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/feed">Feed</Link>
+                        </li>
+                        
+                        <li>
+                            <Link className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/horario">Horário</Link>
+                        </li>
+                    </>
+                    :
+                    <></>
+                
+            }
             <li>
                 <Link className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300" href="/">Calendário</Link>
 

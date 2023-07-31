@@ -87,11 +87,6 @@ model uc {
   uc_class uc_class[]
 }
 
-enum Status {
-  REMOVED
-  PENDING
-  ACCEPTED
-}
 
 model Account {
   id                 String  @id @default(cuid())
@@ -126,6 +121,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  role          Role? 
   accounts      Account[]
   sessions      Session[]
 }
@@ -136,4 +132,19 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+
+// Trade Status
+enum Status {
+  REMOVED
+  PENDING
+  ACCEPTED
+}
+
+// User Role
+enum Role {
+  SUPER_USER
+  ADMIN  
+  STUDENT
 }
