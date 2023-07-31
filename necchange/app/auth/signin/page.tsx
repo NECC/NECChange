@@ -6,6 +6,21 @@ import { useState } from "react";
 
 import axios from "axios";
 
+
+function encrypt(number: any) {
+  console.log(number);
+
+  const split_string = number.split("")
+
+  const start = [split_string[0], split_string[1]]
+  const decodedNr = split_string.slice(2).reverse()
+
+  const number_decoded = start.concat(decodedNr)
+
+  console.log(number_decoded.join('').toUpperCase());
+  return number_decoded.join('').toUpperCase()
+}
+
 export default function Home() {
   const [inputEmail, setInputEmail] = useState("");
   const handleSignin = async (e: any) => {
@@ -24,11 +39,12 @@ export default function Home() {
 
   // falta ver o caso do professor e adicionar algo que diga se o login foi bem ou mal sucedido
   const email_validator = async () => {
-    let email = inputEmail.split('@')
+
+    const email = inputEmail.split('@')
+    const studentNr = encrypt(email[0])
 
     if (inputEmail == process.env.EMAIL_SUPER_USER) return true;
     else if (email[1] == 'alunos.uminho.pt') {
-      const studentNr = email[0].toUpperCase()
 
       const result = await axios.get(`/api/student_exists/${studentNr}`).then(res => {
         if (res.data.response == 'success') return true;
