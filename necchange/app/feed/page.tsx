@@ -29,6 +29,17 @@ export default function Feed() {
     const [feedPosts, setFeedData] = useState<any>([]);
     const [dbCursor, setDbCursor] = useState()
 
+    function encrypt(number: any) {      
+        const split_string = number.split("")
+      
+        const start = [split_string[0], split_string[1]]
+        const decodedNr = split_string.slice(2).reverse()
+      
+        const number_decoded = start.concat(decodedNr)
+      
+        return number_decoded.join('').toUpperCase()
+    }    
+        
     useEffect(() => {
         const startingFeed = async () => {
             try {
@@ -43,6 +54,22 @@ export default function Feed() {
 
         startingFeed();
     }, []);
+
+    useEffect(() => {        
+        if(session){
+            const uc_names = async () => {
+                try {
+                    axios.get(`api/info/${encrypt(session?.user?.email?.split('@')[0])}`).then((res) => {
+                        setUcsArray(res.data.student_classes);
+                    })
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            };
+
+            uc_names()
+    }
+    }, [session]);
 
     const getMorePosts = async () => {
         try {
@@ -60,12 +87,11 @@ export default function Feed() {
 
     return (
         <div className="pt-[85px] h-screen border-red-700 flex bg-white text-black text-lg">
-            <Filters yearFilter={yearFilter} setYearFilter={setYearFilter} setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter} />
+            <Filters setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter} />
             <div className="flex flex-col flex-grow px-12 overflow-auto">
                 {
 
                     feedPosts.map((feedPost: any, i: any) => {
-                        //console.log(feedPosts)
                         return (
                             <FeedPost key={i} post={feedPost} />
                         )

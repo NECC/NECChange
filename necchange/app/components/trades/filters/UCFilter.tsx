@@ -44,9 +44,9 @@ export default function UCFilter(props: UcsFilterProps) {
     )
 
     return (
-        <div className="border-b pb-3"> 
+        <div className="border-b border-t pb-3 pt-3"> 
             <div className="flex items-center justify-between" onClick={toggleIsVisible}>
-                <strong className="text-lg cursor-pointer">Unidade Curricular</strong>
+                <strong className="text-md ml-7 cursor-pointer">Unidade Curricular</strong>
                 <span className="ml-2 cursor-pointer">
                     <FiChevronDown size={24} className={`transition-all duration-300 ${isVisible ? "rotate-180" : "rotate-0"}`}/>
                 </span>
@@ -56,7 +56,7 @@ export default function UCFilter(props: UcsFilterProps) {
                 <form className="mt-2 accent-blue-500 ">
                     {
                         ucsArray.map((uc, index) => (
-                            <div key={index}>
+                            <div className="ml-7" key={index}>
                                 <input onClick={handleFilter} type="checkbox" id={`${arraySanitization(ucsArray)[index]}`} name="uc" value={`${arraySanitization(ucsArray)[index]}`} className="mb-2"/>
                                 <label htmlFor={`${arraySanitization(ucsArray)[index]}`} className="mr-2 "> {uc} </label>
                             </div>

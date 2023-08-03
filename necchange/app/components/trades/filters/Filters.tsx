@@ -9,17 +9,13 @@ import { FilterI } from "./interface";
 import { UnidadesCurricularesI } from "@/app/feed/interface";
 
 interface FilterProps {
-    setYearFilter: Dispatch<SetStateAction<FilterI>>,
     setUcsFilter: Dispatch<SetStateAction<UnidadesCurricularesI>>,
-    yearFilter: FilterI,
     ucsArray: string[],
     ucsFilter: UnidadesCurricularesI,
 }
 
 export default function Filters(props: FilterProps) {
     const { 
-        yearFilter,
-        setYearFilter,
         setUcsFilter,
         ucsArray,
         ucsFilter,
@@ -40,7 +36,6 @@ export default function Filters(props: FilterProps) {
                         All Trades
                     </div>
                 </div>
-                <YearFilter setFilter={setYearFilter} filter={yearFilter}/>
                 <UCFilter setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter}/>
             </div>
         )

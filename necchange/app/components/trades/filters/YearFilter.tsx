@@ -48,7 +48,7 @@ export default function YearFilter(props: YearFilterProps) {
                     {years.map((year, index) => (
                         <div key={index} className="my-1 cursor-pointer">
                             <input type="radio" id={`ano${index+1}`} name="ano" value="ano" className="mr-1 my-1 h-[10px] cursor-pointer" onClick={changeFilterState}/>
-                            <label htmlFor={`ano${index+1}`} className="mr-2 cursor-pointer text-md text-[1.1em]">{year}</label>
+                            <label htmlFor={`ano${index+1}`} className="mr-2 cursor-pointer text-md">{year}</label>
                         </div>
                     ))}
                 </form>

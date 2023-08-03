@@ -19,7 +19,6 @@ function encrypt(number: any) {
 
   const number_decoded = start.concat(decodedNr)
 
-  console.log(number_decoded.join('').toUpperCase());
   return number_decoded.join('').toUpperCase()
 }
 
