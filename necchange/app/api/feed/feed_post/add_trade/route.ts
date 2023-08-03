@@ -33,9 +33,9 @@ export async function POST(req: NextRequest, context: any){
         trades.map(async (trade: Trade) => {
             console.log(trade)
 
-            const class_from_id = await prisma.uc_class.findMany({
+            const class_from_id = await prisma.lesson.findMany({
                 where:{
-                    uc:{
+                    course:{
                         name: trade.fromUC
                     },
                     type: trade.fromType,
@@ -46,9 +46,9 @@ export async function POST(req: NextRequest, context: any){
                 }
             });
 
-            const class_to_id = await prisma.uc_class.findMany({
+            const class_to_id = await prisma.lesson.findMany({
                 where:{
-                    uc:{
+                    course:{
                         name: trade.toUC
                     },
                     type: trade.toType,
@@ -68,10 +68,10 @@ export async function POST(req: NextRequest, context: any){
                 const trade_id = new_trade.id;
                 class_from_id.map(async (class_from, i) => {
                     // create the needed switches
-                    await prisma.class_switch.create({
+                    await prisma.lesson_trade.create({
                         data:{
-                            class_from_id: class_from.id,
-                            class_to_id: class_to_id[i].id,
+                            lesson_from_id: class_from.id,
+                            lesson_to_id: class_to_id[i].id,
                             trade_id: trade_id
                         }
                     })

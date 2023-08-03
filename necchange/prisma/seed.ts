@@ -25,7 +25,7 @@ interface id_uc{
 const ucs_ids: {[id: string]: id_uc} = {}
 
 function populate_ucs(){
-  let result_ucs: Prisma.ucCreateInput[] = [];
+  let result_ucs: Prisma.courseCreateInput[] = [];
   let i = 1;
   ucs.map((uc) => {
     let uc_to_add = {
@@ -56,7 +56,7 @@ type_class['PL'] = 3;
 
 let classes: { 
   id: number;
-  uc_id: number;
+  course_id: number;
   weekday: number; 
   start_time: string; 
   end_time: string; 
@@ -64,6 +64,7 @@ let classes: {
   type: number; 
   shift: number; 
 }[] = [];
+
 function populate_classes(){
   let i = 1;
 
@@ -71,7 +72,7 @@ function populate_classes(){
     class_schedule.slots.map((slot) =>{
       let class_to_add = {
         id: i,
-        uc_id: ucs_ids[class_schedule.uc].id,
+        course_id: ucs_ids[class_schedule.uc].id,
         weekday: weekdays[slot[0]],
         start_time: slot[1] + ":" + slot[2],
         end_time: slot[3] + ":" + slot[4],
@@ -124,7 +125,7 @@ function populate_student_class() {
   let students_classes: { 
     id: number; 
     student_id: number | undefined; 
-    class_id: number | undefined; 
+    lesson_id: number | undefined; 
   }[] = [];
   let i=1;
 
@@ -143,19 +144,19 @@ function populate_student_class() {
             let start_time = slot[1] + ":" + slot[2]
             let end_time = slot[3] + ":" + slot[4]
 
-            let class_id = classes.filter((class_check) => class_check.uc_id == uc_id 
+            let class_id = classes.filter((class_check) => class_check.course_id == uc_id 
                                                         && class_check.type == type_class_int
                                                         && class_check.shift == shift
                                                         && class_check.weekday == weekday_int
                                                         && class_check.start_time == start_time
                                                         && class_check.end_time == end_time
             ).at(0)?.id
-            let student_class = {
+            let student_lesson = {
               id: i,
               student_id: student_id,
-              class_id: class_id
+              lesson_id: class_id
             }
-            students_classes.push(student_class);
+            students_classes.push(student_lesson);
             i++;
           }
         })
@@ -170,7 +171,7 @@ const prisma = new PrismaClient()
 
 async function main() {
   
-    let ucs: Prisma.ucCreateInput[] = populate_ucs();
+    let ucs: Prisma.courseCreateInput[] = populate_ucs();
     let classes = populate_classes();
     let students = populate_students();
     let students_classes = populate_student_class()
@@ -178,7 +179,7 @@ async function main() {
     await nuclear_bomb()
 
     ucs.map(async (uc) => {
-      await prisma.uc.create({
+      await prisma.course.create({
         data: uc
       })
     });
@@ -191,13 +192,13 @@ async function main() {
     })
 
     classes.map(async (class_add) =>{
-      await prisma.uc_class.create({
+      await prisma.lesson.create({
         data: class_add
       })
     });
   
     students_classes.map( async (student_class) => {
-      await prisma.student_class.create({
+      await prisma.student_lesson.create({
         data: student_class
       })
     });
@@ -218,12 +219,12 @@ main()
 
 
 async function nuclear_bomb(){
-  await prisma.class_switch.deleteMany();
+  await prisma.lesson_trade.deleteMany();
 
   await prisma.trade.deleteMany();
-  await prisma.student_class.deleteMany()
+  await prisma.student_lesson.deleteMany()
 
-  await prisma.uc_class.deleteMany();
+  await prisma.lesson.deleteMany();
   await prisma.student.deleteMany();
-  await prisma.uc.deleteMany();
+  await prisma.course.deleteMany();
 }
