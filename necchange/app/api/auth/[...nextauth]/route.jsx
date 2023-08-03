@@ -1,16 +1,16 @@
 import NextAuth from 'next-auth'
 import EmailProvider from "next-auth/providers/email";
-import {PrismaAdapter} from '@next-auth/prisma-adapter';
-import {PrismaClient, Role} from '@prisma/client';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { PrismaClient, Role } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const authOptions  = {
+export const authOptions = {
   adapter: PrismaAdapter(prisma),
-  
+
   pages: {
-    signIn : "/auth/signin",
-    signOut : "/"
+    signIn: "/auth/signin",
+    signOut: "/"
   },
   providers: [
     EmailProvider({
@@ -21,24 +21,33 @@ export const authOptions  = {
   secret: process.env.NEXTAUTH_SECRET,
   debug: true,
 
+  callbacks: {
+    async session({ session, user }) {
+      // Add role to session provided from useSession
+      session.user.role = user.role
+
+      return session
+    }
+  },
+
   events: {
-    createUser: async ({user}) => {
+    createUser: async ({ user }) => {
       let role = null;
 
-      if(user.email == process.env.EMAIL_SUPER_USER) role = Role.SUPER_USER
+      if (user.email == process.env.EMAIL_SUPER_USER) role = Role.SUPER_USER
       else role = Role.STUDENT
 
       const new_user = await prisma.user.update({
-        where:{
-          email: user.email 
+        where: {
+          email: user.email
         },
-        data:{
+        data: {
           role: role
         }
       })
     }
   }
-  
+
 }
 
 const handler = NextAuth(authOptions)

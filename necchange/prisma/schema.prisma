@@ -19,88 +19,85 @@ model uc_class {
   shift         Int?
   uc            uc?             @relation(fields: [uc_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   student_class student_class[]
-  fromSwitch    class_switch[] @relation("class_from_id")
-  toSwitch      class_switch[] @relation("class_to_id")
+  fromSwitch    class_switch[]  @relation("class_from_id")
+  toSwitch      class_switch[]  @relation("class_to_id")
 
   @@map("class")
 }
 
 model student {
-  id                Int             @id
-  number            String?         @unique @db.VarChar(20)
-  firstname         String?         @db.VarChar(100)
-  lastname          String?         @db.VarChar(100)
-  email             String?         @db.VarChar(100)
-  password          String?         @db.VarChar(100)
-  is_admin          Boolean?
+  id        Int      @id
+  number    String?  @unique @db.VarChar(20)
+  firstname String?  @db.VarChar(100)
+  lastname  String?  @db.VarChar(100)
+  email     String?  @db.VarChar(100)
+  password  String?  @db.VarChar(100)
+  is_admin  Boolean?
 
-  student_class     student_class[]
-//  fromRenamedSwitch trade[] @relation("from_student_id")
-//  toRenamedSwitch   trade[] @relation("to_student_id")
-  from_student_id trade[] @relation("from_student_id")
-  to_student_id   trade[] @relation("to_student_id")
-
+  student_class   student_class[]
+  //  fromRenamedSwitch trade[] @relation("from_student_id")
+  //  toRenamedSwitch   trade[] @relation("to_student_id")
+  from_student_id trade[]         @relation("from_student_id")
+  to_student_id   trade[]         @relation("to_student_id")
 }
 
 model student_class {
-  id           Int           @id
-  student_id   Int?
-  class_id     Int?
+  id         Int  @id
+  student_id Int?
+  class_id   Int?
 
-  uc_class     uc_class? @relation(fields: [class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student      student?      @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  uc_class uc_class? @relation(fields: [class_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  student  student?  @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 // old Renamedswitch
 model class_switch {
-  id              Int          @id @default(autoincrement())
-  class_from_id   Int
-  class_to_id     Int
-  trade_id        Int
-  
-  tradeId         trade    @relation("trade_id", fields: [trade_id], references: [id])
-  classFrom       uc_class @relation("class_from_id", fields: [class_from_id], references: [id])
-  classTo         uc_class @relation("class_to_id", fields: [class_to_id], references: [id])
+  id            Int @id @default(autoincrement())
+  class_from_id Int
+  class_to_id   Int
+  trade_id      Int
+
+  tradeId   trade    @relation("trade_id", fields: [trade_id], references: [id])
+  classFrom uc_class @relation("class_from_id", fields: [class_from_id], references: [id])
+  classTo   uc_class @relation("class_to_id", fields: [class_to_id], references: [id])
 
   @@map("switch")
 }
 
-model trade{
-  id                         Int           @id @default(autoincrement())
-  from_student_id            Int
-  to_student_id              Int?
-  status                     Status?
-  publish_time               DateTime
-  close_time                 DateTime?
+model trade {
+  id              Int       @id @default(autoincrement())
+  from_student_id Int
+  to_student_id   Int?
+  status          Status?
+  publish_time    DateTime
+  close_time      DateTime?
 
-  trade_id                   class_switch[]  @relation("trade_id")
-  from_student               student         @relation("from_student_id", fields: [from_student_id], references: [id])
-  to_student                 student?        @relation("to_student_id", fields: [to_student_id], references: [id])
-
+  trade_id     class_switch[] @relation("trade_id")
+  from_student student        @relation("from_student_id", fields: [from_student_id], references: [id])
+  to_student   student?       @relation("to_student_id", fields: [to_student_id], references: [id])
 }
 
 model uc {
-  id           Int            @id
-  name         String?        @db.VarChar(100)
-  year         Int?
-  semester     Int?
+  id       Int        @id
+  name     String?    @db.VarChar(100)
+  year     Int?
+  semester Int?
   uc_class uc_class[]
 }
 
-
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -121,7 +118,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  role          Role? 
+  role          Role?
   accounts      Account[]
   sessions      Session[]
 }
@@ -134,7 +131,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
 // Trade Status
 enum Status {
   REMOVED
@@ -145,6 +141,6 @@ enum Status {
 // User Role
 enum Role {
   SUPER_USER
-  ADMIN  
+  ADMIN
   STUDENT
 }
