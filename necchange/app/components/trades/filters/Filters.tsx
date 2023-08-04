@@ -3,15 +3,12 @@ import {
     Dispatch,
     SetStateAction,
 } from "react";
-import YearFilter from "./YearFilter";
 import UCFilter from "./UCFilter";
-import { FilterI } from "./interface";
-import { UnidadesCurricularesI } from "@/app/feed/interface";
 
 interface FilterProps {
-    setUcsFilter: Dispatch<SetStateAction<UnidadesCurricularesI>>,
+    setUcsFilter: Dispatch<SetStateAction<string[]>>,
     ucsArray: string[],
-    ucsFilter: UnidadesCurricularesI,
+    ucsFilter: string[],
 }
 
 export default function Filters(props: FilterProps) {

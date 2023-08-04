@@ -1,10 +1,9 @@
-import { UnidadesCurricularesI } from "@/app/feed/interface";
 import { useState, Dispatch, SetStateAction } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 interface UcsFilterProps {
-    setUcsFilter: Dispatch<SetStateAction<UnidadesCurricularesI>>,
-    ucsFilter: UnidadesCurricularesI,
+    setUcsFilter: Dispatch<SetStateAction<string[]>>,
+    ucsFilter: string[],
     ucsArray: string[],
 }
 
@@ -13,7 +12,7 @@ export default function UCFilter(props: UcsFilterProps) {
     const {
         ucsArray,
         ucsFilter,
-        setUcsFilter
+        setUcsFilter,
     } = props;
 
     const [isVisible, setIsVisible] = useState(false);
@@ -21,28 +20,22 @@ export default function UCFilter(props: UcsFilterProps) {
 
     // function to change the filter state
     const handleFilter = (e: any) => {
-        const newFilter = {
+        console.log(ucsFilter.indexOf(e.target.id) == -1);
+        
+        if(ucsFilter.indexOf(e.target.id) == -1){
+        const newFilter: string[] = [
             ...ucsFilter,
-            [e.target.id]: e.target.checked,
-        }
+            [e.target.id][0],
+        ]
         setUcsFilter(newFilter);
+        }
+        else{
+            let newFilter = ucsFilter
+            newFilter.splice(ucsFilter.indexOf(e.target.id), 1)
+            setUcsFilter(newFilter);
+        }
     }
     
-
-    // This little code snippet will transform a portuguese phrase in a concatenated with each word capitalized string
-    // without accents and ç
-    // Álgebra Universal e Categorias = AlgebraUniversalECategorias
-    const arraySanitization = (array: string[]): string[] => (
-        array.map((item: string) => ((item
-                        .split(" ")
-                        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                        .join(" "))
-                        .replace(/[,\s]/g, ""))
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "")
-        )
-    )
-
     return (
         <div className="border-b border-t pb-3 pt-3"> 
             <div className="flex items-center justify-between" onClick={toggleIsVisible}>
@@ -57,8 +50,8 @@ export default function UCFilter(props: UcsFilterProps) {
                     {
                         ucsArray.map((uc, index) => (
                             <div className="ml-7" key={index}>
-                                <input onClick={handleFilter} type="checkbox" id={`${arraySanitization(ucsArray)[index]}`} name="uc" value={`${arraySanitization(ucsArray)[index]}`} className="mb-2"/>
-                                <label htmlFor={`${arraySanitization(ucsArray)[index]}`} className="mr-2 "> {uc} </label>
+                                <input onChange={handleFilter} type="checkbox" id={`${ucsArray[index]}`} name="uc" value={`${ucsArray[index]}`} className="mb-2"/>
+                                <label htmlFor={`${ucsArray[index]}`} className="mr-2 "> {uc} </label>
                             </div>
                         ))
                     }
