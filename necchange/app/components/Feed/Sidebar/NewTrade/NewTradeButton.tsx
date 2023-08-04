@@ -27,17 +27,18 @@ export default function NewTrade() {
       .get(`api/trades/student_ucs/${student_nr}`)
       .then((response) => {
         const data = response.data.student_ucs;
-        const parsed = data.reduce((acc: any, { uc_class }: any) => {
-          if (!acc[uc_class.uc.name]) {
-            acc[uc_class.uc.name] = {
-              ucId: uc_class.uc.id,
+        console.log("response", response);
+        const parsed = data.reduce((acc: any, { lesson }: any) => {
+          if (!acc[lesson.course.name]) {
+            acc[lesson.course.name] = {
+              ucId: lesson.course.id,
               classes: [],
             };
           }
-          acc[uc_class.uc.name].classes.push({
-            classId: uc_class.id,
-            shift: uc_class.shift,
-            type: uc_class.type,
+          acc[lesson.course.name].classes.push({
+            classId: lesson.id,
+            shift: lesson.shift,
+            type: lesson.type,
           });
           return acc;
         }, {});
@@ -52,10 +53,10 @@ export default function NewTrade() {
       })
       .then((response) => {
         const res = response.data.classes;
-        const parsed = res.reduce((acc: any, { name, id, uc_class }: any) => {
+        const parsed = res.reduce((acc: any, { name, id, lesson }: any) => {
           acc[name] = {
             ucId: id,
-            classes: uc_class.map(({ id, shift, type }: any) => ({
+            classes: lesson.map(({ id, shift, type }: any) => ({
               classId: id,
               shift,
               type,

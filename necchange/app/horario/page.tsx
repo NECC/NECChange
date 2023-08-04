@@ -41,6 +41,7 @@ export default function Home() {
   useEffect(() => {
     if (session) {
       student_nr = encrypt(session.user?.email?.split("@")[0])
+      console.log(student_nr);
       const getEvents = async () => {
         try {
           const response = await axios.get(`api/trades/student_schedule/${student_nr}`);
@@ -51,7 +52,8 @@ export default function Home() {
       };
 
       getEvents();
-    }, []); 
+    }
+  }, [student_nr]) 
     
 
     return (
@@ -59,9 +61,6 @@ export default function Home() {
         <div className='ml-auto mr-auto px-8 md:px-16'>
           <StudentSchedule events={classes} />
         </div>
-
       </div>
-      <PopUp handleTradesPopUp={handleTradesPopUp} isTradesOpened={isTradesOpened} classes={classes} student_nr={student_nr} />
-    </div>
   );
 }

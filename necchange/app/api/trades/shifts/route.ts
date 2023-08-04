@@ -5,7 +5,7 @@ export async function GET(req: NextRequest, context: any) {
   const prisma = new PrismaClient();
   const ucs = [...req.nextUrl.searchParams.values()].map(Number);
 
-  const classes = await prisma.uc.findMany({
+  const classes = await prisma.course.findMany({
     where: {
       id: {
         in: ucs,
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest, context: any) {
     select: {
       id: true,
       name: true,
-      uc_class: {
+      lesson: {
         select: {
           id: true,
           type: true,

@@ -27,19 +27,19 @@ export default function FeedPost({post}: any) {
 
             </div>
             {
-                post.trade_id.map((class_switch: any, i: number) => {
-                    let type = type_class[class_switch.classFrom.type]
-                    let fromShift = class_switch.classFrom.shift
-                    let toShift = class_switch.classTo.shift
+                post.trade_id.map((lesson_trade: any, i: number) => {
+                    let type = type_class[lesson_trade.lessonFrom.type]
+                    let fromShift = lesson_trade.lessonFrom.shift
+                    let toShift = lesson_trade.lessonTo.shift
 
-                    //console.log(class_switch);
+                    //console.log(lesson_trade);
                     return(
                         <div key={i} className="flex flex-row">
                             <div className="font-bold">
-                                {class_switch.classFrom.uc.name}
+                                {lesson_trade.lessonFrom.course.name}
                             </div>
-                            <span className={`ml-1 font-bold ${yearColor[class_switch.classFrom.uc.year - 1]}`}>
-                                ( {class_switch.classFrom.uc.year}º Ano )
+                            <span className={`ml-1 font-bold ${yearColor[lesson_trade.lessonFrom.course.year - 1]}`}>
+                                ( {lesson_trade.lessonFrom.course.year}º Ano )
                             </span>
                             <div className="ml-1">
                                 {'- ' + type + fromShift + ' para ' + type + toShift}

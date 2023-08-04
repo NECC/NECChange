@@ -1,7 +1,12 @@
-import {Trade} from "@/app/api/feed/feed_post/add_trade/interface"
 import { PrismaClient, Status } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+export interface Trade {
+    ucId: number;
+    type: number;
+    fromShift: number;
+    toShift: number;
+}
 
 export async function POST(req: NextRequest, context: any){
     const data = await req.json()
@@ -31,14 +36,12 @@ export async function POST(req: NextRequest, context: any){
         })
     
         trades.map(async (trade: Trade) => {
-            console.log(trade)
-
             const class_from_id = await prisma.lesson.findMany({
                 where:{
                     course:{
-                        name: trade.fromUC
+                        id: trade.ucId
                     },
-                    type: trade.fromType,
+                    type: trade.type,
                     shift: trade.fromShift
                 },
                 select: {
@@ -49,9 +52,9 @@ export async function POST(req: NextRequest, context: any){
             const class_to_id = await prisma.lesson.findMany({
                 where:{
                     course:{
-                        name: trade.toUC
+                        id: trade.ucId
                     },
-                    type: trade.toType,
+                    type: trade.type,
                     shift: trade.toShift
                 },
                 select: {

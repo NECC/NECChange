@@ -6,16 +6,16 @@ export async function GET(req: NextRequest, context: any) {
   const prisma = new PrismaClient();
 
   try {
-    const student_ucs = await prisma.student_class.findMany({
+    const student_ucs = await prisma.student_lesson.findMany({
       where: {
-        student: {
+        User: {
           number: student_nr,
         },
       },
       include: {
-        uc_class: {
+        lesson: {
           include: {
-            uc: true,
+            course: true,
           },
         },
       },
@@ -24,15 +24,6 @@ export async function GET(req: NextRequest, context: any) {
     return new NextResponse(
       JSON.stringify({ status: "ok", student_ucs: student_ucs })
     );
-
-    // const ucs = new Set();
-    // student_ucs.map((uc) => {
-    //   ucs.add(uc.uc_class?.uc?.name);
-    // });
-    // const ucs_to_array = Array.from(ucs);
-    // return new NextResponse(
-    //   JSON.stringify({ status: "ok", ucs: ucs_to_array })
-    // );
   } catch (error) {
     return new NextResponse(JSON.stringify({ status: "error", error: error }));
   }
