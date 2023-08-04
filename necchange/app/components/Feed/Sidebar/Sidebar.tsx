@@ -1,12 +1,13 @@
 import {
-    useState,
     Dispatch,
     SetStateAction,
 } from "react";
-import YearFilter from "./YearFilter";
-import UCFilter from "./UCFilter";
+import YearFilter from "./Filters/YearFilter";
+import UCFilter from "./Filters/UCFilter";
 import { FilterI } from "./interface";
 import { UnidadesCurricularesI } from "@/app/feed/interface";
+
+import NewTradeButton from '@/app/components/Feed/Sidebar/NewTrade/NewTradeButton'
 
 interface FilterProps {
     setYearFilter: Dispatch<SetStateAction<FilterI>>,
@@ -25,13 +26,8 @@ export default function Filters(props: FilterProps) {
         ucsFilter,
     } = props
 
-    // Debug code
-    //console.table(yearFilter)
-    //console.table(ucsFilter)
-
-
     return (
-            <div className="px-10 mt-4 w-1/4 border-r">
+            <div className=" px-10 mt-4 w-1/4 border-r">
                 <div className="flex w-full font-bold">
                     <div className="w-1/2 p-3 border-e flex justify-center hover:bg-slate-50 hover:cursor-pointer">
                         My Trades
@@ -42,6 +38,7 @@ export default function Filters(props: FilterProps) {
                 </div>
                 <YearFilter setFilter={setYearFilter} filter={yearFilter}/>
                 <UCFilter setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter}/>
+                <NewTradeButton />
             </div>
         )
 }
