@@ -25,7 +25,8 @@ export default function Home() {
   const handleSignin = async (e: any) => {
     e.preventDefault()
     try {
-      if (await email_validator() == true) {
+      const result: any = await email_validator()
+      if (result == true) {
         await signIn('email', { email: inputEmail, callbackUrl: '/roleRouter' })
       } else {
         console.log("Invalid email");
@@ -36,22 +37,21 @@ export default function Home() {
     }
   }
 
-  // falta ver o caso do professor e adicionar algo que diga se o login foi bem ou mal sucedido
   const email_validator = async () => {
     const email = inputEmail.split('@')
 
-    // ver o porquê desta variável de ambiente não funcionar - process.env.EMAIL_SUPER_USER
+    console.log(inputEmail);
     if (inputEmail == "dev@necc.di.uminho.pt") return true;
-    else if (email[1] == 'alunos.uminho.pt') {
+    else{
       const studentNr = encrypt(email[0])
-      const result = await axios.get(`/api/student_exists/${studentNr}`).then( res => {
+      const email_encrypted = studentNr + '@' + email[1];
+
+      const result = await axios.get(`/api/user_exists/${email_encrypted}`).then( res => {
         if (res.data.response == 'success') return true;
         else return false;
       })
-
-      return result;
+      return result
     }
-    else return false;
   }
 
   return (

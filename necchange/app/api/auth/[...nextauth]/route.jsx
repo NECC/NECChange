@@ -37,7 +37,7 @@ export const authOptions = {
       if (user.email == process.env.EMAIL_SUPER_USER) role = Role.SUPER_USER
       else role = Role.STUDENT
 
-      const new_user = await prisma.user.update({
+      await prisma.user.update({
         where: {
           email: user.email
         },

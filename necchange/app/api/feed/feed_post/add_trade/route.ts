@@ -10,12 +10,12 @@ export async function POST(req: NextRequest, context: any){
     
     const prisma = new PrismaClient();
 
-    const student_id = await prisma.student.findFirst({
+    const student_id: any = await prisma.user.findFirst({
         where:{
             number: student_nr
         },
         select: {
-            id:true 
+            uniqueId:true 
         }
     })
     
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest, context: any){
     if(student_id){
         const new_trade = await prisma.trade.create({
             data:{
-                from_student_id: student_id.id,
+                from_student_id: student_id.uniqueId,
                 status: Status.PENDING,
                 publish_time: date,
             }

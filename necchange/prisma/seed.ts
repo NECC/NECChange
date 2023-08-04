@@ -90,7 +90,7 @@ function populate_classes(){
 
 
 let students: {
-  unique_id: number; 
+  uniqueId: number; 
   number: string; 
   firstname: string; 
   lastname: string; 
@@ -104,7 +104,7 @@ function populate_students(){
 
     Object.keys(alocation).map((student_nr) =>{
         let student = {
-          unique_id: i,
+          uniqueId: i,
           number: student_nr,
           firstname: portugueseFaker.person.firstName(),
           lastname: portugueseFaker.person.lastName(),
@@ -133,7 +133,7 @@ function populate_student_class() {
     let entries = alocation[studentNr]
     if(Array.isArray(entries)){
       entries.map((student_class) => {
-        let student_id = students.filter((student) => student.number == studentNr).at(0)?.unique_id;
+        let student_id = students.filter((student) => student.number == studentNr).at(0)?.uniqueId;
         
         let uc_id = ucs_ids[student_class.uc].id;
         let type_class_int = type_class[student_class.type_class]

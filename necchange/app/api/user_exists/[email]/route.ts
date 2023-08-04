@@ -3,20 +3,19 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest, context: any){
     const prisma = new PrismaClient();
-    const studentNr = context.params.number
+    const email = context.params.email
     
-    console.log(studentNr);
-    const student = await prisma.student.findFirst({
+    const student = await prisma.user.findFirst({
         where: {
-            number: studentNr
+            email: email
         },
         select:{
-            id: true
+            uniqueId: true
         }
     })
 
     if(student){
-        return new NextResponse(JSON.stringify({response: "success"}))
+        return new NextResponse(JSON.stringify({response: "success", unique_id: student.uniqueId}))
     } else {
         return new NextResponse(JSON.stringify({response: "error"}))
     }

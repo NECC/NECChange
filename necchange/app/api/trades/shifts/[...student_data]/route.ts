@@ -16,11 +16,10 @@ export async function GET(req: NextRequest, context: any) {
     // this query gets all classes of a student from a given uc
     const student_classes_uc = await prisma.student_lesson.findMany({
         where: {
-            student:{
+            User:{
                 number: student_nr
             },
             lesson:{
-
                 course:{
                     name: uc_name
                 }
@@ -28,7 +27,6 @@ export async function GET(req: NextRequest, context: any) {
         },
         select:{
             lesson:{
-
                 select: {
                     type: true,
                     shift: true
