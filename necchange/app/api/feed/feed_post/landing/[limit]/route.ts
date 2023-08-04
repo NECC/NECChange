@@ -26,9 +26,9 @@ export async function GET(req: NextRequest, context: any) {
           },
           trade_id: {
             select: {
-              classFrom:{
+              lessonFrom:{
                 select: {
-                  uc:{
+                  course:{
                     select:{
                       name: true,
                       year: true
@@ -38,9 +38,9 @@ export async function GET(req: NextRequest, context: any) {
                   shift: true
                 }
               },
-              classTo: {
+              lessonTo: {
                 select: {
-                  uc:{
+                  course:{
                     select:{
                       name: true,
                       year: true

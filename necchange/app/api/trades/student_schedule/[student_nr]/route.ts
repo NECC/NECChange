@@ -1,19 +1,19 @@
 import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from '@prisma/client'
 
-export async function GET(request, context){
+export async function GET(request: NextRequest, context: any){
 
   const student_nr = context.params.student_nr
   
   const prisma = new PrismaClient()
-  const studentClasses = await prisma.student.findUnique({
+  const studentClasses: any = await prisma.user.findUnique({
       where: {
         number: student_nr,
       },
       select: {
-        student_class: {
+        student_lesson: {
           select: {
-            uc_class: {
+            lesson: {
               select: {
                 weekday: true,
                 start_time: true,
@@ -21,7 +21,7 @@ export async function GET(request, context){
                 local: true,
                 shift: true,
                 type: true,
-                uc: {
+                course: {
                   select:{
                       name: true
                   }
@@ -34,16 +34,16 @@ export async function GET(request, context){
     });
 
 
-  let classes = [];
-  studentClasses.student_class.map((studentClass) => {
+  let classes: any = [];
+  studentClasses.student_lesson.map((studentClass: any) => {
     let date = new Date()
     let year = date.getFullYear()
-    let month = date.getMonth() +1;
+    let month: any = date.getMonth() +1;
 
     if(month < 10) month = "0" + month;
 
     let days_in_month = new Date(year, month, 0).getDate();
-    let day = date.getDate() + studentClass.uc_class.weekday - date.getDay();
+    let day: any = date.getDate() + studentClass.lesson.weekday - date.getDay();
 
     if (day > days_in_month) {
       day = day % days_in_month;
@@ -66,20 +66,20 @@ export async function GET(request, context){
       day = "0" + day;
     }
 
-    let start = new Date(year + "-" + month + "-" + day + "T" + studentClass.uc_class.start_time);
-    let end = new Date(year + "-" + month + "-" + day + "T" + studentClass.uc_class.end_time);
+    let start = new Date(year + "-" + month + "-" + day + "T" + studentClass.lesson.start_time);
+    let end = new Date(year + "-" + month + "-" + day + "T" + studentClass.lesson.end_time);
 
-    let type_class = {
+    let type_class: any = {
       1: "T",
       2: "TP",
       3: "PL"
     }
 
-    let shift = studentClass.uc_class.shift;
-    let type = type_class[studentClass.uc_class.type];
-    let uc_name = studentClass.uc_class.uc.name;
+    let shift = studentClass.lesson.shift;
+    let type: any = type_class[studentClass.lesson.type];
+    let uc_name = studentClass.lesson.course.name;
     classes.push({
-      title: uc_name + " - " + type + shift + " - " + studentClass.uc_class.local,
+      title: uc_name + " - " + type + shift + " - " + studentClass.lesson.local,
 
       uc_name: uc_name,
       type: type,

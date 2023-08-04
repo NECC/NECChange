@@ -8,8 +8,6 @@ import axios from "axios";
 
 
 function encrypt(number: any) {
-  console.log(number);
-
   const split_string = number.split("")
 
   const start = [split_string[0], split_string[1]]
@@ -17,17 +15,19 @@ function encrypt(number: any) {
 
   const number_decoded = start.concat(decodedNr)
 
-  console.log(number_decoded.join('').toUpperCase());
   return number_decoded.join('').toUpperCase()
 }
 
 export default function Home() {
   const [inputEmail, setInputEmail] = useState("");
+
+  
   const handleSignin = async (e: any) => {
     e.preventDefault()
     try {
-      if (await email_validator() == true) {
-        await signIn('email', { email: inputEmail, callbackUrl: '/horario' })
+      const result: any = await email_validator()
+      if (result == true) {
+        await signIn('email', { email: inputEmail, callbackUrl: '/roleRouter' })
       } else {
         console.log("Invalid email");
       }
@@ -37,23 +37,21 @@ export default function Home() {
     }
   }
 
-  // falta ver o caso do professor e adicionar algo que diga se o login foi bem ou mal sucedido
   const email_validator = async () => {
-
     const email = inputEmail.split('@')
-    const studentNr = encrypt(email[0])
 
-    if (inputEmail == process.env.EMAIL_SUPER_USER) return true;
-    else if (email[1] == 'alunos.uminho.pt') {
+    console.log(inputEmail);
+    if (inputEmail == "dev@necc.di.uminho.pt") return true;
+    else{
+      const studentNr = encrypt(email[0])
+      const email_encrypted = studentNr + '@' + email[1];
 
-      const result = await axios.get(`/api/student_exists/${studentNr}`).then(res => {
+      const result = await axios.get(`/api/user_exists/${email_encrypted}`).then( res => {
         if (res.data.response == 'success') return true;
         else return false;
       })
-
-      return result;
+      return result
     }
-    else return false;
   }
 
   return (
