@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { FiChevronRight } from 'react-icons/fi';
-import { FeedPostI, UnidadesCurricularesI } from "@/app/feed/interface";
-import { FilterI } from "../filters/interface";
-
+import React, {useState} from "react";
 
 const type_class: any = {
     1: "T",
@@ -53,7 +49,7 @@ export default function FeedPost({post}: any) {
                 })
             }
             <div>
-                <button className="rounded-lg p-2 text-md mt-4 float-right font-bold text-white bg-[#018ccb] shadow-md hover:bg-[#007cb6]">Aceitar Troca</button>
+                <button className="p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md">Aceitar Troca</button>
             </div>
         </div>
     );

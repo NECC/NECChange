@@ -1,6 +1,7 @@
 'use client'
-import StudentSchedule from '../components/trades/schedule/StudentSchedule'
-import PopUp from '../components/trades/popUp/PopUp'
+
+import StudentSchedule from '../components/schedule/StudentSchedule'
+
 
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from 'react'
@@ -24,6 +25,7 @@ function encrypt(number: any) {
 }
 
 export default function Home() {
+
   let student_nr = '';
   const [isTradesOpened, setIsTradesOpened] = useState(false);
   const [classes, setClasses] = useState([]);
@@ -49,14 +51,15 @@ export default function Home() {
       };
 
       getEvents();
-    }
-  }, [session]);
+    }, []); 
+    
 
+    return (
+      <div className='bg-white h-screen pt-24 '>
+        <div className='ml-auto mr-auto px-8 md:px-16'>
+          <StudentSchedule events={classes} />
+        </div>
 
-  return (
-    <div className='bg-white h-screen pt-24 '>
-      <div className='ml-auto mr-auto px-8 md:px-16'>
-        <StudentSchedule events={classes} handleTradesPopUp={handleTradesPopUp} />
       </div>
       <PopUp handleTradesPopUp={handleTradesPopUp} isTradesOpened={isTradesOpened} classes={classes} student_nr={student_nr} />
     </div>

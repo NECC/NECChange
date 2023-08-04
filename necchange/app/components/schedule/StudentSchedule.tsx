@@ -14,7 +14,7 @@ import { CalendarProps } from './interface';
 
 
 export default function StudentSchedule(props: CalendarProps) {
-    const {events, handleTradesPopUp} = props
+    const {events} = props
     const {innerWidth, innerHeight} = useWindowSize(); // Get width and height size
 
     const minDate = new Date();
@@ -23,18 +23,9 @@ export default function StudentSchedule(props: CalendarProps) {
     const maxDate = new Date();
     maxDate.setHours(20, 0, 0);
 
-    //console.table(events)
-
     return (
         <FullCalendar
             plugins={[ dayGridPlugin , timeGridPlugin, interactionPlugin]}
-
-            customButtons={{
-                openTrades: {
-                    text: "Trocas de turnos",
-                    click: () => handleTradesPopUp(),
-                }
-            }}
 
             allDaySlot={false}
             initialView={innerWidth && innerWidth < 640 ? "timeGridDay" : "timeGridWeek"}
@@ -43,10 +34,6 @@ export default function StudentSchedule(props: CalendarProps) {
                 start: innerWidth && innerWidth < 640 ? "prev next" : "",
                 end: "openTrades",
             }}
-            //footerToolbar={{
-            //    center: "prev next"
-            //}}
-            // start: "today dayGridMonth,timeGridWeek,timeGridDay",
             
             dayHeaderFormat={{
                 weekday: innerWidth && innerWidth < 1100 ? 'short' : 'long', 

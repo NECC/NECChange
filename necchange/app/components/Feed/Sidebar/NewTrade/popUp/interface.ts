@@ -1,3 +1,11 @@
+import { ClassesI } from "@/app/horario/interface"
+
+export interface PopUpInterface {
+    student_nr: string,
+    handleTradesPopUp: () => void,
+    isTradesOpened: boolean,
+}
+
 export interface TradesI {
     student_nr: string,
     ucNames: Array<string>,
