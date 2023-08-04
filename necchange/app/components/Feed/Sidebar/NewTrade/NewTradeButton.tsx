@@ -19,7 +19,6 @@ export default function NewTrade() {
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
 
-
   console.log("Trades", trades);
   //console.log("enrolled classes" , enrolledClasses);
 
@@ -81,23 +80,24 @@ export default function NewTrade() {
   };
 
   const removeTrade = (id: number) => {
-    console.log("Removing trade");
+    console.log("Removing trade", id);
     const newTrades = trades.filter((trade) => trade.id != id);
-    setTrades(newTrades)
-  }
-  
+    setTrades(newTrades);
+  };
+
   const updateTrade = (id: number, tradeData: any) => {
-    const index = trades.findIndex((trade) => trade.id === id);
-    const updated = [...trades];
-    updated[index] = { ...updated[index], ...tradeData };
-    setTrades(updated);
+    const newTrades = trades.map((trade) => {
+      if (trade.id == id) {
+        trade = { ...trade, ...tradeData };
+      }
+      return trade;
+    });
+    setTrades(newTrades);
   };
 
   useEffect(() => {
     console.log(trades);
   }, [trades]);
-
-  
 
   const submitTrades = () => {
     axios
@@ -122,11 +122,10 @@ export default function NewTrade() {
         title="Solicitar troca"
       >
         <div className="flex flex-col space-y-2 mb-3 min-h-[50vh]">
-          {trades.map((trade, index) => (
+          {trades.map((trade) => (
             <TradeEntry
-              key={index}
-              tradeIndex={trade.id}
-              removeTrade={removeTrade}
+              key={trade.id}
+              removeTrade={() => removeTrade(trade.id)}
               updateTrade={(tradeData: any) => updateTrade(trade.id, tradeData)}
               enrolledClasses={enrolledClasses}
               availableClasses={availableClasses}
