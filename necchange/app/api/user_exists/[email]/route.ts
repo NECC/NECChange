@@ -14,6 +14,8 @@ export async function GET(req: NextRequest, context: any){
         }
     })
 
+    console.log(email);
+
     if(student){
         return new NextResponse(JSON.stringify({response: "success", unique_id: student.uniqueId}))
     } else {

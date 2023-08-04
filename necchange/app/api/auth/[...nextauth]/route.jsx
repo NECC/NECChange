@@ -31,21 +31,6 @@ export const authOptions = {
   },
 
   events: {
-    createUser: async ({ user }) => {
-      let role = null;
-
-      if (user.email == process.env.EMAIL_SUPER_USER) role = Role.SUPER_USER
-      else role = Role.STUDENT
-
-      await prisma.user.update({
-        where: {
-          email: user.email
-        },
-        data: {
-          role: role
-        }
-      })
-    }
   }
 
 }

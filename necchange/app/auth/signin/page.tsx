@@ -43,10 +43,10 @@ export default function Home() {
     console.log(inputEmail);
     if (inputEmail == "dev@necc.di.uminho.pt") return true;
     else{
-      const studentNr = encrypt(email[0])
-      const email_encrypted = studentNr + '@' + email[1];
+      //const studentNr = encrypt(email[0])
+      //const email_encrypted = studentNr + '@' + email[1];
 
-      const result = await axios.get(`/api/user_exists/${email_encrypted}`).then( res => {
+      const result = await axios.get(`/api/user_exists/${inputEmail}`).then( res => {
         if (res.data.response == 'success') return true;
         else return false;
       })

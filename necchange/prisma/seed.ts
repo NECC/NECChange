@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient, Role } from '@prisma/client'
 import { Faker, pt_PT } from '@faker-js/faker';
 
 import schedule from '../public/data/input/schedule.json'
@@ -88,6 +88,16 @@ function populate_classes(){
   return classes
 }
 
+function encrypt(number: any) {
+  const split_string = number.split("")
+
+  const start = [split_string[0], split_string[1]]
+  const decodedNr = split_string.slice(2).reverse()
+
+  const number_decoded = start.concat(decodedNr)
+
+  return number_decoded.join('')
+}
 
 let students: {
   uniqueId: number; 
@@ -102,15 +112,18 @@ function populate_students(){
     let i = 1;
     const portugueseFaker = new Faker({ locale: [pt_PT] });
 
+
+
     Object.keys(alocation).map((student_nr) =>{
         let student = {
           uniqueId: i,
           number: student_nr,
           firstname: portugueseFaker.person.firstName(),
           lastname: portugueseFaker.person.lastName(),
-          email: student_nr + "@alunos.uminho.pt",
+          email: encrypt(student_nr).toLowerCase() + "@alunos.uminho.pt",
           //password: null
-          is_admin: false
+          is_admin: false,
+          role: Role.STUDENT
         }
         students.push(student);
         i++;
@@ -178,6 +191,7 @@ async function main() {
 
     await nuclear_bomb()
 
+    
     ucs.map(async (uc) => {
       await prisma.course.create({
         data: uc
@@ -203,7 +217,7 @@ async function main() {
       })
     });
     
-   
+ 
 }
 
 main()
