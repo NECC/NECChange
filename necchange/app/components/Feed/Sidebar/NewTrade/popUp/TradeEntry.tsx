@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { FaArrowRightArrowLeft, FaMinus } from "react-icons/fa6";
+import { FaArrowRightArrowLeft, FaMinus, FaTrash } from "react-icons/fa6";
 import Select from "@/app/components/globals/Select";
 
 const classMap: any = {
@@ -10,13 +10,15 @@ const classMap: any = {
 };
 
 interface TradeEntryI {
+  tradeIndex: any;
+  removeTrade: any;  
   updateTrade: any;
   enrolledClasses: any;
   availableClasses: any;
 }
 
 export default function TradeEntry(props: TradeEntryI) {
-  const { updateTrade, enrolledClasses, availableClasses } = props;
+  const { tradeIndex, removeTrade, updateTrade, enrolledClasses, availableClasses } = props;
   // selection controls
   const [ucSelection, setUcSelection] = useState("");
   const [fromSelection, setFromSelection] = useState("");
@@ -76,7 +78,12 @@ export default function TradeEntry(props: TradeEntryI) {
   }, [toSelection]);
 
   return (
-    <div className="text-center bg-slate-100 p-6 rounded-2xl w-full">
+    <div className="group text-center bg-slate-100 p-6 rounded-2xl w-full">
+      <div className="flex">
+        <button className="hidden group-hover:block ml-auto pb-6 text-red-500" onClick={() => removeTrade(tradeIndex)}>
+          <FaTrash />
+        </button>
+      </div>
       <div className="text-white grid grid-cols-12 gap-4 items-center">
         <div className="col-span-6">
           <Select

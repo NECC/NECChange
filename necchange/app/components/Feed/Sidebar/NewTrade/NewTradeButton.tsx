@@ -19,6 +19,10 @@ export default function NewTrade() {
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
 
+
+  console.log("Trades", trades);
+  //console.log("enrolled classes" , enrolledClasses);
+
   useEffect(() => {
     axios
       .get(`api/trades/student_ucs/${student_nr}`)
@@ -76,6 +80,12 @@ export default function NewTrade() {
     ]);
   };
 
+  const removeTrade = (id: number) => {
+    console.log("Removing trade");
+    const newTrades = trades.filter((trade) => trade.id != id);
+    setTrades(newTrades)
+  }
+  
   const updateTrade = (id: number, tradeData: any) => {
     const index = trades.findIndex((trade) => trade.id === id);
     const updated = [...trades];
@@ -86,6 +96,8 @@ export default function NewTrade() {
   useEffect(() => {
     console.log(trades);
   }, [trades]);
+
+  
 
   const submitTrades = () => {
     axios
@@ -113,6 +125,8 @@ export default function NewTrade() {
           {trades.map((trade, index) => (
             <TradeEntry
               key={index}
+              tradeIndex={trade.id}
+              removeTrade={removeTrade}
               updateTrade={(tradeData: any) => updateTrade(trade.id, tradeData)}
               enrolledClasses={enrolledClasses}
               availableClasses={availableClasses}
