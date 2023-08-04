@@ -25,19 +25,20 @@ model lesson {
   @@map("class")
 }
 
-model student {
-  id        Int      @id
-  number    String?  @unique @db.VarChar(20)
-  firstname String?  @db.VarChar(100)
-  lastname  String?  @db.VarChar(100)
-  email     String?  @db.VarChar(100)
-  password  String?  @db.VarChar(100)
-  is_admin  Boolean?
 
-  student_lesson   student_lesson[]
-  from_student_id trade[]         @relation("from_student_id")
-  to_student_id   trade[]         @relation("to_student_id")
-}
+//model student {
+//  id        Int      @id
+//  number    String?  @unique @db.VarChar(20)
+//  firstname String?  @db.VarChar(100)
+//  lastname  String?  @db.VarChar(100)
+//  email     String?  @db.VarChar(100)
+//  password  String?  @db.VarChar(100)
+//  is_admin  Boolean?
+//
+//  student_lesson   student_lesson[]
+//  from_student_id trade[]         @relation("from_student_id")
+//  to_student_id   trade[]         @relation("to_student_id")
+//}
 
 //OLD: student_class
 model student_lesson {
@@ -46,7 +47,7 @@ model student_lesson {
   lesson_id   Int?
 
   lesson lesson? @relation(fields: [lesson_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  student  student?  @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  User  User?  @relation(fields: [student_id], references: [unique_id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 // OLD: class_switch 
@@ -72,8 +73,8 @@ model trade {
   close_time      DateTime?
 
   trade_id     lesson_trade[] @relation("trade_id")
-  from_student student        @relation("from_student_id", fields: [from_student_id], references: [id])
-  to_student   student?       @relation("to_student_id", fields: [to_student_id], references: [id])
+  from_student User        @relation("from_student_id", fields: [from_student_id], references: [unique_id])
+  to_student   User?       @relation("to_student_id", fields: [to_student_id], references: [unique_id])
 }
 
 //Old name: uc
@@ -113,14 +114,21 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
+  id        String   @id @default(cuid())
+  unique_id Int      @unique @default(autoincrement())
+  number    String?  @unique @db.VarChar(20)
+  firstname String?  @db.VarChar(100)
+  lastname  String?  @db.VarChar(100)
   email         String?   @unique
   emailVerified DateTime?
-  image         String?
+  is_admin  Boolean?
   role          Role?
+  
   accounts      Account[]
   sessions      Session[]
+  student_lesson   student_lesson[]
+  from_student_id trade[]         @relation("from_student_id")
+  to_student_id   trade[]         @relation("to_student_id")
 }
 
 model VerificationToken {
