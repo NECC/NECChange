@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,10 +24,13 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/getCalendar/route.ts", "app/api/trades/student_schedule/[student_nr]/route.js", "app/components/schedule/StudentSchedule.tsx", "app/components/Feed/Sidebar/NewTrade/popUp/TradeEntry.tsx"],
 
   "exclude": ["node_modules"]
+
 }

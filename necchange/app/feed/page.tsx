@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { FilterI } from "../components/Feed/Sidebar/interface";
 //import { FeedPostI } from "./interface";
+
 import { UnidadesCurricularesI } from "./interface";
 
 import FeedPost from "@/app/components/Feed/Feed-Posts/FeedPost";
@@ -23,6 +24,7 @@ export default function Feed() {
   const student_nr = "A182920";
   const [feedPosts, setFeedData] = useState<any>([]);
   const [dbCursor, setDbCursor] = useState();
+
 
   useEffect(() => {
     const startingFeed = async () => {
@@ -79,6 +81,7 @@ export default function Feed() {
               style={{ color: "white" }}
             />
           </button>
+
         </div>
       </div>
     </div>
