@@ -29,8 +29,6 @@ export default function Feed() {
     const [feedPosts, setFeedData] = useState<any>([]);
     const [dbCursor, setDbCursor] = useState<any>([])
 
-    const [teste, setTeste] = useState<string[]>([]);
-
 
     function encrypt(number: any) {      
         const split_string = number.split("")
@@ -56,6 +54,10 @@ export default function Feed() {
         };
         startingFeed();
     }, []);
+
+    useEffect(() => {
+        console.log("RELOAD ----------------------");
+    }, [ucsFilter]);
 
     useEffect(() => {        
         if(session){
@@ -86,30 +88,28 @@ export default function Feed() {
         }
     }
 
-    useEffect(() => {        
-        console.log(teste);
-        setTeste(ucsFilter)
-        
-    }, [ucsFilter]);
-
+    
     return (
         <div className="pt-[85px] h-screen border-red-700 flex bg-white text-black text-lg">
             <Filters setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter}/>
             <div className="flex flex-col flex-grow px-12 overflow-auto">
                 {
                     feedPosts.map((feedPost: any, i: any) => {
-                        console.log(teste.length);                        
-                        if(teste.length == 0){
+                        console.log(ucsFilter, "tamanho:", ucsFilter.length);                        
+                        if(ucsFilter.length == 0){
+                            console.log("vazio");
                             return (
                                 <FeedPost key={i} post={feedPost} />
                             )
                         }
-                        else if(teste.includes(feedPost.trade_id[0].classFrom.uc.name)){
+                        else if(ucsFilter.includes(feedPost.trade_id[0].classFrom.uc.name)){
+                            console.log("filtrado");
                             return (
                                 <FeedPost key={i} post={feedPost} />
                             )
                         }
                         else{
+                            console.log("nada");
                             return
                         }
                     })

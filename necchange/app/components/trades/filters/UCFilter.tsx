@@ -19,9 +19,7 @@ export default function UCFilter(props: UcsFilterProps) {
     const toggleIsVisible = () => setIsVisible(!isVisible);
 
     // function to change the filter state
-    const handleFilter = (e: any) => {
-        console.log(ucsFilter.indexOf(e.target.id) == -1);
-        
+    const handleFilter = (e: any) => {        
         if(ucsFilter.indexOf(e.target.id) == -1){
         const newFilter: string[] = [
             ...ucsFilter,

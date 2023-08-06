@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FiChevronRight } from 'react-icons/fi';
-import { FeedPostI, UnidadesCurricularesI } from "@/app/feed/interface";
-import { FilterI } from "../filters/interface";
-
 
 const type_class: any = {
     1: "T",
@@ -15,6 +11,9 @@ const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
 export default function FeedPost({post}: any) {
     const [fromStudentNr, setFromStudentNr] = useState<string>(post.from_student.number)
     const [tradeId, setTradeId] = useState<number>(post.id);
+
+    console.log("POSTTTTI", post);
+    
 
     return (
         <div className="w-2/3 rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
