@@ -10,10 +10,7 @@ const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
 
 export default function FeedPost({post}: any) {
     const [fromStudentNr, setFromStudentNr] = useState<string>(post.from_student.number)
-    const [tradeId, setTradeId] = useState<number>(post.id);
-
-    console.log("POSTTTTI", post);
-    
+    const [tradeId, setTradeId] = useState<number>(post.id);    
 
     return (
         <div className="w-2/3 rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
@@ -27,7 +24,6 @@ export default function FeedPost({post}: any) {
                 <div className="text-end">
                     Publicado há ...
                 </div>
-
             </div>
             {
                 post.trade_id.map((class_switch: any, i: number) => {
@@ -35,7 +31,6 @@ export default function FeedPost({post}: any) {
                     let fromShift = class_switch.classFrom.shift
                     let toShift = class_switch.classTo.shift
 
-                    //console.log(class_switch);
                     return(
                         <div key={i} className="flex flex-row">
                             <div className="font-bold">

@@ -29,6 +29,8 @@ export default function Feed() {
     const [feedPosts, setFeedData] = useState<any>([]);
     const [dbCursor, setDbCursor] = useState<any>([])
 
+    const [filteredPosts, setFilteredPosts] = useState<any>([]);
+
 
     function encrypt(number: any) {      
         const split_string = number.split("")
@@ -55,9 +57,16 @@ export default function Feed() {
         startingFeed();
     }, []);
 
-    useEffect(() => {
-        console.log("RELOAD ----------------------");
-    }, [ucsFilter]);
+    useEffect(() => {        
+        if(ucsFilter.length == 0){            
+            setFilteredPosts(feedPosts)
+        }
+        else{
+        setFilteredPosts(feedPosts.filter((feedPost: any, i: any) => {
+            return ucsFilter.includes(feedPost.trade_id[0].classFrom.uc.name)
+        }))
+    }
+    }, [ucsFilter, feedPosts]);
 
     useEffect(() => {        
         if(session){
@@ -94,24 +103,10 @@ export default function Feed() {
             <Filters setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter}/>
             <div className="flex flex-col flex-grow px-12 overflow-auto">
                 {
-                    feedPosts.map((feedPost: any, i: any) => {
-                        console.log(ucsFilter, "tamanho:", ucsFilter.length);                        
-                        if(ucsFilter.length == 0){
-                            console.log("vazio");
-                            return (
-                                <FeedPost key={i} post={feedPost} />
-                            )
-                        }
-                        else if(ucsFilter.includes(feedPost.trade_id[0].classFrom.uc.name)){
-                            console.log("filtrado");
-                            return (
-                                <FeedPost key={i} post={feedPost} />
-                            )
-                        }
-                        else{
-                            console.log("nada");
-                            return
-                        }
+                    filteredPosts.map((feedPost: any, i: any) => {
+                        return (
+                            <FeedPost key={i} post={feedPost} />
+                        )
                     })
                 }
                 <div className="flex w-2/3 p-8 m-4 ml-10">
