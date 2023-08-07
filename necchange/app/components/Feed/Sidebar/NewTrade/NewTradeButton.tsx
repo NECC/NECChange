@@ -14,13 +14,11 @@ const emptyTrade = {
 
 export default function NewTrade() {
   const student_nr = "A94447";
+
   const [showModal, setShowModal] = useState(false);
   const [trades, setTrades] = useState([emptyTrade]);
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
-
-  console.log("Trades", trades);
-  //console.log("enrolled classes" , enrolledClasses);
 
   useEffect(() => {
     axios
@@ -97,7 +95,7 @@ export default function NewTrade() {
   };
 
   useEffect(() => {
-    console.log(trades);
+    console.log("Trades", trades);
   }, [trades]);
 
   const submitTrades = () => {
@@ -107,6 +105,9 @@ export default function NewTrade() {
       })
       .then((response) => console.log(response));
   };
+
+
+
 
   return (
     <>
