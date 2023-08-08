@@ -1,7 +1,7 @@
 'use client'
 import Image from "next/image";
-
-import { useSession, signIn, signOut, getSession } from 'next-auth/react';
+import Loader from "@/app/components/globals/Loader";
+import { signIn } from 'next-auth/react';
 import { useState } from "react";
 
 import axios from "axios";
@@ -20,19 +20,30 @@ function encrypt(number: any) {
 
 export default function Home() {
   const [inputEmail, setInputEmail] = useState("");
+  const [loader, setLoader] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(false)
 
+
+  const toggleLoader = (value: boolean) => {
+    setLoader(value);
+  }
   
   const handleSignin = async (e: any) => {
     e.preventDefault()
     try {
+      toggleLoader(true)
       const result: any = await email_validator()
       if (result == true) {
+        setErrorMessage(false)
         await signIn('email', { email: inputEmail, callbackUrl: '/roleRouter' })
       } else {
+        setErrorMessage(true)
         console.log("Invalid email");
       }
+      toggleLoader(false)
     }
     catch (error) {
+      toggleLoader(false)
       console.log('Unable to sign-in: ', error)
     }
   }
@@ -75,10 +86,14 @@ export default function Home() {
                       type="email"
                       autoComplete="email"
                       required
-                      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       onChange={(e) => setInputEmail(e.target.value)}
                     />
                   </div>
+                  {
+                    errorMessage && 
+                    <p className="text-red-600">Email inválido!</p>
+                  }
                 </div>
 
                 <div>
@@ -107,6 +122,7 @@ export default function Home() {
           NECChange
         </div>
       </div>
+      {loader && <Loader />}
     </main>
   );
 }
