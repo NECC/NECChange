@@ -12,22 +12,23 @@ const emptyTrade = {
   toShift: 0,
 };
 
-export default function NewTrade() {
-  const student_nr = "A94447";
+interface FilterProps {
+  student_nr: string;
+}
+
+export default function NewTrade(props: FilterProps) {
   const [showModal, setShowModal] = useState(false);
   const [trades, setTrades] = useState([emptyTrade]);
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
 
-  console.log("Trades", trades);
-  //console.log("enrolled classes" , enrolledClasses);
+  const { student_nr } = props;  
 
   useEffect(() => {
     axios
       .get(`api/trades/student_ucs/${student_nr}`)
       .then((response) => {
         const data = response.data.student_ucs;
-        console.log("response", response);
         const parsed = data.reduce((acc: any, { lesson }: any) => {
           if (!acc[lesson.course.name]) {
             acc[lesson.course.name] = {
