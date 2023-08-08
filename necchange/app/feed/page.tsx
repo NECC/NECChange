@@ -41,6 +41,7 @@ function encrypt(number: any) {
 }   
     
 useEffect(() => {
+
     const startingFeed = async () => {
         try {
             axios.get(`api/feed/feed_post/landing/${2}`).then((res) => {

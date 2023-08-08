@@ -17,6 +17,7 @@ interface FilterProps {
 }
 
 export default function NewTrade(props: FilterProps) {
+
   const [showModal, setShowModal] = useState(false);
   const [trades, setTrades] = useState([emptyTrade]);
   const [enrolledClasses, setEnrolledClasses] = useState({});
@@ -98,7 +99,7 @@ export default function NewTrade(props: FilterProps) {
   };
 
   useEffect(() => {
-    console.log(trades);
+    console.log("Trades", trades);
   }, [trades]);
 
   const submitTrades = () => {
@@ -108,6 +109,9 @@ export default function NewTrade(props: FilterProps) {
       })
       .then((response) => console.log(response));
   };
+
+
+
 
   return (
     <>
