@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import axios from 'axios'
+import Loader from "../../globals/Loader";
 
 const type_class: any = {
     1: "T",
@@ -12,6 +13,8 @@ const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
 export default function FeedPost({post}: any) {
     const [fromStudentNr, setFromStudentNr] = useState<string>(post.from_student.number)
     const [tradeId, setTradeId] = useState<number>(post.id);
+    const [loader, setLoader] = useState(false)
+
 
         /*
     David - A95661
@@ -20,7 +23,12 @@ export default function FeedPost({post}: any) {
     */
     const studentNrAccept = 'A94447'
 
+    const toggleLoader = (value: boolean) => {
+        setLoader(value);
+    }
+
     const acceptTrade = () => {
+        toggleLoader(true)
         axios
         .post(`api/feed/feed_post/accept_trade`, {
             params: {studentNr: studentNrAccept, tradeId: tradeId}
@@ -36,10 +44,12 @@ export default function FeedPost({post}: any) {
                         console.log("Res2" , res);
                     })
             }
+            toggleLoader(false)
         }).catch(err=>{
             console.log(err);
         })
     }
+
 
     return (
         <div className="w-2/3 rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
@@ -56,24 +66,30 @@ export default function FeedPost({post}: any) {
 
             </div>
             {
+
                 post.trade_id.map((lesson_trade: any, i: number) => {
                     let type = type_class[lesson_trade.lessonFrom.type]
                     let fromShift = lesson_trade.lessonFrom.shift
                     let toShift = lesson_trade.lessonTo.shift
 
-                    //console.log(lesson_trade);
                     return(
-                        <div key={i} className="flex flex-row">
-                            <div className="font-bold">
-                                {lesson_trade.lessonFrom.course.name}
+                        <div key={i}>
+                            <div className="flex flex-row">
+                                <div className="font-bold">
+                                    {lesson_trade.lessonFrom.course.name}
+                                </div>
+                                <span className={`ml-1 font-bold ${yearColor[lesson_trade.lessonFrom.course.year - 1]}`}>
+                                    ( {lesson_trade.lessonFrom.course.year}º Ano )
+                                </span>
+                                <div className="ml-1">
+                                    {'- ' + type + fromShift + ' para ' + type + toShift}
+                                </div>
                             </div>
-                            <span className={`ml-1 font-bold ${yearColor[lesson_trade.lessonFrom.course.year - 1]}`}>
-                                ( {lesson_trade.lessonFrom.course.year}º Ano )
-                            </span>
-                            <div className="ml-1">
-                                {'- ' + type + fromShift + ' para ' + type + toShift}
+                            <div className={`${studentNrAccept == fromStudentNr ? 'hidden' : '' } text-xs`}>
+                                {fromStudentNr}{": " + type + fromShift + " -> " + type + toShift} || {studentNrAccept}{": " + type + toShift + " -> " + type + fromShift}
                             </div>
                         </div>
+                        
                     );
                 })
             }
@@ -85,6 +101,7 @@ export default function FeedPost({post}: any) {
                     </button>
                 }
             </div>
+            {loader && <Loader />}
         </div>
     );
 }
