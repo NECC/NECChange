@@ -2,28 +2,23 @@ import {
     Dispatch,
     SetStateAction,
 } from "react";
-import YearFilter from "./Filters/YearFilter";
 import UCFilter from "./Filters/UCFilter";
-import { FilterI } from "./interface";
-import { UnidadesCurricularesI } from "@/app/feed/interface";
 
 import NewTradeButton from '@/app/components/Feed/Sidebar/NewTrade/NewTradeButton'
 
 interface FilterProps {
-    setYearFilter: Dispatch<SetStateAction<FilterI>>,
-    setUcsFilter: Dispatch<SetStateAction<UnidadesCurricularesI>>,
-    yearFilter: FilterI,
+    setUcsFilter: Dispatch<SetStateAction<string[]>>,
     ucsArray: string[],
-    ucsFilter: UnidadesCurricularesI,
+    ucsFilter: string[],
+    student_nr: string
 }
 
 export default function Filters(props: FilterProps) {
     const { 
-        yearFilter,
-        setYearFilter,
         setUcsFilter,
         ucsArray,
         ucsFilter,
+        student_nr,
     } = props
 
     return (
@@ -36,9 +31,8 @@ export default function Filters(props: FilterProps) {
                         All Trades
                     </div>
                 </div>
-                <YearFilter setFilter={setYearFilter} filter={yearFilter}/>
                 <UCFilter setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter}/>
-                <NewTradeButton />
+                <NewTradeButton student_nr={student_nr} />
             </div>
         )
 }
