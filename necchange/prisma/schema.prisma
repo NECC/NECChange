@@ -114,7 +114,7 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
-  uniqueId      Int?      @unique @default(autoincrement())
+  uniqueId      Int       @unique @default(autoincrement())
   number        String?   @unique @db.VarChar(20)
   firstname     String?   @db.VarChar(100)
   lastname      String?   @db.VarChar(100)

@@ -20,11 +20,8 @@ export default function Feed() {
     ano3: false,
   });
   const [ucsArray, setUcsArray] = useState<string[]>([]);
-
-  const student_nr = "A182920";
   const [feedPosts, setFeedData] = useState<any>([]);
   const [dbCursor, setDbCursor] = useState();
-
 
   useEffect(() => {
     const startingFeed = async () => {
