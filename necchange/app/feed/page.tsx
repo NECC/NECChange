@@ -19,7 +19,6 @@ export default function Feed() {
 });
 
 const [ucsFilter, setUcsFilter] = useState<string[]>([]);
-const [yearFilter, setYearFilter] = useState<FilterI>({ ano1: false, ano2: false, ano3: false, })
 const [ucsArray, setUcsArray] = useState<string[]>([]);
 
 const [feedPosts, setFeedData] = useState<any>([]);
