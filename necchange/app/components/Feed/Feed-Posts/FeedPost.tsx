@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import axios from 'axios'
 
 const type_class: any = {
     1: "T",
@@ -11,6 +12,34 @@ const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
 export default function FeedPost({post}: any) {
     const [fromStudentNr, setFromStudentNr] = useState<string>(post.from_student.number)
     const [tradeId, setTradeId] = useState<number>(post.id);
+
+        /*
+    David - A95661
+    Hugo  - A93646
+    Simão - A94447
+    */
+    const studentNrAccept = 'A94447'
+
+    const acceptTrade = () => {
+        axios
+        .post(`api/feed/feed_post/accept_trade`, {
+            params: {studentNr: studentNrAccept, tradeId: tradeId}
+        })
+        .then(res =>{
+            console.log("Res 1", res);
+            if(res.data.response == true){
+                axios
+                    .delete(`api/feed/feed_post/accept_trade`, {
+                        data: {fromStudentNr: fromStudentNr, toStudentNr: studentNrAccept, tradeId: tradeId}
+                    })
+                    .then(res =>{
+                        console.log("Res2" , res);
+                    })
+            }
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
 
     return (
         <div className="w-2/3 rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
@@ -49,7 +78,12 @@ export default function FeedPost({post}: any) {
                 })
             }
             <div>
-                <button className="p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md">Aceitar Troca</button>
+                {
+                    <button className={`${studentNrAccept == fromStudentNr ? 'hidden' : '' } p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md`}
+                            onClick={acceptTrade}>
+                        Aceitar Troca
+                    </button>
+                }
             </div>
         </div>
     );
