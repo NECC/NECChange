@@ -4,13 +4,9 @@ import { PrismaClient, Status } from "@prisma/client";
 export async function GET(req: NextRequest, context: any) {
     const prisma = new PrismaClient();
 
-    const limit = parseInt(context.params.scroll[0]);
-    const cursor = parseInt(context.params.scroll[1]);
-    let studentNr = context.params.scroll[2] === 'undefined' ? undefined : context.params.scroll[2]
-    let ucsFilter = context.params.scroll.length === 4 ? context.params.scroll[3].split('&') : undefined
-
-    console.log(limit);
-    console.log(cursor);
+    const limit = parseInt(context.params.data[0])
+    let studentNr = context.params.data[1] === 'undefined' ? undefined : context.params.data[1]
+    let ucsFilter = context.params.data.length === 3 ? context.params.data[2].split('&') : undefined
 
     let lesson_ids = undefined;
     if(ucsFilter != undefined){
@@ -30,31 +26,24 @@ export async function GET(req: NextRequest, context: any) {
       lesson_ids = query_lesson_ids.map((lesson_id) => lesson_id.id)
     }
 
-    console.log("Lesson ids", lesson_ids);
-
     const trades = await prisma.trade.findMany({
         where:{
           status: Status.PENDING,
           from_student:{
             number: studentNr
           },
-          trade_id:{
-            some : {
+          trade_id: {
+            some:{
               lesson_from_id: {in: lesson_ids},
               lesson_to_id: {in: lesson_ids}
             }
           }
-
+          
         },
-        cursor: {
-            id: cursor
+        orderBy: {
+          id: 'asc'
         },
         take: limit,
-        skip: 1,
-        orderBy: {
-            id: 'asc'
-        },
-
         include:{
           from_student:{
             select:{
@@ -90,13 +79,11 @@ export async function GET(req: NextRequest, context: any) {
                 }
               }
             }
+            
           }
         }
     })
-
-
-    console.log("Trades", trades);
-
+    
     let new_cursor = 0; 
     trades.forEach((trade) =>{
       if(trade.id > new_cursor) new_cursor = trade.id;

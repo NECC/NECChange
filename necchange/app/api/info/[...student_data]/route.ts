@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest, context: any) {
     const student_nr = context.params.student_data[0];
     
-    
     const prisma = new PrismaClient();
     // const student_nr = student_data[0];
 
