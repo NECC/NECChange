@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from 'axios'
 import Loader from "../../globals/Loader";
 
@@ -11,16 +11,21 @@ const type_class: any = {
 const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
 
 export default function FeedPost({post}: any) {
-    const [fromStudentNr, setFromStudentNr] = useState<string>(post.from_student.number)
-    const [tradeId, setTradeId] = useState<number>(post.id);
+    const [fromStudentNr, setFromStudentNr] = useState<string>();
+    const [tradeId, setTradeId] = useState<number>();
     const [loader, setLoader] = useState(false)
 
-
-        /*
+    /*
     David - A95661
     Hugo  - A93646
     Simão - A94447
     */
+
+    useEffect(() =>{
+        setFromStudentNr(post.from_student.number);
+        setTradeId(post.id)
+    }, [post])
+
     const studentNrAccept = 'A94447'
 
     const toggleLoader = (value: boolean) => {
@@ -95,7 +100,7 @@ export default function FeedPost({post}: any) {
             }
             <div>
                 {
-                    <button className={`${studentNrAccept == fromStudentNr ? 'hidden' : '' } p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md`}
+                    <button className={`${studentNrAccept == post.from_student.number ? 'hidden' : '' } p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md`}
                             onClick={acceptTrade}>
                         Aceitar Troca
                     </button>
