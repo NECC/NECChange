@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { FilterI } from "../components/Feed/Sidebar/interface";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import axios from "axios";
+
 import FeedPost from "@/app/components/Feed/Feed-Posts/FeedPost";
 import Sidebar from "@/app/components/Feed/Sidebar/Sidebar";
-import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownLong } from "@fortawesome/free-solid-svg-icons";
@@ -25,35 +25,40 @@ const [feedPosts, setFeedData] = useState<any>([]);
 const [dbCursor, setDbCursor] = useState<any>([])
 
 const [filteredPosts, setFilteredPosts] = useState<any>([]);
+const [myTrades, setMyTrades] = useState<boolean>(false)
 
-const [student_nr, setStudent_Nr] = useState<any>();
+useEffect(() => {        
+  if(session){
+      const uc_names = async () => {
+          try {
+              axios.get(`api/info/${session?.user?.number}`).then((res) => {
+                setUcsArray(res.data.student_classes);
+              })
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      };
+      uc_names()
+}
+}, [session]);
 
-
-function encrypt(number: any) {      
-    const split_string = number.split("")
-  
-    const start = [split_string[0], split_string[1]]
-    const decodedNr = split_string.slice(2).reverse()
-  
-    const number_decoded = start.concat(decodedNr)
-  
-    return number_decoded.join('').toUpperCase()
-}   
-    
 useEffect(() => {
-
     const startingFeed = async () => {
         try {
-            axios.get(`api/feed/feed_post/landing/${2}`).then((res) => {
-                setDbCursor(res.data.cursor);
-                setFeedData(res.data.response);
+            let query_filtered_ucs = ucsFilter.join('&');
+            query_filtered_ucs = encodeURIComponent(query_filtered_ucs)
+            console.log(query_filtered_ucs);
+
+            axios.get(`api/feed/feed_post/landing/${2}${myTrades ? `/${session?.user?.number}` : '/undefined'}/${query_filtered_ucs}`).then((res) => {
+              setDbCursor(res.data.cursor);
+              setFeedData(res.data.response);
             })
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
     startingFeed();
-}, []);
+}, [session, ucsFilter, myTrades]);
 
 useEffect(() => {        
     if(ucsFilter.length == 0){            
@@ -66,26 +71,12 @@ useEffect(() => {
     }
 }, [ucsFilter, feedPosts]);
 
-useEffect(() => {        
-    if(session){
-        const uc_names = async () => {
-            try {
-                axios.get(`api/info/${encrypt(session?.user?.email?.split('@')[0])}`).then((res) => {
-                  setStudent_Nr(encrypt(session?.user?.email?.split('@')[0]))
-                  setUcsArray(res.data.student_classes);
-                })
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-        uc_names()
-}
-}, [session]);
-
 const getMorePosts = async () => {
     try {
+        let query_filtered_ucs = ucsFilter.join('&');
+        query_filtered_ucs = encodeURIComponent(query_filtered_ucs)
         console.log("dbCursor", dbCursor);
-        axios.get(`api/feed/feed_post/${2}/${dbCursor}`).then((res) => {
+        axios.get(`api/feed/feed_post/${2}/${dbCursor}${myTrades ? `/${session?.user?.number}` : '/undefined'}/${query_filtered_ucs}`).then((res) => {
             if (res.data.response.length > 0) {
                 setDbCursor(res.data.cursor);
                 setFeedData([...feedPosts, ...res.data.response])
@@ -103,7 +94,9 @@ const getMorePosts = async () => {
         setUcsFilter={setUcsFilter}
         ucsArray={ucsArray}
         ucsFilter={ucsFilter}
-        student_nr={student_nr}
+        student_nr={session?.user?.number}
+        myTrades={myTrades}
+        setMyTrades={setMyTrades}
       />
       <div className="flex flex-col flex-grow px-12 overflow-auto">
         {filteredPosts.map((feedPost: any, i: any) => {

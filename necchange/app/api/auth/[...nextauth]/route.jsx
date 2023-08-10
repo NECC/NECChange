@@ -25,6 +25,10 @@ export const authOptions = {
     async session({ session, user }) {
       // Add role to session provided from useSession
       session.user.role = user.role
+      session.user.number = user.number
+
+      console.log("session.user", session.user);
+      console.log("user", user);
 
       return session
     }

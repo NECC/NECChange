@@ -13,7 +13,7 @@ const emptyTrade = {
 };
 
 interface FilterProps {
-  student_nr: string;
+  student_nr: string | undefined;
 }
 
 export default function NewTrade(props: FilterProps) {
