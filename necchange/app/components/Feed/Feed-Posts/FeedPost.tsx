@@ -28,6 +28,7 @@ export default function FeedPost(props: FeedPostProps) {
     */
 
     useEffect(() =>{
+        console.log("post", post);
         setFromStudentNr(post.from_student.number);
         setTradeId(post.id)
     }, [post])

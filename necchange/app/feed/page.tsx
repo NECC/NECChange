@@ -122,7 +122,7 @@ const getMorePosts = async () => {
       <div className="mr-16 mt-10">
         <div className={`${feedBack.error ? "bg-red-600" : "bg-green-600"} 
                          ${feedBack.show ? "" : "invisible"}
-                         flex w-40 h-20 p-6 justify-center items-center text-white text-sm font-semibold rounded-md`}>
+                         flex w-40 h-20 p-4 justify-center items-center text-white text-sm font-semibold rounded-md`}>
           {feedBack.message}
         </div>
       </div>

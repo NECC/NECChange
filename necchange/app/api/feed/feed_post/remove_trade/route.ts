@@ -7,10 +7,6 @@ export async function PUT(req: NextRequest, context: any) {
     const tradeId = parseInt(data.params.tradeId);
     const prisma = new PrismaClient()
 
-
-    throw new Error('Um erro');
-    return new NextResponse(JSON.stringify({response: "erro"}))
-
     const removeTrade = await prisma.$transaction(async (tx) => {
         await prisma.trade.update({
             where: {
