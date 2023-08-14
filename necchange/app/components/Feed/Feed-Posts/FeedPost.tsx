@@ -55,6 +55,21 @@ export default function FeedPost({post}: any) {
         })
     }
 
+    const removeTrade = () => {
+        toggleLoader(true);
+        axios
+        .put(`api/feed/feed_post/remove_trade`, {
+            params: {tradeId: tradeId}
+        })
+        .then(res => {
+            console.log(res);
+            toggleLoader(false);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+
 
     return (
         <div className="w-2/3 rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
@@ -100,10 +115,16 @@ export default function FeedPost({post}: any) {
             }
             <div>
                 {
-                    <button className={`${studentNrAccept == post.from_student.number ? 'hidden' : '' } p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md`}
-                            onClick={acceptTrade}>
-                        Aceitar Troca
-                    </button>
+                    <div>
+                        <button className={`${studentNrAccept == post.from_student.number ? 'hidden' : '' } p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md`}
+                                onClick={acceptTrade}>
+                            Aceitar Troca
+                        </button>
+                        <button className={`${studentNrAccept == post.from_student.number ? '' : 'hidden' } p-2 mt-4 bg-red-500 hover:bg-red-600 font-bold text-white text-md float-right rounded-lg shadow-md`}
+                                onClick={removeTrade}>
+                            Remover Troca
+                        </button>
+                    </div>
                 }
             </div>
             {loader && <Loader />}
