@@ -27,7 +27,7 @@ export default function Home() {
   const toggleLoader = (value: boolean) => {
     setLoader(value);
   }
-  
+
   const handleSignin = async (e: any) => {
     e.preventDefault()
     try {
@@ -50,8 +50,8 @@ export default function Home() {
 
   const email_validator = async () => {
     if (inputEmail == "dev@necc.di.uminho.pt") return true;
-    else{
-      const result = await axios.get(`/api/user_exists/${inputEmail}`).then( res => {
+    else {
+      const result = await axios.get(`/api/user_exists/${inputEmail}`).then(res => {
         if (res.data.response == 'success') return true;
         else return false;
       })
@@ -61,7 +61,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen  items-center justify-between  bg-white">
-      <aside className="w-1/2 h-screen border-r dark:border-gray-200 dark:bg-darker focus:outline-none">
+      <aside className="h-screen border-r dark:border-gray-200 dark:bg-darker focus:outline-none sm:w-1/2 w-full tall:w-full">
         <div className="flex flex-col   min-h-full  justify-center items-center ">
           <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -91,7 +91,7 @@ export default function Home() {
                     />
                   </div>
                   {
-                    errorMessage && 
+                    errorMessage &&
                     <p className="text-red-600">Email inválido!</p>
                   }
                 </div>
@@ -111,14 +111,14 @@ export default function Home() {
         </div>
       </aside>
 
-      <div className="flex flex-col w-1/2  h-screen  justify-center items-center">
+      <div className="flex flex-col w-1/2  h-screen  justify-center items-center hidden sm:flex tall:hidden">
         <Image
           src="/logos/neccSticker.png"
           alt="Logo NECC"
           width={400}
           height={400}
         />
-        <div className="text-[#018ccb] text-2xl sm:text-6xl font-semibold">
+        <div className="text-[#018ccb]  sm:text-5xl font-semibold">
           NECChange
         </div>
       </div>
