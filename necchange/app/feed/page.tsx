@@ -9,14 +9,18 @@ import Sidebar from "@/app/components/Feed/Sidebar/Sidebar";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownLong } from "@fortawesome/free-solid-svg-icons";
+import Loader from "../components/globals/Loader";
 
 export default function Feed() {
-  const { data: session, status } = useSession({
+  const { data: session } = useSession({
     required: true,
     onUnauthenticated() {
         redirect('/')
     },
 });
+
+const [loader, setLoader] = useState(false);
+const [feedBack, setFeedBack] = useState({message:"", show:false, error:false})
 
 const [ucsFilter, setUcsFilter] = useState<string[]>([]);
 const [ucsArray, setUcsArray] = useState<string[]>([]);
@@ -89,7 +93,7 @@ const getMorePosts = async () => {
 
 
   return (
-    <div className="pt-[85px] h-screen border-red-700 flex bg-white text-black text-lg">
+    <div className="pt-[85px] h-screen border-red-700 flex bg-white text-black text-lg overflow-auto">
       <Sidebar
         setUcsFilter={setUcsFilter}
         ucsArray={ucsArray}
@@ -98,11 +102,11 @@ const getMorePosts = async () => {
         myTrades={myTrades}
         setMyTrades={setMyTrades}
       />
-      <div className="flex flex-col flex-grow px-12 overflow-auto">
+      <div className="flex flex-col flex-grow px-12 mt-6">
         {filteredPosts.map((feedPost: any, i: any) => {
-          return <FeedPost key={i} post={feedPost} />;
+          return <FeedPost key={i} post={feedPost} setLoader={setLoader} setFeedBack={setFeedBack}/>;
         })}
-        <div className="flex w-2/3 p-8 m-4 ml-10">
+        <div className="flex p-8 m-4 ml-10">
           <button
             className="p-2 px-4 m-2 ml-auto mr-auto rounded-full bg-[#018ccb] hover:bg-[#007cb6]"
             onClick={getMorePosts}
@@ -115,6 +119,14 @@ const getMorePosts = async () => {
 
         </div>
       </div>
+      <div className="mr-16 mt-10">
+        <div className={`${feedBack.error ? "bg-red-600" : "bg-green-600"} 
+                         ${feedBack.show ? "" : "invisible"}
+                         flex w-40 h-20 p-6 justify-center items-center text-white text-sm font-semibold rounded-md`}>
+          {feedBack.message}
+        </div>
+      </div>
+      {loader && <Loader />}
     </div>
   );
 }
