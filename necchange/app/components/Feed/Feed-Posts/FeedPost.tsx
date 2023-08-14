@@ -1,19 +1,25 @@
 import React, {useEffect, useState} from "react";
 import axios from 'axios'
-import Loader from "../../globals/Loader";
 
 const type_class: any = {
     1: "T",
     2: "TP",
     3: "PL"
 }
-
 const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
 
-export default function FeedPost({post}: any) {
+
+interface FeedPostProps {
+    post: any,
+    setLoader: Function,
+    setFeedBack: Function
+}
+
+export default function FeedPost(props: FeedPostProps) {
+    const {post, setLoader, setFeedBack} = props
     const [fromStudentNr, setFromStudentNr] = useState<string>();
     const [tradeId, setTradeId] = useState<number>();
-    const [loader, setLoader] = useState(false)
+    
 
     /*
     David - A95661
@@ -22,6 +28,7 @@ export default function FeedPost({post}: any) {
     */
 
     useEffect(() =>{
+        console.log("post", post);
         setFromStudentNr(post.from_student.number);
         setTradeId(post.id)
     }, [post])
@@ -62,17 +69,25 @@ export default function FeedPost({post}: any) {
             params: {tradeId: tradeId}
         })
         .then(res => {
-            console.log(res);
             toggleLoader(false);
+            setFeedBack({message: "Pedido de troca removido", show: true, error: false})
+            setTimeout(() => {
+                setFeedBack({message: "", show: false, error: false})
+            }, 5000)
         })
         .catch(err => {
+            toggleLoader(false);
+            setFeedBack({message: "Erro ao remover o pedido de troca", show: true, error: true})
+            setTimeout(() => {
+                setFeedBack({message: "", show: false, error: false})
+            }, 5000)
             console.log(err);
         })
     }
 
 
     return (
-        <div className="w-2/3 rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
+        <div className="rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
             <div className="font-bold pb-10">
                 <div className="float-left text-2xl">
                     <span className="ml-1 text-lg font-normal">
@@ -113,21 +128,20 @@ export default function FeedPost({post}: any) {
                     );
                 })
             }
-            <div>
-                {
-                    <div>
-                        <button className={`${studentNrAccept == post.from_student.number ? 'hidden' : '' } p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md`}
-                                onClick={acceptTrade}>
-                            Aceitar Troca
-                        </button>
-                        <button className={`${studentNrAccept == post.from_student.number ? '' : 'hidden' } p-2 mt-4 bg-red-500 hover:bg-red-600 font-bold text-white text-md float-right rounded-lg shadow-md`}
-                                onClick={removeTrade}>
-                            Remover Troca
-                        </button>
-                    </div>
-                }
-            </div>
-            {loader && <Loader />}
+            
+            {
+                <div>
+                    <button className={`${studentNrAccept == post.from_student.number ? 'hidden' : '' } p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md`}
+                            onClick={acceptTrade}>
+                        Aceitar Troca
+                    </button>
+                    <button className={`${studentNrAccept == post.from_student.number ? '' : 'hidden' } p-2 mt-4 bg-red-500 hover:bg-red-600 font-bold text-white text-md float-right rounded-lg shadow-md`}
+                            onClick={removeTrade}>
+                        Remover Troca
+                    </button>
+                </div>
+            }
+            
         </div>
     );
 }
