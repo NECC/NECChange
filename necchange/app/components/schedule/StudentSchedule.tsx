@@ -32,7 +32,7 @@ export default function StudentSchedule(props: CalendarProps) {
             weekends={false}
             headerToolbar={{
                 start: innerWidth && innerWidth < 640 ? "prev next" : "",
-                end: "openTrades",
+                end: "",
             }}
             
             dayHeaderFormat={{

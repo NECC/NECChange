@@ -15,11 +15,16 @@ interface FeedPostProps {
     setFeedBack: Function
 }
 
+interface PublishDate {
+    value: number,
+    scope: 'segundo' | 'minuto' | 'hora' | 'dia' | 'mes',
+}
+
 export default function FeedPost(props: FeedPostProps) {
     const {post, setLoader, setFeedBack} = props
     const [fromStudentNr, setFromStudentNr] = useState<string>();
     const [tradeId, setTradeId] = useState<number>();
-    
+    const [publishDate, setPublishDate] = useState<PublishDate>({ value: 0, scope: 'segundo' })
 
     /*
     David - A95661
@@ -27,8 +32,27 @@ export default function FeedPost(props: FeedPostProps) {
     Simão - A94447
     */
 
+    const calculatePublishedDate = () => {
+        const actualDate = new Date();
+        const publishedDate = new Date(post.publish_time);
+        
+        const secondsDiff = Math.floor((actualDate.getTime() - publishedDate.getTime()) / 1000);
+        if (secondsDiff < 60) return setPublishDate({ value: secondsDiff, scope: 'segundo' });
+
+        const minutesDiff = Math.floor(secondsDiff / 60);
+        if (minutesDiff < 60) return setPublishDate({ value: minutesDiff, scope: 'minuto' });
+
+        const hourDiff = Math.floor(minutesDiff / 60);
+        if (hourDiff < 24) return setPublishDate({ value: hourDiff, scope: 'hora' });
+
+        const daysDiff = Math.floor(hourDiff / 24);
+        if (daysDiff < 30) return setPublishDate({ value: daysDiff, scope: 'dia' });
+        else return setPublishDate({ value: Math.floor(daysDiff / 30), scope: 'mes' });
+    }
+
     useEffect(() =>{
         console.log("post", post);
+        calculatePublishedDate();
         setFromStudentNr(post.from_student.number);
         setTradeId(post.id)
     }, [post])
@@ -85,7 +109,6 @@ export default function FeedPost(props: FeedPostProps) {
         })
     }
 
-
     return (
         <div className="rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
             <div className="font-bold pb-10">
@@ -96,7 +119,12 @@ export default function FeedPost(props: FeedPostProps) {
                     </span>
                 </div>
                 <div className="text-end">
-                    Publicado há ...
+                    Publicado há {publishDate.value} {
+                        publishDate.scope == 'mes' ? 
+                        publishDate.value == 1 ? publishDate.scope : `${publishDate.scope}es`
+                        :
+                        publishDate.value == 1 ? publishDate.scope : `${publishDate.scope}s`
+                    }
                 </div>
 
             </div>
