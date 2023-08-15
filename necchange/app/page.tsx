@@ -9,9 +9,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Sidebar from './components/calendar/CalendarSidebar';
 
+
+import { useSession } from "next-auth/react";
+
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
   const [ucs, setUcs] = useState([]);
+
+
+  const { data: session, status } = useSession()
+  console.log('Session: ', session);
+  console.log('Status: ', status);
+
 
   useEffect(() => {
     axios.get("api/calendar/getCalendar").then((res) => setEvents(res.data.response));

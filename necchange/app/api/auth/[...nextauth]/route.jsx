@@ -31,7 +31,7 @@ export const authOptions = {
       console.log("user", user);
 
       return session
-    }
+    },
   },
 
   events: {
