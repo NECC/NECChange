@@ -10,12 +10,7 @@ import axios from 'axios'
 
 export default function Home() {
   const [classes, setClasses] = useState([]);
-  const { data: session } = useSession({
-    required: true,
-    onUnauthenticated() {
-      redirect('/')
-    },
-  });
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (session) {
