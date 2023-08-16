@@ -13,9 +13,30 @@ const emptyTrade = {
 };
 
 interface FilterProps {
-  student_nr: string | undefined;
+  student_nr: string | undefined,
+  toggleLoader: Function,
+  handleFeedBack: Function
 }
 
+
+const format_validator = (trades: any) =>{
+  // verificar se tudo está preenchido
+  const entries_empty = trades.filter( (trade: any) => trade.fromShift == 0 || trade.toShift == 0 || trade.ucId == 0)
+
+  // verificar se não há repetições
+  let no_repetitions = true;
+  trades.forEach( (trade: any) => {
+    const repeated_entry = trades.filter((trade_aux: any) => trade_aux.fromShift == trade.fromShift && trade_aux.ucId == trade.ucId)
+    if(repeated_entry.length > 1){
+      no_repetitions = false
+      return false
+    };
+  })
+
+  if(entries_empty.length == 0 && no_repetitions) return true
+  else return false
+}
+ 
 export default function NewTrade(props: FilterProps) {
 
   const [showModal, setShowModal] = useState(false);
@@ -23,7 +44,7 @@ export default function NewTrade(props: FilterProps) {
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
 
-  const { student_nr } = props;  
+  const { student_nr, toggleLoader, handleFeedBack } = props;  
 
   useEffect(() => {
     axios
@@ -37,11 +58,18 @@ export default function NewTrade(props: FilterProps) {
               classes: [],
             };
           }
-          acc[lesson.course.name].classes.push({
-            classId: lesson.id,
-            shift: lesson.shift,
-            type: lesson.type,
-          });
+
+          const result = acc[lesson.course.name].classes.filter((lesson_aux: any) =>
+            lesson_aux.shift == lesson.shift && lesson_aux.type == lesson.type
+          )
+
+          if(result.length == 0){
+            acc[lesson.course.name].classes.push({
+              //classId: lesson.id,
+              shift: lesson.shift,
+              type: lesson.type,
+            });
+          }
           return acc;
         }, {});
         setEnrolledClasses(parsed);
@@ -59,7 +87,7 @@ export default function NewTrade(props: FilterProps) {
           acc[name] = {
             ucId: id,
             classes: lesson.map(({ id, shift, type }: any) => ({
-              classId: id,
+              //classId: id,
               shift,
               type,
             })),
@@ -99,15 +127,32 @@ export default function NewTrade(props: FilterProps) {
   };
 
   useEffect(() => {
-    console.log("Trades", trades);
+  //  console.log("Trades", trades);
+  //  console.log("Enrolled Classes", enrolledClasses);
+  //  console.log("Available Classes", availableClasses);
   }, [trades]);
 
   const submitTrades = () => {
-    axios
-      .post("api/feed/feed_post/add_trade", {
-        params: { trades: trades, student_nr: student_nr },
-      })
-      .then((response) => console.log(response));
+    toggleLoader(true);
+
+    if(format_validator(trades) == true){
+      axios
+        .post("api/feed/feed_post/add_trade", {
+          params: { trades: trades, student_nr: student_nr },
+        })
+        .then((response) => {
+          console.log(response);
+          toggleLoader(false); 
+          handleFeedBack({message: "Pedido de troca realizado", show: true, error:false})
+        })
+        .catch(err =>{
+          toggleLoader(false)
+          handleFeedBack({message: "Erro ao realizar o pedido de troca", show: true, error:true})
+        })
+    } else {
+      toggleLoader(false)
+      handleFeedBack({message: "Formato de troca inválido", show: true, error:true})
+    } 
   };
 
 
@@ -136,7 +181,9 @@ export default function NewTrade(props: FilterProps) {
               enrolledClasses={enrolledClasses}
               availableClasses={availableClasses}
             />
-          ))}
+            
+          ))
+          }
 
           <button
             className="flex justify-center items-center mx-auto p-2 w-full rounded-2xl bg-slate-100 hover:bg-slate-200 text-blue-500 font-semibold"
