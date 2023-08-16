@@ -16,6 +16,17 @@ interface FilterProps {
   student_nr: string | undefined;
 }
 
+
+const not_in = (props: any) => {
+  const {acc, shift, type} = props;
+  const result = acc.classes.forEach((lesson: any) =>{
+    if(lesson.shift == shift && lesson.type == type) return false
+  })
+
+  if(!result) return result
+  else return true
+}
+ 
 export default function NewTrade(props: FilterProps) {
 
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +38,7 @@ export default function NewTrade(props: FilterProps) {
 
   useEffect(() => {
     axios
-      .get(`api/trades/student_ucs/${student_nr}`)
+      .get(`api/trades/student_ucs/${'A157820'}`)
       .then((response) => {
         const data = response.data.student_ucs;
         const parsed = data.reduce((acc: any, { lesson }: any) => {
@@ -37,11 +48,18 @@ export default function NewTrade(props: FilterProps) {
               classes: [],
             };
           }
-          acc[lesson.course.name].classes.push({
-            classId: lesson.id,
-            shift: lesson.shift,
-            type: lesson.type,
-          });
+
+          const result = acc[lesson.course.name].classes.filter((lesson_aux: any) =>
+            lesson_aux.shift == lesson.shift && lesson_aux.type == lesson.type
+          )
+
+          if(result.length == 0){
+            acc[lesson.course.name].classes.push({
+              //classId: lesson.id,
+              shift: lesson.shift,
+              type: lesson.type,
+            });
+          }
           return acc;
         }, {});
         setEnrolledClasses(parsed);
@@ -59,7 +77,7 @@ export default function NewTrade(props: FilterProps) {
           acc[name] = {
             ucId: id,
             classes: lesson.map(({ id, shift, type }: any) => ({
-              classId: id,
+              //classId: id,
               shift,
               type,
             })),
@@ -100,12 +118,14 @@ export default function NewTrade(props: FilterProps) {
 
   useEffect(() => {
     console.log("Trades", trades);
+    console.log("Enrolled Classes", enrolledClasses);
+    console.log("Available Classes", availableClasses);
   }, [trades]);
 
   const submitTrades = () => {
     axios
       .post("api/feed/feed_post/add_trade", {
-        params: { trades: trades, student_nr: student_nr },
+        params: { trades: trades, student_nr: 'A157820' },
       })
       .then((response) => console.log(response));
   };
@@ -136,7 +156,9 @@ export default function NewTrade(props: FilterProps) {
               enrolledClasses={enrolledClasses}
               availableClasses={availableClasses}
             />
-          ))}
+            
+          ))
+          }
 
           <button
             className="flex justify-center items-center mx-auto p-2 w-full rounded-2xl bg-slate-100 hover:bg-slate-200 text-blue-500 font-semibold"

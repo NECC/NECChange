@@ -51,7 +51,6 @@ export default function FeedPost(props: FeedPostProps) {
     }
 
     useEffect(() =>{
-        console.log("post", post);
         calculatePublishedDate();
         setFromStudentNr(post.from_student.number);
         setTradeId(post.id)
@@ -129,7 +128,6 @@ export default function FeedPost(props: FeedPostProps) {
 
             </div>
             {
-
                 post.trade_id.map((lesson_trade: any, i: number) => {
                     let type = type_class[lesson_trade.lessonFrom.type]
                     let fromShift = lesson_trade.lessonFrom.shift
