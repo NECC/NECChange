@@ -1,6 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient, Status } from "@prisma/client";
 
+const removeDuplicates = (post: any) =>{
+  const filteredArray: any = []
+  const seenObjects = new Set();
+
+  post.map((trade: any) =>{
+      const stringified = JSON.stringify(trade);
+      if (!seenObjects.has(stringified)) {
+          seenObjects.add(stringified);
+          filteredArray.push(trade);
+      }
+  })
+
+  return filteredArray
+}
+
 export async function GET(req: NextRequest, context: any) {
     const prisma = new PrismaClient();
 
@@ -86,8 +101,11 @@ export async function GET(req: NextRequest, context: any) {
     
     let new_cursor = 0; 
     trades.forEach((trade) =>{
+      trade.trade_id = removeDuplicates(trade.trade_id)
       if(trade.id > new_cursor) new_cursor = trade.id;
     })
+
+    console.log("Trades", trades);
 
     return new NextResponse(JSON.stringify({response: trades, cursor: new_cursor}))
 }
