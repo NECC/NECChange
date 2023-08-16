@@ -13,18 +13,28 @@ const emptyTrade = {
 };
 
 interface FilterProps {
-  student_nr: string | undefined;
+  student_nr: string | undefined,
+  toggleLoader: Function,
+  handleFeedBack: Function
 }
 
 
-const not_in = (props: any) => {
-  const {acc, shift, type} = props;
-  const result = acc.classes.forEach((lesson: any) =>{
-    if(lesson.shift == shift && lesson.type == type) return false
+const format_validator = (trades: any) =>{
+  // verificar se tudo está preenchido
+  const entries_empty = trades.filter( (trade: any) => trade.fromShift == 0 || trade.toShift == 0 || trade.ucId == 0)
+
+  // verificar se não há repetições
+  let no_repetitions = true;
+  trades.forEach( (trade: any) => {
+    const repeated_entry = trades.filter((trade_aux: any) => trade_aux.fromShift == trade.fromShift && trade_aux.ucId == trade.ucId)
+    if(repeated_entry.length > 1){
+      no_repetitions = false
+      return false
+    };
   })
 
-  if(!result) return result
-  else return true
+  if(entries_empty.length == 0 && no_repetitions) return true
+  else return false
 }
  
 export default function NewTrade(props: FilterProps) {
@@ -34,11 +44,11 @@ export default function NewTrade(props: FilterProps) {
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
 
-  const { student_nr } = props;  
+  const { student_nr, toggleLoader, handleFeedBack } = props;  
 
   useEffect(() => {
     axios
-      .get(`api/trades/student_ucs/${'A157820'}`)
+      .get(`api/trades/student_ucs/${student_nr}`)
       .then((response) => {
         const data = response.data.student_ucs;
         const parsed = data.reduce((acc: any, { lesson }: any) => {
@@ -117,17 +127,32 @@ export default function NewTrade(props: FilterProps) {
   };
 
   useEffect(() => {
-    console.log("Trades", trades);
-    console.log("Enrolled Classes", enrolledClasses);
-    console.log("Available Classes", availableClasses);
+  //  console.log("Trades", trades);
+  //  console.log("Enrolled Classes", enrolledClasses);
+  //  console.log("Available Classes", availableClasses);
   }, [trades]);
 
   const submitTrades = () => {
-    axios
-      .post("api/feed/feed_post/add_trade", {
-        params: { trades: trades, student_nr: 'A157820' },
-      })
-      .then((response) => console.log(response));
+    toggleLoader(true);
+
+    if(format_validator(trades) == true){
+      axios
+        .post("api/feed/feed_post/add_trade", {
+          params: { trades: trades, student_nr: student_nr },
+        })
+        .then((response) => {
+          console.log(response);
+          toggleLoader(false); 
+          handleFeedBack({message: "Pedido de troca realizado", show: true, error:false})
+        })
+        .catch(err =>{
+          toggleLoader(false)
+          handleFeedBack({message: "Erro ao realizar o pedido de troca", show: true, error:true})
+        })
+    } else {
+      toggleLoader(false)
+      handleFeedBack({message: "Formato de troca inválido", show: true, error:true})
+    } 
   };
 
 
