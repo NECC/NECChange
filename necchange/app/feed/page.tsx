@@ -12,12 +12,8 @@ import { faArrowDownLong } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../components/globals/Loader";
 
 export default function Feed() {
-  const { data: session } = useSession(/*{
-    required: true,
-    onUnauthenticated() {
-        redirect('/')
-    },
-}*/);
+  const { data: session } = useSession();
+
 
 const [loader, setLoader] = useState(false);
 const [feedBack, setFeedBack] = useState({message:"", show:false, error:false})

@@ -14,13 +14,11 @@ const RoleRouter = () => {
     const router = useRouter()
     const { data: session, status } = useSession() 
 
-    console.log("session", session?.user);
-
     useEffect(() => {
         if (status === "authenticated" && session.user) {
             router.push(redirects[session.user.role])
         }
-    }, [status])
+    }, [status, session?.user.role])
 
     // dar return a um loader depois
     return <></>
