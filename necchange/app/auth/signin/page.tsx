@@ -35,7 +35,7 @@ export default function Home() {
       const result: any = await email_validator()
       if (result == true) {
         setErrorMessage(false)
-        await signIn('email', { email: inputEmail, callbackUrl: '/roleRouter' })
+        await signIn('email', { email: inputEmail, callbackUrl: '/' })
       } else {
         setErrorMessage(true)
         console.log("Invalid email");
