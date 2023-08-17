@@ -24,7 +24,7 @@ export default function Home() {
       };
       getEvents();
     }
-  }, []) 
+  }, [session]) 
     
     return (
       <div className='bg-white h-screen pt-24 '>

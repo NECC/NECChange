@@ -11,8 +11,8 @@ const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
 
 interface FeedPostProps {
     post: any,
-    setLoader: Function,
-    setFeedBack: Function
+    toggleLoader: Function,
+    handleFeedBack: Function
 }
 
 interface PublishDate {
@@ -21,7 +21,7 @@ interface PublishDate {
 }
 
 export default function FeedPost(props: FeedPostProps) {
-    const {post, setLoader, setFeedBack} = props
+    const {post, toggleLoader, handleFeedBack} = props
     const [fromStudentNr, setFromStudentNr] = useState<string>();
     const [tradeId, setTradeId] = useState<number>();
     const [publishDate, setPublishDate] = useState<PublishDate>({ value: 0, scope: 'segundo' })
@@ -51,17 +51,12 @@ export default function FeedPost(props: FeedPostProps) {
     }
 
     useEffect(() =>{
-        console.log("post", post);
         calculatePublishedDate();
         setFromStudentNr(post.from_student.number);
         setTradeId(post.id)
     }, [post])
 
     const studentNrAccept = 'A94447'
-
-    const toggleLoader = (value: boolean) => {
-        setLoader(value);
-    }
 
     const acceptTrade = () => {
         toggleLoader(true)
@@ -94,17 +89,11 @@ export default function FeedPost(props: FeedPostProps) {
         })
         .then(res => {
             toggleLoader(false);
-            setFeedBack({message: "Pedido de troca removido", show: true, error: false})
-            setTimeout(() => {
-                setFeedBack({message: "", show: false, error: false})
-            }, 5000)
+            handleFeedBack({message: "Pedido de troca removido", show: true, error: false})
         })
         .catch(err => {
             toggleLoader(false);
-            setFeedBack({message: "Erro ao remover o pedido de troca", show: true, error: true})
-            setTimeout(() => {
-                setFeedBack({message: "", show: false, error: false})
-            }, 5000)
+            handleFeedBack({message: "Erro ao remover o pedido de troca", show: true, error: true})
             console.log(err);
         })
     }
@@ -129,7 +118,6 @@ export default function FeedPost(props: FeedPostProps) {
 
             </div>
             {
-
                 post.trade_id.map((lesson_trade: any, i: number) => {
                     let type = type_class[lesson_trade.lessonFrom.type]
                     let fromShift = lesson_trade.lessonFrom.shift
