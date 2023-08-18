@@ -19,8 +19,9 @@ const removeDuplicates = (post: any) =>{
 export async function GET(req: NextRequest, context: any) {
     const prisma = new PrismaClient();
 
-    const limit = parseInt(context.params.data[0])
-    let studentNr = context.params.data[1] === 'undefined' ? undefined : context.params.data[1]
+    const limit = parseInt(context.params.data[0]);
+    let studentNr = context.params.data[1] === 'undefined' ? undefined : context.params.data[1];
+    let status = studentNr == undefined ? Status.PENDING : undefined
     let ucsFilter = context.params.data.length === 3 ? context.params.data[2].split('&') : undefined
 
     let lesson_ids = undefined;
@@ -43,7 +44,7 @@ export async function GET(req: NextRequest, context: any) {
 
     const trades = await prisma.trade.findMany({
         where:{
-          status: Status.PENDING,
+          status: status,
           from_student:{
             number: studentNr
           },
@@ -104,8 +105,6 @@ export async function GET(req: NextRequest, context: any) {
       trade.trade_id = removeDuplicates(trade.trade_id)
       if(trade.id > new_cursor) new_cursor = trade.id;
     })
-
-    console.log("Trades", trades);
 
     return new NextResponse(JSON.stringify({response: trades, cursor: new_cursor}))
 }

@@ -22,10 +22,11 @@ export async function GET(req: NextRequest, context: any) {
     const limit = parseInt(context.params.scroll[0]);
     const cursor = parseInt(context.params.scroll[1]);
     let studentNr = context.params.scroll[2] === 'undefined' ? undefined : context.params.scroll[2]
+    let status = studentNr == undefined ? Status.PENDING : undefined
     let ucsFilter = context.params.scroll.length === 4 ? context.params.scroll[3].split('&') : undefined
 
-    console.log(limit);
-    console.log(cursor);
+//    console.log(limit);
+//    console.log(cursor);
 
     let lesson_ids = undefined;
     if(ucsFilter != undefined){
@@ -45,11 +46,9 @@ export async function GET(req: NextRequest, context: any) {
       lesson_ids = query_lesson_ids.map((lesson_id) => lesson_id.id)
     }
 
-    console.log("Lesson ids", lesson_ids);
-
     const trades = await prisma.trade.findMany({
         where:{
-          status: Status.PENDING,
+          status: status,
           from_student:{
             number: studentNr
           },
@@ -108,9 +107,6 @@ export async function GET(req: NextRequest, context: any) {
           }
         }
     })
-
-
-    console.log("Trades", trades);
 
     let new_cursor = 0; 
     trades.forEach((trade) =>{
