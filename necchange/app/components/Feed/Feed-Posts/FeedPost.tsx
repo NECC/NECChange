@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import { useSession } from "next-auth/react";
 
 
 const type_class: any = {
@@ -27,11 +28,8 @@ export default function FeedPost(props: FeedPostProps) {
     const [tradeId, setTradeId] = useState<number>();
     const [publishDate, setPublishDate] = useState<PublishDate>({ value: 0, scope: 'segundo' })
     const [status, setStatus] = useState('')
-    /*
-    David - A95661
-    Hugo  - A93646
-    Simão - A94447
-    */
+    const { data: session } = useSession();
+
 
     const calculatePublishedDate = () => {
         const actualDate = new Date();
@@ -65,20 +63,19 @@ export default function FeedPost(props: FeedPostProps) {
         setTradeId(post.id)
     }, [post])
 
-    const studentNrAccept = 'A94447'
 
     const acceptTrade = () => {
         toggleLoader(true)
         axios
         .post(`api/feed/feed_post/accept_trade`, {
-            params: {studentNr: studentNrAccept, tradeId: tradeId}
+            params: {studentNr: session?.user.number, tradeId: tradeId}
         })
         .then(res =>{
             console.log("Res 1", res);
             if(res.data.response == true){
                 axios
                     .delete(`api/feed/feed_post/accept_trade`, {
-                        data: {fromStudentNr: fromStudentNr, toStudentNr: studentNrAccept, tradeId: tradeId}
+                        data: {fromStudentNr: fromStudentNr, toStudentNr: session?.user.number, tradeId: tradeId}
                     })
                     .then(res =>{
                         toast.success('Troca realizada com sucesso!')
@@ -128,7 +125,7 @@ export default function FeedPost(props: FeedPostProps) {
                     }
                 </div>
                 {
-                    <div className={`${studentNrAccept == post.from_student.number ? '' : 'hidden' } float-right`}>
+                    <div className={`${session?.user.number == post.from_student.number ? '' : 'hidden' } float-right`}>
                         Estado:
                         <span className={`${statusColor[status]} `}> {status}</span>
                     </div>
@@ -154,8 +151,8 @@ export default function FeedPost(props: FeedPostProps) {
                                     {'- ' + type + fromShift + ' para ' + type + toShift}
                                 </div>
                             </div>
-                            <div className={`${studentNrAccept == fromStudentNr ? 'hidden' : '' } text-xs`}>
-                                {fromStudentNr}{": " + type + fromShift + " -> " + type + toShift} || {studentNrAccept}{": " + type + toShift + " -> " + type + fromShift}
+                            <div className={`${session?.user.number == fromStudentNr ? 'hidden' : '' } text-xs`}>
+                                {fromStudentNr}{": " + type + fromShift + " -> " + type + toShift} || {session?.user.number}{": " + type + toShift + " -> " + type + fromShift}
                             </div>
                         </div>
                         
@@ -165,11 +162,11 @@ export default function FeedPost(props: FeedPostProps) {
             
             {
                 <div>
-                    <button className={`${studentNrAccept == post.from_student.number ? 'hidden' : '' } p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md`}
+                    <button className={`${session?.user.number == post.from_student.number ? 'hidden' : '' } p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md`}
                             onClick={acceptTrade}>
                         Aceitar Troca
                     </button>
-                    <button className={`${studentNrAccept == post.from_student.number ? '' : 'hidden' }
+                    <button className={`${session?.user.number == post.from_student.number ? '' : 'hidden' }
                                         ${status == 'Pendente' ? '' : 'hidden'}
                                         p-2 mt-4 bg-red-500 hover:bg-red-600 font-bold text-white text-md float-right rounded-lg shadow-md`}
                             onClick={removeTrade}>
@@ -177,7 +174,6 @@ export default function FeedPost(props: FeedPostProps) {
                     </button>
                 </div>
             }
-            
         </div>
     );
 }
