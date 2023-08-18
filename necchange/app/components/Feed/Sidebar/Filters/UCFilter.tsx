@@ -7,7 +7,6 @@ interface UcsFilterProps {
     ucsArray: string[],
 }
 
-
 export default function UCFilter(props: UcsFilterProps) {
     const {
         ucsArray,
@@ -34,10 +33,6 @@ export default function UCFilter(props: UcsFilterProps) {
             })
             setUcsFilter(newFilter);
         }
-    }
-    
-    function refreshPage() {
-        window.location.reload();
     }
 
     return (

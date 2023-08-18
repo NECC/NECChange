@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlus } from "react-icons/fa6";
+import { toast } from 'react-toastify';
+
 import Modal from "@/app/components/globals/Modal";
 import TradeEntry from "./popUp/TradeEntry";
 
@@ -15,7 +17,6 @@ const emptyTrade = {
 interface FilterProps {
   student_nr: string | undefined,
   toggleLoader: Function,
-  handleFeedBack: Function
 }
 
 
@@ -44,7 +45,7 @@ export default function NewTrade(props: FilterProps) {
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
 
-  const { student_nr, toggleLoader, handleFeedBack } = props;  
+  const { student_nr, toggleLoader } = props;  
 
   useEffect(() => {
     axios
@@ -143,15 +144,15 @@ export default function NewTrade(props: FilterProps) {
         .then((response) => {
           console.log(response);
           toggleLoader(false); 
-          handleFeedBack({message: "Pedido de troca realizado", show: true, error:false})
+          toast.success('Pedido de troca realizado!')
         })
         .catch(err =>{
           toggleLoader(false)
-          handleFeedBack({message: "Erro ao realizar o pedido de troca", show: true, error:true})
+          toast.error('Erro ao realizar o pedido de troca!')
         })
     } else {
       toggleLoader(false)
-      handleFeedBack({message: "Formato de troca inválido", show: true, error:true})
+      toast.warning('Formato de troca inválido!')
     } 
   };
 
