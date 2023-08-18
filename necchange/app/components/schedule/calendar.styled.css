@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Oswald:wght@400;500&display=swap');
+
+/* header btn hover */
+
+
+.fc .fc-button {
+    @apply text-white font-semibold bg-blue-500 hover:bg-blue-600 border-0;
+}
+
+/* header btn active */
+.fc-direction-ltr .fc-button-group > .fc-button-active {
+    color: black !important;
+    cursor: default;
+}
+
+/* Header text */
+.fc .fc-col-header-cell-cushion {
+    @apply text-2xl font-semibold p-2;
+}
+
+/* Header */
+.fc-col-header-cell {
+    @apply bg-gray-800 text-white;
+}
+
+/* Left grid bg color*/
+.fc-timegrid-axis {
+    @apply bg-gray-800 text-white;
+}
+
+
+
+.fc-event-time {
+    @apply hidden
+}
+/* Overwritten classes 
+.fc-timegrid-event-harness-inset:not(:first-child) .fc-timegrid-event {
+    @apply border-black
+}
+*/
+
+.fc-timegrid-event-harness-inset .fc-timegrid-event:not(:first-child) {
+    @apply w-1/2
+}
+
+
+/* 30min border */
+.fc .fc-timegrid-slot-minor {
+    @apply border-gray-800 border-none py-2;
+}
+
+.fc .fc-scroller::-webkit-scrollbar {
+    display: none;
+    width: 20px;
+}
+
+.fc .fc-scroller::-webkit-scrollbar-thumb {
+    display: none;
+    background-color: var(--outline-color);
+    border-radius: 10px;
+}
+
+.fc .fc-toolbar-title {
+    @apply hidden;
+}
+
+.fc-timegrid-event .fc-event-time {
+    @apply text-base pt-1 px-2;
+}
+
+.fc-v-event .fc-event-title {
+    @apply text-lg px-2;
+}
+
+.fc .fc-scroller-liquid-absolute {
+    @apply bg-white;
+}
+
+.fc .fc-view-harness {
+    @apply shadow-md;
+}
+
+.fc-timegrid-col-events {
+    @apply w-full;
+}
+
+.fc-direction-ltr .fc-timegrid-col-events {
+    @apply ml-0;
+}
+
+.fc-timegrid-event-harness-inset .fc-timegrid-event, .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
+    @apply rounded-none shadow-none ;
+}
+
+.fc-timegrid-event-harness .fc-timegrid-event-harness-inset{
+   @apply flex w-1/2 
+}
+
+@media screen and (max-width: 640px) {
+    .fc-v-event .fc-event-title {
+        padding-left: 10px;
+        font-size: 1.4em;
+        font-family: 'Oswald', sans-serif;
+        font-weight: normal;
+    }
+
+    /* Header text */
+    .fc .fc-col-header-cell-cushion {
+        padding: 4px;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+}
