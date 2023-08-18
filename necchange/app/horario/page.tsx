@@ -1,12 +1,11 @@
 'use client'
 
-import StudentSchedule from '../components/schedule/StudentSchedule'
-
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from 'react'
 import { redirect } from 'next/navigation';
 
 import axios from 'axios'
+import StudentSchedule from "../components/schedule/StudentSchedule";
 
 export default function Home() {
   const [classes, setClasses] = useState([]);
