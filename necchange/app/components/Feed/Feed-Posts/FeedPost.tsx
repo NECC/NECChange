@@ -9,7 +9,7 @@ const type_class: any = {
     3: "PL"
 }
 const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
-
+const statusColor: any = {'Aceite': 'text-green-500','Pendente': 'text-yellow-500', 'Removido': 'text-red-600'}
 
 interface FeedPostProps {
     post: any,
@@ -26,7 +26,7 @@ export default function FeedPost(props: FeedPostProps) {
     const [fromStudentNr, setFromStudentNr] = useState<string>();
     const [tradeId, setTradeId] = useState<number>();
     const [publishDate, setPublishDate] = useState<PublishDate>({ value: 0, scope: 'segundo' })
-
+    const [status, setStatus] = useState('')
     /*
     David - A95661
     Hugo  - A93646
@@ -53,6 +53,14 @@ export default function FeedPost(props: FeedPostProps) {
 
     useEffect(() =>{
         calculatePublishedDate();
+        if(post.status == 'PENDING'){
+            setStatus('Pendente')
+        } else if(post.status == 'REMOVED'){
+            setStatus('Removido')
+        } else {
+            setStatus('Aceite')
+        }
+        
         setFromStudentNr(post.from_student.number);
         setTradeId(post.id)
     }, [post])
@@ -119,6 +127,12 @@ export default function FeedPost(props: FeedPostProps) {
                         publishDate.value == 1 ? publishDate.scope : `${publishDate.scope}s`
                     }
                 </div>
+                {
+                    <div className={`${studentNrAccept == post.from_student.number ? '' : 'hidden' } float-right`}>
+                        Estado:
+                        <span className={`${statusColor[status]} `}> {status}</span>
+                    </div>
+                }
 
             </div>
             {
@@ -155,7 +169,9 @@ export default function FeedPost(props: FeedPostProps) {
                             onClick={acceptTrade}>
                         Aceitar Troca
                     </button>
-                    <button className={`${studentNrAccept == post.from_student.number ? '' : 'hidden' } p-2 mt-4 bg-red-500 hover:bg-red-600 font-bold text-white text-md float-right rounded-lg shadow-md`}
+                    <button className={`${studentNrAccept == post.from_student.number ? '' : 'hidden' }
+                                        ${status == 'Pendente' ? '' : 'hidden'}
+                                        p-2 mt-4 bg-red-500 hover:bg-red-600 font-bold text-white text-md float-right rounded-lg shadow-md`}
                             onClick={removeTrade}>
                         Remover Troca
                     </button>
