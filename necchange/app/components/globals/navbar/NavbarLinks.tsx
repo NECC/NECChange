@@ -34,11 +34,11 @@ function NavbarLinks(props: NavbarLinksProps) {
             {    
             (session) ? 
                 <li>
-                    <button className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300 text-star" onClick={() => signOut()}>Logout</button>
+                    <button className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300 text-left" onClick={() => signOut()}>Logout</button>
                 </li>
                 :
                 <li>
-                    <button className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300 text-start" onClick={() => signIn()}>Login</button>
+                    <button className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300 text-left" onClick={() => signIn()}>Login</button>
                 </li>
             }
         </ul>
