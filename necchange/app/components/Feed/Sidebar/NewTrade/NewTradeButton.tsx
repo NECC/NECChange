@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 
 import Modal from "@/app/components/globals/Modal";
 import TradeEntry from "./popUp/TradeEntry";
+import { useSession } from "next-auth/react";
 
 const emptyTrade = {
   id: 0,
@@ -15,10 +16,8 @@ const emptyTrade = {
 };
 
 interface FilterProps {
-  student_nr: string | undefined,
   toggleLoader: Function,
-}
-
+};
 
 const format_validator = (trades: any) =>{
   // verificar se tudo está preenchido
@@ -36,7 +35,7 @@ const format_validator = (trades: any) =>{
 
   if(entries_empty.length == 0 && no_repetitions) return true
   else return false
-}
+};
  
 export default function NewTrade(props: FilterProps) {
 
@@ -44,12 +43,13 @@ export default function NewTrade(props: FilterProps) {
   const [trades, setTrades] = useState([emptyTrade]);
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
+  const { data: session } = useSession();
 
-  const { student_nr, toggleLoader } = props;  
+  const { toggleLoader } = props;  
 
   useEffect(() => {
     axios
-      .get(`api/trades/student_ucs/${student_nr}`)
+      .get(`api/trades/student_ucs/${session?.user.number}`)
       .then((response) => {
         const data = response.data.student_ucs;
         const parsed = data.reduce((acc: any, { lesson }: any) => {
@@ -98,7 +98,7 @@ export default function NewTrade(props: FilterProps) {
 
         setAvailableClasses(parsed);
       });
-  }, []);
+  }, [session]);
 
   const addTrade = () => {
     const id = trades.length == 0 ? 0 : trades[trades.length - 1].id + 1;
@@ -139,7 +139,7 @@ export default function NewTrade(props: FilterProps) {
     if(format_validator(trades) == true){
       axios
         .post("api/feed/feed_post/add_trade", {
-          params: { trades: trades, student_nr: student_nr },
+          params: { trades: trades, student_nr: session?.user.number },
         })
         .then((response) => {
           console.log(response);

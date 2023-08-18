@@ -5,7 +5,6 @@ interface FilterProps {
     setUcsFilter: Function,
     ucsArray: string[],
     ucsFilter: string[],
-    student_nr: string | undefined,
     myTrades: boolean,
     setMyTrades: Function,
     toggleLoader: Function,
@@ -16,7 +15,6 @@ export default function Filters(props: FilterProps) {
         setUcsFilter,
         ucsArray,
         ucsFilter,
-        student_nr,
         myTrades,
         setMyTrades,
         toggleLoader,
@@ -37,7 +35,7 @@ export default function Filters(props: FilterProps) {
                     </div>
                 </div>
                 <UCFilter setUcsFilter={setUcsFilter} ucsArray={ucsArray} ucsFilter={ucsFilter}/>
-                <NewTradeButton student_nr={student_nr} toggleLoader={toggleLoader} />
+                <NewTradeButton toggleLoader={toggleLoader} />
             </div>
         )
 }
