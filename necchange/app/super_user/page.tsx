@@ -6,13 +6,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 
 export default function SuperUser() {
-    const { data: session, status } = useSession({
-        required: true,
-        onUnauthenticated() {
-            redirect('/')
-        }
-    });
-
+    const { data: session, status } = useSession();
     console.log(session);
 
     /* useEffect(() => {
