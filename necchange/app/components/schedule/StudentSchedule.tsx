@@ -1,67 +1,104 @@
 "use client";
 
+import React, { useRef, useState } from 'react';
+import useWindowSize from '@rooks/use-window-size';
 
-import React from 'react'
-import useWindowSize from '@rooks/use-window-size'
-
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import './calendar.styles.css';
 import { CalendarProps } from './interface';
 
-
-
 export default function StudentSchedule(props: CalendarProps) {
-    const {events} = props
-    const {innerWidth, innerHeight} = useWindowSize(); // Get width and height size
+    const { events } = props;
+    const { innerWidth } = useWindowSize();
+
+    
+    const [currentDate, setCurrentDate] = useState(new Date());
+   
+    
+
+    const updateDate = (dateModifier: number) => {
+           currentDate.setDate(currentDate.getDate() + dateModifier);
+           setCurrentDate(new Date(currentDate));
+       }
+    
+    const handlePrevClick2 = () => {
+        updateDate(-1);
+    };
+    
+    const handleNextClick2 = () => {
+        updateDate(1);
+    };
+    
+    
+    
+
+    const handlePrevClick = () => {
+        handlePrevClick2(); 
+        if (calendarRef.current) {
+            calendarRef.current.getApi().prev(); // Chamar o método prev() do FullCalendar
+        }
+    };
+
+    const handleNextClick = () => {
+        handleNextClick2(); 
+        if (calendarRef.current) {
+            calendarRef.current.getApi().next(); // Chamar o método next() do FullCalendar
+        }
+    };
+
+    const calendarRef = useRef<FullCalendar | null>(null);
 
     const minDate = new Date();
-    minDate.setHours(8,0,0);
+    minDate.setHours(8, 0, 0);
 
     const maxDate = new Date();
     maxDate.setHours(20, 0, 0);
 
     return (
         <FullCalendar
-            plugins={[ dayGridPlugin , timeGridPlugin, interactionPlugin]}
-
+            ref={calendarRef} 
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             allDaySlot={false}
-            initialView={innerWidth && innerWidth < 640 ? "timeGridDay" : "timeGridWeek"}
+            initialView={innerWidth && innerWidth < 640 ? 'timeGridDay' : 'timeGridWeek'}
             weekends={false}
             headerToolbar={{
-                start: innerWidth && innerWidth < 640 ? "prev next" : "",
-                end: "",
+                start:
+                    innerWidth && innerWidth < 640 && currentDate.getDay() > 1 ? 'prev' : '',
+                center: '',
+                end: innerWidth && innerWidth < 640 && currentDate.getDay()  < 5 ? 'next' : '',
             }}
             
             dayHeaderFormat={{
-                weekday: innerWidth && innerWidth < 1100 ? 'short' : 'long', 
+                weekday: innerWidth && innerWidth < 1100 ? 'short' : 'long',
             }}
-
-            titleRangeSeparator='/' // Jul 1/9
-
-            buttonText={{ // Capitalize button text
-                today: "Today",
-                month: "Month",
-                day: "Day",
-                week: "Week",
+            titleRangeSeparator='/'
+            buttonText={{
+                today: 'Today',
+                month: 'Month',
+                day: 'Day',
+                week: 'Week',
             }}
-
-            nowIndicator={true} // Implement the red row indicating the hour
-
-            slotMinTime="08:00:00" // Set the minimum time to 8am
-            slotMaxTime="20:00:00" // Set the maximum time to 8pm   
-
-            slotLabelFormat={{ // Hour Format
-                hour: "2-digit",
-                minute: "2-digit",
+            nowIndicator={true}
+            slotMinTime="08:00:00"
+            slotMaxTime="20:00:00"
+            slotLabelFormat={{
+                hour: '2-digit',
+                minute: '2-digit',
                 hour12: false,
-
-            }}   
-
+            }}
             events={events}
             height={'85vh'}
+            customButtons={{
+                prev: {
+                    click: handlePrevClick,
+                },
+                next: {
+                    click: handleNextClick,
+                },
+            }}
         />
-    )
+    );
 }
