@@ -13,43 +13,28 @@ import { CalendarProps } from './interface';
 export default function StudentSchedule(props: CalendarProps) {
     const { events } = props;
     const { innerWidth } = useWindowSize();
-
-    
     const [currentDate, setCurrentDate] = useState(new Date());
-   
-    
+    const calendarRef = useRef<FullCalendar | null>(null);
 
     const updateDate = (dateModifier: number) => {
-           currentDate.setDate(currentDate.getDate() + dateModifier);
-           setCurrentDate(new Date(currentDate));
-       }
-    
-    const handlePrevClick2 = () => {
-        updateDate(-1);
-    };
-    
-    const handleNextClick2 = () => {
-        updateDate(1);
-    };
-    
-    
-    
+        const date = new Date(currentDate.setDate(currentDate.getDate() + dateModifier));
+        setCurrentDate(date);
+    }
 
     const handlePrevClick = () => {
-        handlePrevClick2(); 
+        updateDate(-1);
         if (calendarRef.current) {
             calendarRef.current.getApi().prev(); // Chamar o método prev() do FullCalendar
         }
     };
-
+    
     const handleNextClick = () => {
-        handleNextClick2(); 
+        updateDate(1);
         if (calendarRef.current) {
             calendarRef.current.getApi().next(); // Chamar o método next() do FullCalendar
         }
     };
 
-    const calendarRef = useRef<FullCalendar | null>(null);
 
     const minDate = new Date();
     minDate.setHours(8, 0, 0);
