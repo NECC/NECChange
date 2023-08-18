@@ -6,21 +6,8 @@ import { useEffect } from "react";
 import Link from "next/link";
 
 export default function SuperUser() {
-    const { data: session, status } = useSession({
-        required: true,
-        onUnauthenticated() {
-            redirect('/')
-        }
-    });
-
+    const { data: session, status } = useSession();
     console.log(session);
-
-    useEffect(() => {
-        if (session && session.user?.role !== 'SUPER_USER') {
-            redirect('/')
-        }
-
-    }, [status])
 
     const buttonStyles = "p-6 m-2 text-xl border-2 border-sky-500 shadow-md rounded-md bg-white hover:bg-slate-50"
 

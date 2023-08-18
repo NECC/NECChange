@@ -5,21 +5,7 @@ import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 export default function ManageUsers(){
-    const { data: session, status } = useSession({
-        required: true,
-        onUnauthenticated() {
-            redirect('/')
-        }
-    });
-
-
-    useEffect(() => {
-        if (session && session.user?.role !== 'SUPER_USER') {
-            redirect('/')
-        }
-
-    }, [status])
-
+    const { data: session, status } = useSession();
 
     return(
         <div className="bg-white h-screen">

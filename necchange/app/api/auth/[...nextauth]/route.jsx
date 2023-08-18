@@ -22,18 +22,19 @@ export const authOptions = {
   debug: true,
 
   callbacks: {
-    async session({ session, user }) {
+    async jwt({token, user}){
+      return {...token, ...user};
+    },
+    
+    async session({ session, token }) {
       // Add role to session provided from useSession
-      session.user.role = user.role
-      session.user.number = user.number
-
-      console.log("session.user", session.user);
-      console.log("user", user);
+      session.user.role = token.role
+      session.user.number = token.number
 
       return session
-    }
+    },   
   },
-
+  session: { strategy: "jwt" },
   events: {
   }
 
