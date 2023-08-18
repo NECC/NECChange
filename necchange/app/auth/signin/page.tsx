@@ -6,23 +6,10 @@ import { useState } from "react";
 
 import axios from "axios";
 
-
-function encrypt(number: any) {
-  const split_string = number.split("")
-
-  const start = [split_string[0], split_string[1]]
-  const decodedNr = split_string.slice(2).reverse()
-
-  const number_decoded = start.concat(decodedNr)
-
-  return number_decoded.join('').toUpperCase()
-}
-
 export default function Home() {
   const [inputEmail, setInputEmail] = useState("");
   const [loader, setLoader] = useState(false)
   const [errorMessage, setErrorMessage] = useState(false)
-
 
   const toggleLoader = (value: boolean) => {
     setLoader(value);
@@ -35,7 +22,7 @@ export default function Home() {
       const result: any = await email_validator()
       if (result == true) {
         setErrorMessage(false)
-        await signIn('email', { email: inputEmail, callbackUrl: '/' })
+        await signIn('email', { email: inputEmail, callbackUrl: '/horario' })
       } else {
         setErrorMessage(true)
         console.log("Invalid email");
@@ -111,7 +98,7 @@ export default function Home() {
         </div>
       </aside>
 
-      <div className="flex flex-col w-1/2  h-screen  justify-center items-center hidden sm:flex tall:hidden">
+      <div className="flex-col w-1/2  h-screen  justify-center items-center hidden sm:flex tall:hidden">
         <Image
           src="/logos/neccSticker.png"
           alt="Logo NECC"
