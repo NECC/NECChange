@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from 'axios'
+import { toast } from 'react-toastify';
+
 
 const type_class: any = {
     1: "T",
@@ -12,7 +14,6 @@ const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
 interface FeedPostProps {
     post: any,
     toggleLoader: Function,
-    handleFeedBack: Function
 }
 
 interface PublishDate {
@@ -21,7 +22,7 @@ interface PublishDate {
 }
 
 export default function FeedPost(props: FeedPostProps) {
-    const {post, toggleLoader, handleFeedBack} = props
+    const {post, toggleLoader} = props
     const [fromStudentNr, setFromStudentNr] = useState<string>();
     const [tradeId, setTradeId] = useState<number>();
     const [publishDate, setPublishDate] = useState<PublishDate>({ value: 0, scope: 'segundo' })
@@ -72,8 +73,11 @@ export default function FeedPost(props: FeedPostProps) {
                         data: {fromStudentNr: fromStudentNr, toStudentNr: studentNrAccept, tradeId: tradeId}
                     })
                     .then(res =>{
+                        toast.success('Troca realizada com sucesso!')
                         console.log("Res2" , res);
                     })
+            } else {
+                toast.error('Não é possível realizar a troca!')
             }
             toggleLoader(false)
         }).catch(err=>{
@@ -89,11 +93,11 @@ export default function FeedPost(props: FeedPostProps) {
         })
         .then(res => {
             toggleLoader(false);
-            handleFeedBack({message: "Pedido de troca removido", show: true, error: false})
+            toast.success('Pedido de troca removido!');
         })
         .catch(err => {
             toggleLoader(false);
-            handleFeedBack({message: "Erro ao remover o pedido de troca", show: true, error: true})
+            toast.error('Erro ao remover o pedido de troca!');
             console.log(err);
         })
     }

@@ -1,15 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import axios from "axios";
 
 import FeedPost from "@/app/components/Feed/Feed-Posts/FeedPost";
 import Sidebar from "@/app/components/Feed/Sidebar/Sidebar";
+import Loader from "../components/globals/Loader";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDownLong } from "@fortawesome/free-solid-svg-icons";
-import Loader from "../components/globals/Loader";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface FeedBack{
   message: string,
@@ -21,7 +22,6 @@ export default function Feed() {
   const { data: session } = useSession();
 
   const [loader, setLoader] = useState(false);
-  const [feedBack, setFeedBack] = useState({message:"", show:false, error:false})
 
   const [ucsFilter, setUcsFilter] = useState<string[]>([]);
   const [ucsArray, setUcsArray] = useState<string[]>([]);
@@ -37,12 +37,6 @@ export default function Feed() {
     setLoader(value);
   }
 
-  const handleFeedBack = (newState: FeedBack) => {
-    setFeedBack(newState);
-    setTimeout(() => {
-      setFeedBack({message: "", show: false, error: false})
-    }, 5000)
-  }
 
   useEffect(() => {        
     if(session){
@@ -115,11 +109,10 @@ export default function Feed() {
         myTrades={myTrades}
         setMyTrades={setMyTrades}
         toggleLoader={toggleLoader}
-        handleFeedBack={handleFeedBack}
       />
       <div className="flex flex-col flex-grow px-12 mt-6">
         {filteredPosts.map((feedPost: any, i: any) => {
-          return <FeedPost key={i} post={feedPost} toggleLoader={toggleLoader} handleFeedBack={handleFeedBack}/>;
+          return <FeedPost key={i} post={feedPost} toggleLoader={toggleLoader}/>;
         })}
         <div className="flex p-8 m-4 ml-10">
           <button
@@ -134,14 +127,27 @@ export default function Feed() {
 
         </div>
       </div>
-      <div className="mr-16 mt-10">
-        <div className={`${feedBack.error ? "bg-red-600" : "bg-green-600"} 
-                         ${feedBack.show ? "" : "invisible"}
-                         flex w-40 h-20 p-4 justify-center items-center text-white text-sm font-semibold rounded-md`}>
-          {feedBack.message}
-        </div>
+      <div className="mr-16 mt-10 w-40 h-20">
+        {
+        /*
+          Acho que o card a ocupar o ecrã todo fica feio
+        */
+        }
+      
       </div>
       {loader && <Loader />}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }
