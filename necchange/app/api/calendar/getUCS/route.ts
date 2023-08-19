@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req: any, res: any) {
     const prisma = new PrismaClient();
-    const ucs = await prisma.uc.findMany({
+    const ucs = await prisma.course.findMany({
         select: {
             id: true,
             name: true,

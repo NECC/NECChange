@@ -14,21 +14,19 @@ export async function GET(req: NextRequest, context: any) {
     const uc_name = student_data[1];
 
     // this query gets all classes of a student from a given uc
-    const student_classes_uc = await prisma.student_class.findMany({
+    const student_classes_uc = await prisma.student_lesson.findMany({
         where: {
-            student:{
+            User:{
                 number: student_nr
             },
-            uc_class:{
-
-                uc:{
+            lesson:{
+                course:{
                     name: uc_name
                 }
             }
         },
         select:{
-            uc_class:{
-
+            lesson:{
                 select: {
                     type: true,
                     shift: true
@@ -44,19 +42,19 @@ export async function GET(req: NextRequest, context: any) {
     }
 
     student_classes_uc.map((student_class_uc) =>{
-        if(student_class_uc.uc_class?.type){
-            let type = type_class[student_class_uc.uc_class.type]
-            student_classes[type].push(student_class_uc.uc_class.shift)
+        if(student_class_uc.lesson?.type){
+            let type = type_class[student_class_uc.lesson.type]
+            student_classes[type].push(student_class_uc.lesson.shift)
 
         }
     })
 
 
     // this query gets all classes from a given uc
-    const uc_shifts_query = await prisma.uc_class.findMany({
+    const uc_shifts_query = await prisma.lesson.findMany({
 
         where:{
-            uc:{
+            course:{
                 name: uc_name
             }
         },

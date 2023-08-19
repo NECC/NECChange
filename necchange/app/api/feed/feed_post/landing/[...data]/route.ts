@@ -19,14 +19,10 @@ const removeDuplicates = (post: any) =>{
 export async function GET(req: NextRequest, context: any) {
     const prisma = new PrismaClient();
 
-    const limit = parseInt(context.params.scroll[0]);
-    const cursor = parseInt(context.params.scroll[1]);
-    let studentNr = context.params.scroll[2] === 'undefined' ? undefined : context.params.scroll[2]
+    const limit = parseInt(context.params.data[0]);
+    let studentNr = context.params.data[1] === 'undefined' ? undefined : context.params.data[1];
     let status = studentNr == undefined ? Status.PENDING : undefined
-    let ucsFilter = context.params.scroll.length === 4 ? context.params.scroll[3].split('&') : undefined
-
-//    console.log(limit);
-//    console.log(cursor);
+    let ucsFilter = context.params.data.length === 3 ? context.params.data[2].split('&') : undefined
 
     let lesson_ids = undefined;
     if(ucsFilter != undefined){
@@ -52,23 +48,18 @@ export async function GET(req: NextRequest, context: any) {
           from_student:{
             number: studentNr
           },
-          trade_id:{
-            some : {
+          trade_id: {
+            some:{
               lesson_from_id: {in: lesson_ids},
               lesson_to_id: {in: lesson_ids}
             }
           }
-
+          
         },
-        cursor: {
-            id: cursor
+        orderBy: {
+          id: 'asc'
         },
         take: limit,
-        skip: 1,
-        orderBy: {
-            id: 'asc'
-        },
-
         include:{
           from_student:{
             select:{
@@ -104,10 +95,11 @@ export async function GET(req: NextRequest, context: any) {
                 }
               }
             }
+            
           }
         }
     })
-
+    
     let new_cursor = 0; 
     trades.forEach((trade) =>{
       trade.trade_id = removeDuplicates(trade.trade_id)
