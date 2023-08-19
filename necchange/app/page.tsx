@@ -9,6 +9,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Sidebar from './components/calendar/CalendarSidebar';
 
+import './calendar.css';
+
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
   const [ucs, setUcs] = useState([]);

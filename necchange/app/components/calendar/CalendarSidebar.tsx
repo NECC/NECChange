@@ -1,4 +1,6 @@
 import React, { useState, useId } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 
@@ -66,17 +68,21 @@ export default function Sidebar({
       <div className="flex h-screen-full antialiased text-gray-900 bg-white dark:bg-dark dark:text-light pt-20">
         <aside className="z-10 w-96 border-r dark:border-orange-600 dark:bg-darker focus:outline-none">
           <div className="flex flex-col h-full px-5 py-14">
-            <CheckboxTree
-              id={useId()}
-              nodes={convertUCStoNodes(ucs)}
-              checked={checked}
-              expanded={expanded}
-              onCheck={(checked) => {
-                console.log(checked)
-                setChecked(checked)
-              }}
-              onExpand={(expanded) => setExpanded(expanded)}
-            />
+          <CheckboxTree
+            id={useId()}
+            nodes={convertUCStoNodes(ucs)}
+            checked={checked}
+            expanded={expanded}
+            onCheck={(checked) => {
+              console.log(checked)
+              setChecked(checked)
+            }}
+            onExpand={(expanded) => setExpanded(expanded)}
+            icons={{
+              expandClose: <FontAwesomeIcon icon={faCaretRight} className="text-slate-700" />,
+              expandOpen: <FontAwesomeIcon icon={faCaretDown} className="text-slate-700" />,
+            }}
+          />
           </div>
         </aside>
         <main className="flex-1 overflow-x-auto max-h-screen">

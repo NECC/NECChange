@@ -6,12 +6,14 @@
     @apply border-b pb-3;
 }
 
-.react-checkbox-tree>ol>li.rct-node.rct-node-parent>ol>li.rct-node.rct-node-parent>.rct-text {
-    @apply pt-3;
+.react-checkbox-tree>ol>li.rct-node.rct-node-parent>.rct-text {
+    @apply px-2 py-2 border rounded-md font-bold;
+    border-radius: 8px;
 }
 
 .react-checkbox-tree>ol>li.rct-node.rct-node-parent>span>button {
-    @apply bg-slate-700 text-white rounded mr-3;
+    @apply text-slate-700 rounded mr-3 bg-white;
+    font-size: 16px;
 }
 
 .react-checkbox-tree>ol>li.rct-node.rct-node-parent:not(:first-child) {
