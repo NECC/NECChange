@@ -1,180 +1,167 @@
-import React, {useEffect, useState} from "react";
-import axios from 'axios'
-import { toast } from 'react-toastify';
+import React from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
+import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import Badge from "../../globals/Badge";
+// há x tempo atrás
+import moment from "moment";
+import "moment/locale/pt";
 
+interface statusMapProps {
+  [key: string]: [string, "green" | "yellow" | "red"];
+}
+const statusMap: statusMapProps = {
+  ACCEPTED: ["Aceite", "green"],
+  PENDING: ["Pendente", "yellow"],
+  REMOVED: ["Removido", "red"],
+};
 
 const type_class: any = {
-    1: "T",
-    2: "TP",
-    3: "PL"
-}
-const yearColor = ['text-blue-500','text-red-500', 'text-green-600'];
-const statusColor: any = {'Aceite': 'text-green-500','Pendente': 'text-yellow-500', 'Removido': 'text-red-600'}
+  1: "T",
+  2: "TP",
+  3: "PL",
+};
 
 interface FeedPostProps {
-    post: any,
-    toggleLoader: Function,
+  post: {
+    id: number;
+    from_student: {
+      number: string;
+    };
+    publish_time: string;
+    status: "ACCEPTED" | "PENDING" | "REMOVED";
+    trade_id: any[];
+  };
+  toggleLoader: Function;
 }
 
-interface PublishDate {
-    value: number,
-    scope: 'segundo' | 'minuto' | 'hora' | 'dia' | 'mes',
-}
+export default function FeedPost({ post, toggleLoader }: FeedPostProps) {
+  const { data: session } = useSession();
+  const isViewingOwnPost = session?.user.number === post.from_student.number;
+  const fromStudentNr = post.from_student.number;
+  const tradeId = post.id;
+  const [status, badgeVariant] = statusMap[post.status];
 
-export default function FeedPost(props: FeedPostProps) {
-    const {post, toggleLoader} = props
-    const [fromStudentNr, setFromStudentNr] = useState<string>();
-    const [tradeId, setTradeId] = useState<number>();
-    const [publishDate, setPublishDate] = useState<PublishDate>({ value: 0, scope: 'segundo' })
-    const [status, setStatus] = useState('')
-    const { data: session } = useSession();
-
-
-    const calculatePublishedDate = () => {
-        const actualDate = new Date();
-        const publishedDate = new Date(post.publish_time);
-        
-        const secondsDiff = Math.floor((actualDate.getTime() - publishedDate.getTime()) / 1000);
-        if (secondsDiff < 60) return setPublishDate({ value: secondsDiff, scope: 'segundo' });
-
-        const minutesDiff = Math.floor(secondsDiff / 60);
-        if (minutesDiff < 60) return setPublishDate({ value: minutesDiff, scope: 'minuto' });
-
-        const hourDiff = Math.floor(minutesDiff / 60);
-        if (hourDiff < 24) return setPublishDate({ value: hourDiff, scope: 'hora' });
-
-        const daysDiff = Math.floor(hourDiff / 24);
-        if (daysDiff < 30) return setPublishDate({ value: daysDiff, scope: 'dia' });
-        else return setPublishDate({ value: Math.floor(daysDiff / 30), scope: 'mes' });
-    }
-
-    useEffect(() =>{
-        calculatePublishedDate();
-        if(post.status == 'PENDING'){
-            setStatus('Pendente')
-        } else if(post.status == 'REMOVED'){
-            setStatus('Removido')
+  const acceptTrade = () => {
+    toggleLoader(true);
+    axios
+      .post(`api/feed/feed_post/accept_trade`, {
+        params: { studentNr: session?.user.number, tradeId: tradeId },
+      })
+      .then((res) => {
+        console.log("Res 1", res);
+        if (res.data.response == true) {
+          axios
+            .delete(`api/feed/feed_post/accept_trade`, {
+              data: {
+                fromStudentNr: fromStudentNr,
+                toStudentNr: session?.user.number,
+                tradeId: tradeId,
+              },
+            })
+            .then((res) => {
+              toast.success("Troca realizada com sucesso!");
+              console.log("Res2", res);
+            });
         } else {
-            setStatus('Aceite')
+          toast.error("Não é possível realizar a troca!");
         }
-        
-        setFromStudentNr(post.from_student.number);
-        setTradeId(post.id)
-    }, [post])
+        toggleLoader(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
+  const removeTrade = () => {
+    toggleLoader(true);
+    axios
+      .put(`api/feed/feed_post/remove_trade`, {
+        params: { tradeId: tradeId },
+      })
+      .then((res) => {
+        toggleLoader(false);
+        toast.success("Pedido de troca removido!");
+      })
+      .catch((err) => {
+        toggleLoader(false);
+        toast.error("Erro ao remover o pedido de troca!");
+        console.log(err);
+      });
+  };
 
-    const acceptTrade = () => {
-        toggleLoader(true)
-        axios
-        .post(`api/feed/feed_post/accept_trade`, {
-            params: {studentNr: session?.user.number, tradeId: tradeId}
-        })
-        .then(res =>{
-            console.log("Res 1", res);
-            if(res.data.response == true){
-                axios
-                    .delete(`api/feed/feed_post/accept_trade`, {
-                        data: {fromStudentNr: fromStudentNr, toStudentNr: session?.user.number, tradeId: tradeId}
-                    })
-                    .then(res =>{
-                        toast.success('Troca realizada com sucesso!')
-                        console.log("Res2" , res);
-                    })
-            } else {
-                toast.error('Não é possível realizar a troca!')
-            }
-            toggleLoader(false)
-        }).catch(err=>{
-            console.log(err);
-        })
-    }
+  return (
+    <div className="rounded-md text-base bg-white p-6 border shadow w-full grid gap-8">
+      <div className="flex items-center justify-between gap-2">
+        <p className="">
+          Solicitado por{" "}
+          <strong className="text-lg font-semibold">{fromStudentNr}</strong> há{" "}
+          {moment(post.publish_time).fromNow(true)} atrás
+        </p>
 
-    const removeTrade = () => {
-        toggleLoader(true);
-        axios
-        .put(`api/feed/feed_post/remove_trade`, {
-            params: {tradeId: tradeId}
-        })
-        .then(res => {
-            toggleLoader(false);
-            toast.success('Pedido de troca removido!');
-        })
-        .catch(err => {
-            toggleLoader(false);
-            toast.error('Erro ao remover o pedido de troca!');
-            console.log(err);
-        })
-    }
+        {isViewingOwnPost && <Badge variant={badgeVariant}>{status}</Badge>}
+      </div>
 
-    return (
-        <div className="rounded-md text-lg bg-white p-8 m-4 ml-10 border shadow-md">
-            <div className="font-bold pb-10">
-                <div className="float-left text-2xl">
-                    <span className="ml-1 text-lg font-normal">
-                        <strong className="text-xl">{fromStudentNr}</strong>
-                        - solicitou uma troca de turno da UC
-                    </span>
+      <div className="grid">
+        {post.trade_id.map((lesson_trade: any, i: number) => {
+          const { year, name } = lesson_trade.lessonFrom.course;
+          const type = type_class[lesson_trade.lessonFrom.type];
+          const from = `${type}${lesson_trade.lessonFrom.shift}`;
+          const to = `${type}${lesson_trade.lessonTo.shift}`;
+          const yearColor = [
+            "text-cyan-500",
+            "text-teal-500",
+            "text-violet-500",
+          ];
+          const color = yearColor[year - 1];
+
+          return (
+            <div
+              className="grid grid-cols-2 items-center py-1 w-full border-b last:border-none"
+              key={i}
+            >
+              <p className="font-semibold">
+                <span className={`mr-1 font-bold ${color}`}>({year}º Ano)</span>{" "}
+                {name}
+              </p>
+              <div className="flex justify-end">
+                <div className="ml-2 flex items-baseline gap-3">
+                  <p className="">
+                    {fromStudentNr}{" "}
+                    <span className="font-semibold">{from}</span>
+                  </p>
+                  <FaArrowRightArrowLeft className="text-[11px] text-blue-900" />
+                  <p className="">
+                    <span className="font-semibold">{to}</span>{" "}
+                    {isViewingOwnPost ? "Axxxxx" : session?.user.number}
+                  </p>
                 </div>
-                <div className="text-end">
-                    Publicado há {publishDate.value} {
-                        publishDate.scope == 'mes' ? 
-                        publishDate.value == 1 ? publishDate.scope : `${publishDate.scope}es`
-                        :
-                        publishDate.value == 1 ? publishDate.scope : `${publishDate.scope}s`
-                    }
-                </div>
-                {
-                    <div className={`${session?.user.number == post.from_student.number ? '' : 'hidden' } float-right`}>
-                        Estado:
-                        <span className={`${statusColor[status]} `}> {status}</span>
-                    </div>
-                }
-
+              </div>
             </div>
-            {
-                post.trade_id.map((lesson_trade: any, i: number) => {
-                    let type = type_class[lesson_trade.lessonFrom.type]
-                    let fromShift = lesson_trade.lessonFrom.shift
-                    let toShift = lesson_trade.lessonTo.shift
+          );
+        })}
+      </div>
 
-                    return(
-                        <div key={i}>
-                            <div className="flex flex-row">
-                                <div className="font-bold">
-                                    {lesson_trade.lessonFrom.course.name}
-                                </div>
-                                <span className={`ml-1 font-bold ${yearColor[lesson_trade.lessonFrom.course.year - 1]}`}>
-                                    ( {lesson_trade.lessonFrom.course.year}º Ano )
-                                </span>
-                                <div className="ml-1">
-                                    {'- ' + type + fromShift + ' para ' + type + toShift}
-                                </div>
-                            </div>
-                            <div className={`${session?.user.number == fromStudentNr ? 'hidden' : '' } text-xs`}>
-                                {fromStudentNr}{": " + type + fromShift + " -> " + type + toShift} || {session?.user.number}{": " + type + toShift + " -> " + type + fromShift}
-                            </div>
-                        </div>
-                        
-                    );
-                })
-            }
-            
-            {
-                <div>
-                    <button className={`${session?.user.number == post.from_student.number ? 'hidden' : '' } p-2 mt-4 bg-[#018ccb] hover:bg-[#007cb6] font-bold text-white text-md float-right rounded-lg shadow-md`}
-                            onClick={acceptTrade}>
-                        Aceitar Troca
-                    </button>
-                    <button className={`${session?.user.number == post.from_student.number ? '' : 'hidden' }
-                                        ${status == 'Pendente' ? '' : 'hidden'}
-                                        p-2 mt-4 bg-red-500 hover:bg-red-600 font-bold text-white text-md float-right rounded-lg shadow-md`}
-                            onClick={removeTrade}>
-                        Remover Troca
-                    </button>
-                </div>
-            }
-        </div>
-    );
+      <div className="flex justify-end">
+        {isViewingOwnPost ? (
+          status == "Pendente" && (
+            <button
+              className={`py-2 px-4 bg-red-600 hover:bg-red-500 font-bold text-white rounded-lg`}
+              onClick={removeTrade}
+            >
+              Remover Troca
+            </button>
+          )
+        ) : (
+          <button
+            className={`py-2 px-4 bg-blue-500 hover:bg-blue-600 font-bold text-white rounded-lg`}
+            onClick={acceptTrade}
+          >
+            Trocar
+          </button>
+        )}
+      </div>
+    </div>
+  );
 }
-

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlus } from "react-icons/fa6";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 import Modal from "@/app/components/globals/Modal";
 import TradeEntry from "./popUp/TradeEntry";
@@ -16,36 +16,39 @@ const emptyTrade = {
 };
 
 interface FilterProps {
-  toggleLoader: Function,
-};
+  toggleLoader: Function;
+}
 
-const format_validator = (trades: any) =>{
+const format_validator = (trades: any) => {
   // verificar se tudo está preenchido
-  const entries_empty = trades.filter( (trade: any) => trade.fromShift == 0 || trade.toShift == 0 || trade.ucId == 0)
+  const entries_empty = trades.filter(
+    (trade: any) =>
+      trade.fromShift == 0 || trade.toShift == 0 || trade.ucId == 0
+  );
 
   // verificar se não há repetições
   let no_repetitions = true;
-  trades.forEach( (trade: any) => {
-    const repeated_entry = trades.filter((trade_aux: any) => trade_aux.fromShift == trade.fromShift && trade_aux.ucId == trade.ucId)
-    if(repeated_entry.length > 1){
-      no_repetitions = false
-      return false
-    };
-  })
+  trades.forEach((trade: any) => {
+    const repeated_entry = trades.filter(
+      (trade_aux: any) =>
+        trade_aux.fromShift == trade.fromShift && trade_aux.ucId == trade.ucId
+    );
+    if (repeated_entry.length > 1) {
+      no_repetitions = false;
+      return false;
+    }
+  });
 
-  if(entries_empty.length == 0 && no_repetitions) return true
-  else return false
+  if (entries_empty.length == 0 && no_repetitions) return true;
+  else return false;
 };
- 
-export default function NewTrade(props: FilterProps) {
 
+export default function NewTrade({ toggleLoader }: FilterProps) {
   const [showModal, setShowModal] = useState(false);
   const [trades, setTrades] = useState([emptyTrade]);
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
   const { data: session } = useSession();
-
-  const { toggleLoader } = props;  
 
   useEffect(() => {
     axios
@@ -60,11 +63,12 @@ export default function NewTrade(props: FilterProps) {
             };
           }
 
-          const result = acc[lesson.course.name].classes.filter((lesson_aux: any) =>
-            lesson_aux.shift == lesson.shift && lesson_aux.type == lesson.type
-          )
+          const result = acc[lesson.course.name].classes.filter(
+            (lesson_aux: any) =>
+              lesson_aux.shift == lesson.shift && lesson_aux.type == lesson.type
+          );
 
-          if(result.length == 0){
+          if (result.length == 0) {
             acc[lesson.course.name].classes.push({
               //classId: lesson.id,
               shift: lesson.shift,
@@ -128,50 +132,47 @@ export default function NewTrade(props: FilterProps) {
   };
 
   useEffect(() => {
-  //  console.log("Trades", trades);
-  //  console.log("Enrolled Classes", enrolledClasses);
-  //  console.log("Available Classes", availableClasses);
+    //  console.log("Trades", trades);
+    //  console.log("Enrolled Classes", enrolledClasses);
+    //  console.log("Available Classes", availableClasses);
   }, [trades]);
 
   const submitTrades = () => {
     toggleLoader(true);
 
-    if(format_validator(trades) == true){
+    if (format_validator(trades) == true) {
       axios
         .post("api/feed/feed_post/add_trade", {
           params: { trades: trades, student_nr: session?.user.number },
         })
         .then((response) => {
           console.log(response);
-          toggleLoader(false); 
-          toast.success('Pedido de troca realizado!')
+          toggleLoader(false);
+          toast.success("Pedido de troca realizado!");
         })
-        .catch(err =>{
-          toggleLoader(false)
-          toast.error('Erro ao realizar o pedido de troca!')
-        })
+        .catch((err) => {
+          toggleLoader(false);
+          toast.error("Erro ao realizar o pedido de troca!");
+        });
     } else {
-      toggleLoader(false)
-      toast.warning('Formato de troca inválido!')
-    } 
+      toggleLoader(false);
+      toast.warning("Formato de troca inválido!");
+    }
   };
-
-
-
 
   return (
     <>
       <button
-        className="flex justify-center w-full p-1 rounded-md bg-[#018ccb] hover:bg-[#007cb6] text-white font-semibold"
+        className="w-full sm:w-auto py-1 px-3 rounded-md text-blue-600 font-semibold border hover:bg-gray-100"
         onClick={() => setShowModal(true)}
       >
-        Solicitar troca
+        Nova Troca
       </button>
 
       <Modal
         showModal={showModal}
         setShowModal={setShowModal}
-        title="Solicitar troca"
+        title="Nova troca"
       >
         <div className="flex flex-col space-y-2 mb-3 min-h-[50vh]">
           {trades.map((trade) => (
@@ -182,9 +183,7 @@ export default function NewTrade(props: FilterProps) {
               enrolledClasses={enrolledClasses}
               availableClasses={availableClasses}
             />
-            
-          ))
-          }
+          ))}
 
           <button
             className="flex justify-center items-center mx-auto p-2 w-full rounded-2xl bg-slate-100 hover:bg-slate-200 text-blue-500 font-semibold"
