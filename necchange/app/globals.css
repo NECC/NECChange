@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --btn: #2C3E50;
 
   --foreground-rgb: 0, 0, 0;
@@ -10,7 +10,7 @@
   --background-end-rgb: 255, 255, 255;
 
 
-  /* FullCalendar */
+
   --fc-border-color: white; 
   
   --fc-button-text-color: white;
@@ -18,14 +18,14 @@
   --fc-button-hover-text-color: black;
   --fc-button-hover-bg-color: rgb(255, 255, 255);
   --fc-button-active-bg-color: var(--btn);
-/*  --fc-button-active-border-color: black; */
+
   --fc-event-bg-color: #3c7dbe;
   --fc-event-text-color: white;
   --fc-event-border-color: #3788d8;
  --fc-today-bg-color: rgba(0, 141, 202, 0.352);
 
   --outline-color: #0b223a;
-}
+} */
 
 ::-webkit-scrollbar {
   width: 8px; /* Width of the scrollbar */
@@ -44,7 +44,7 @@
   background-color: rgba(248, 248, 248, 0.774); /* Background color of the scrollbar track on hover */
 }
 
-
+/* 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -58,4 +58,4 @@ body {
   background: linear-gradient(to bottom,
       transparent,
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-}
+} */
