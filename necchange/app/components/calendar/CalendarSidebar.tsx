@@ -4,8 +4,6 @@ import { faCaretDown, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import CheckboxTree from "react-checkbox-tree";
 import "react-checkbox-tree/lib/react-checkbox-tree.css";
 
-import "./CalendarSidebarStyles.css";
-
 export type UC = {
   id: number;
   name: string;
