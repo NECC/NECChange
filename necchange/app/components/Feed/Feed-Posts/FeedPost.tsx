@@ -47,23 +47,11 @@ export default function FeedPost({ post, toggleLoader }: FeedPostProps) {
     toggleLoader(true);
     axios
       .post(`api/feed/feed_post/accept_trade`, {
-        params: { studentNr: session?.user.number, tradeId: tradeId },
+        params: { fromStudentNr: fromStudentNr, studentAcceptedNr: session?.user.number, tradeId: tradeId },
       })
       .then((res) => {
-        console.log("Res 1", res);
         if (res.data.response == true) {
-          axios
-            .delete(`api/feed/feed_post/accept_trade`, {
-              data: {
-                fromStudentNr: fromStudentNr,
-                toStudentNr: session?.user.number,
-                tradeId: tradeId,
-              },
-            })
-            .then((res) => {
-              toast.success("Troca realizada com sucesso!");
-              console.log("Res2", res);
-            });
+          toast.success("Troca realizada com sucesso!");
         } else {
           toast.error("Não é possível realizar a troca!");
         }
