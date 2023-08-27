@@ -20,13 +20,11 @@ export async function GET(req: NextRequest, context: any) {
     const prisma = new PrismaClient();
 
     const limit = parseInt(context.params.scroll[0]);
-    const cursor = parseInt(context.params.scroll[1]);
+    const skip = context.params.scroll[1] === 'landing' ? 0 : 1;
+    const cursor = context.params.scroll[1] === 'landing' ? undefined : {id: parseInt(context.params.scroll[1])};
     let studentNr = context.params.scroll[2] === 'undefined' ? undefined : context.params.scroll[2]
     let status = studentNr == undefined ? Status.PENDING : undefined
     let ucsFilter = context.params.scroll.length === 4 ? context.params.scroll[3].split('&') : undefined
-
-//    console.log(limit);
-//    console.log(cursor);
 
     let lesson_ids = undefined;
     if(ucsFilter != undefined){
@@ -52,19 +50,18 @@ export async function GET(req: NextRequest, context: any) {
           from_student:{
             number: studentNr
           },
+          
           trade_id:{
             some : {
               lesson_from_id: {in: lesson_ids},
               lesson_to_id: {in: lesson_ids}
-            }
-          }
-
+            },
+          },
+          
         },
-        cursor: {
-            id: cursor
-        },
+        cursor: cursor,
         take: limit,
-        skip: 1,
+        skip: skip,
         orderBy: {
             id: 'asc'
         },
@@ -114,5 +111,6 @@ export async function GET(req: NextRequest, context: any) {
       if(trade.id > new_cursor) new_cursor = trade.id;
     })
 
+    
     return new NextResponse(JSON.stringify({response: trades, cursor: new_cursor}))
 }
