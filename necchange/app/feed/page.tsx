@@ -7,17 +7,9 @@ import FeedPost from "@/app/components/Feed/Feed-Posts/FeedPost";
 import Sidebar from "@/app/components/Feed/Sidebar/Sidebar";
 import Loader from "../components/globals/Loader";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDownLong } from "@fortawesome/free-solid-svg-icons";
 import { FaPlus } from "react-icons/fa6";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-interface FeedBack {
-  message: string;
-  show: boolean;
-  error: boolean;
-}
 
 import UCFilter from "@/app/components/Feed/Sidebar/Filters/UCFilter";
 import NewTradeButton from "@/app/components/Feed/Sidebar/NewTrade/NewTradeButton";
@@ -31,13 +23,12 @@ export default function Feed() {
   const [ucsArray, setUcsArray] = useState<string[]>([]);
 
   const [feedPosts, setFeedData] = useState<any>([]);
-  const [dbCursor, setDbCursor] = useState<any>([]);
+  const [dbCursor, setDbCursor] = useState<any>(1);
 
   const [filteredPosts, setFilteredPosts] = useState<any>([]);
   const [myTrades, setMyTrades] = useState<boolean>(false);
 
   const toggleLoader = (value: boolean) => {
-    console.log("Changing");
     setLoader(value);
   };
 
@@ -66,7 +57,7 @@ export default function Feed() {
 
         axios
           .get(
-            `api/feed/feed_post/landing/${5}${
+            `api/feed/feed_post/${5}/landing/${
               myTrades ? `/${session?.user?.number}` : "/undefined"
             }/${query_filtered_ucs}`
           )
