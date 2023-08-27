@@ -15,12 +15,12 @@ export default function SuperUser() {
 
     console.log(session);
 
-    useEffect(() => {
+    /* useEffect(() => {
         if (session && session.user?.role !== 'SUPER_USER') {
             redirect('/')
         }
 
-    }, [status])
+    }, [status]) */
 
     const buttonStyles = "p-6 m-2 text-xl border-2 border-sky-500 shadow-md rounded-md bg-white hover:bg-slate-50"
 
