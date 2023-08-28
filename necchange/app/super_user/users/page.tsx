@@ -33,6 +33,7 @@ export default function ManageUsers(){
                     const response = await axios.get(`../api/users`);
                     setUsers(response.data.users);
 
+
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }

@@ -38,22 +38,7 @@ function NavbarLinks(props: NavbarLinksProps) {
                 </li>
                 :
                 <li>
-                  <button
-                    className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300"
-                    style={{
-                      display: 'flex',
-                      height: '40px',
-                      padding: '8px 20px',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: '100px',
-                      background: '#018ccb',
-                      color: 'white', // Set text color to match the background
-                    }}
-                    onClick={() => signIn()}
-                  >
-                    Login
-                  </button>
+                    <button className="hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300 text-left" onClick={() => signIn()}>Login</button>
                 </li>
             }
         </ul>

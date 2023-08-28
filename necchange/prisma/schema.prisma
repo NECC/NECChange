@@ -17,6 +17,7 @@ model lesson {
   local          String?          @db.VarChar(100)
   type           Int?
   shift          Int?
+
   course         course?          @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   student_lesson student_lesson[]
   fromSwitch     lesson_trade[]   @relation("lesson_from_id")
