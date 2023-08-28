@@ -15,6 +15,13 @@ export default function StudentSchedule(props: CalendarProps) {
   const { innerWidth } = useWindowSize();
   const [currentDate, setCurrentDate] = useState(new Date());
   const calendarRef = useRef<FullCalendar | null>(null);
+  // breakpoints
+  const isPhone = innerWidth && innerWidth < 640;
+  const isTablet = innerWidth && innerWidth < 768;
+  // valid date range
+  const now = new Date();
+  const startDate = new Date().setDate(now.getDate() - now.getDay() + 1);
+  const endDate = new Date().setDate(now.getDate() + (5 - now.getDay()));
 
   const updateDate = (dateModifier: number) => {
     const date = new Date(
@@ -36,16 +43,6 @@ export default function StudentSchedule(props: CalendarProps) {
       calendarRef.current.getApi().next(); // Chama o método next() do FullCalendar
     }
   };
-
-  const isPhone = innerWidth && innerWidth < 640;
-  const isTablet = innerWidth && innerWidth < 768;
-
-  const startingDate = new Date().setDate(
-    currentDate.getDate() - currentDate.getDay()
-  );
-  const endingDate = new Date().setDate(
-    currentDate.getDate() + (6 - currentDate.getDay())
-  );
 
   return (
     <div className="full-calendar schedule-container min-h-min">
@@ -71,8 +68,8 @@ export default function StudentSchedule(props: CalendarProps) {
         slotMinTime="08:00:00"
         slotMaxTime="20:00:00"
         validRange={{
-          start: new Date(startingDate),
-          end: new Date(endingDate),
+          start: new Date(startDate),
+          end: new Date(endDate),
         }}
         slotLabelFormat={{
           hour: "2-digit",
