@@ -45,7 +45,6 @@ export default function Feed() {
       };
       uc_names();
     }
-    42;
   }, [session]);
 
   useEffect(() => {

@@ -8,25 +8,19 @@ import axios, { AxiosResponse } from 'axios'
 import DataTable, { DataRow } from "../../components/admin/datatable/datatable";
 import Modal from "../../components/globals/Modal";
 
+
 function filterUsers(user: DataRow, loweredCasedSearch: string){
     const searchIsEmpty = loweredCasedSearch === '';
     const checkNumber = user.number.toLowerCase().includes(loweredCasedSearch); 
     const checkFirstName = user.firstname.toLowerCase().includes(loweredCasedSearch); 
     const checkLastName = user.lastname.toLowerCase().includes(loweredCasedSearch); 
     const checkEmail = user.email.toLowerCase().includes(loweredCasedSearch);
-
  
-    
     return searchIsEmpty || checkFirstName || checkLastName || checkEmail || checkNumber;
 }
 
 export default function ManageUsers(){
-    const { data: session, status } = useSession({
-        required: true,
-        onUnauthenticated() {
-            redirect('/')
-        }
-    });
+    const { data: session } = useSession();
     const [users, setUsers] = useState(new Array<DataRow>()); 
     const [search, setSearch] = useState('');
     const [showModal, setShowModal] = useState(false);
@@ -106,7 +100,9 @@ export default function ManageUsers(){
                         </div>
                     </div>                    
                 </div>
-                <DataTable data={users.filter((user) => {return filterUsers(user, search.toLowerCase()) })}/>
+                {
+                    //<DataTable data={users.filter((user) => {return filterUsers(user, search.toLowerCase()) })}/>
+                }
             </div>
         </div>
     )
