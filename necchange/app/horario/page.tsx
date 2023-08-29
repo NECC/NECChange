@@ -1,10 +1,8 @@
-'use client'
+"use client";
 
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from 'react'
-import { redirect } from 'next/navigation';
-
-import axios from 'axios'
+import { useState, useEffect } from "react";
+import axios from "axios";
 import StudentSchedule from "../components/schedule/StudentSchedule";
 
 export default function Home() {
@@ -12,24 +10,22 @@ export default function Home() {
   const { data: session } = useSession();
 
   useEffect(() => {
-    if (session) {
-      const getEvents = async () => {
-        try {
-          const response = await axios.get(`api/trades/student_schedule/${session.user?.number}`);
-          setClasses(response.data.response);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-      getEvents();
-    }
-  }, [session]) 
-    
-    return (
-      <div className='bg-white h-screen pt-24 '>
-        <div className='ml-auto mr-auto px-8 md:px-16'>
-          <StudentSchedule events={classes} />
-        </div>
+    if (!session) return;
+    axios
+      .get(`api/trades/student_schedule/${session.user?.number}`)
+      .then((response) => {
+        setClasses(response.data.response);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [session]);
+
+  return (
+    <div className="flex justify-center pt-36 pb-20">
+      <div className="container mx-8">
+        <StudentSchedule events={classes} />
       </div>
+    </div>
   );
 }
