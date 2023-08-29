@@ -17,7 +17,10 @@ export default function CalendarPage() {
   useEffect(() => {
     axios
       .get("api/calendar/getCalendar")
-      .then((res) => setEvents(res.data.response));
+      .then((res) => {
+        const events_with_color = setEvents(res.data.response); 
+        console.log(res.data.response);
+      });
   }, []);
 
   useEffect(() => {
@@ -44,6 +47,7 @@ export default function CalendarPage() {
           initialView="dayGridMonth"
           displayEventTime={false}
           events={events}
+          eventColor="blue-sky-500"
           height="80vh"
         />
       </div>
