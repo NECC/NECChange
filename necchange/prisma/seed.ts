@@ -216,6 +216,12 @@ async function main() {
         data: student_class
       })
     });
+
+    await prisma.tradePeriods.create({
+      data: {
+        isOpen: false
+      }
+    });
     
  
 }
@@ -241,4 +247,5 @@ async function nuclear_bomb(){
   await prisma.lesson.deleteMany();
   await prisma.user.deleteMany();
   await prisma.course.deleteMany();
+  await prisma.tradePeriods.deleteMany();
 }

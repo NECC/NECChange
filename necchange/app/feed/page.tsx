@@ -1,10 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, MouseEventHandler } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 
 import FeedPost from "@/app/components/Feed/Feed-Posts/FeedPost";
-import Sidebar from "@/app/components/Feed/Sidebar/Sidebar";
 import Loader from "../components/globals/Loader";
 
 import { FaPlus } from "react-icons/fa6";
@@ -14,8 +13,48 @@ import "react-toastify/dist/ReactToastify.css";
 import UCFilter from "@/app/components/Feed/Sidebar/Filters/UCFilter";
 import NewTradeButton from "@/app/components/Feed/Sidebar/NewTrade/NewTradeButton";
 
-export default function Feed() {
+interface PostsI{
+  filteredPosts: Array<any>,
+  toggleLoader: Function,
+  getMorePosts: MouseEventHandler<HTMLButtonElement>
+}
+
+const Posts = ({filteredPosts, toggleLoader, getMorePosts}: PostsI) => {
+  return(
+    <div>
+      <div className="w-full grid gap-6 mb-8">
+        {filteredPosts.map((feedPost: any, i: any) => {
+          return (
+            <FeedPost key={i} post={feedPost} toggleLoader={toggleLoader} />
+          );
+        })}
+      </div>
+
+      <div className="flex justify-center">
+        <button
+          className="flex items-center gap-2 rounded-full bg-blue-500 py-2 px-4 text-base capitalize font-semibold text-white"
+          onClick={getMorePosts}
+        >
+          <FaPlus /> carregar mais
+        </button>
+      </div>
+    </div>
+  )
+}
+
+const TradesClosed = () => {
+  return(
+    <div className="w-full mt-16 p-12 border rounded-md shadow-md  text-center font-bold">
+      A época de trocas encontra-se fechada.
+    </div>
+  )
+}
+
+
+
+export default function Feed(){
   const { data: session } = useSession();
+  const [tradesOpen, setTradesOpen] = useState<any>(null)
 
   const [loader, setLoader] = useState(false);
 
@@ -32,6 +71,22 @@ export default function Feed() {
     setLoader(value);
   };
 
+  // This effect checks if trade period is open
+  useEffect(() =>{
+    const checkTradePeriod = () =>{
+      axios
+        .get('/api/feed/feed_post/trade_period_info')
+        .then(res =>{
+          setTradesOpen(res.data.open)
+          console.log(res);
+        })
+        .catch(err => console.log(err))
+    }
+
+    checkTradePeriod()
+  }, []);
+  
+  // This effect gets the courses that the student is taking
   useEffect(() => {
     if (session) {
       const uc_names = async () => {
@@ -45,9 +100,9 @@ export default function Feed() {
       };
       uc_names();
     }
-    42;
   }, [session]);
 
+  // This effect is responsible to get the first posts that show on feed
   useEffect(() => {
     const startingFeed = async () => {
       try {
@@ -69,9 +124,11 @@ export default function Feed() {
         console.error("Error fetching data:", error);
       }
     };
-    startingFeed();
+    
+    if(tradesOpen) startingFeed();
   }, [session, ucsFilter, myTrades]);
 
+  // This effect filters the posts already taken
   useEffect(() => {
     if (ucsFilter.length == 0) {
       setFilteredPosts(feedPosts);
@@ -87,6 +144,7 @@ export default function Feed() {
     }
   }, [ucsFilter, feedPosts]);
 
+  // This function gets more posts from the database
   const getMorePosts = async () => {
     try {
       let query_filtered_ucs = ucsFilter.join("&");
@@ -142,29 +200,27 @@ export default function Feed() {
               ucsArray={ucsArray}
               ucsFilter={ucsFilter}
             />
-            <div className="flex-grow">
-              <NewTradeButton toggleLoader={toggleLoader} />
-            </div>
+            {
+              tradesOpen 
+              ? 
+              <div className="flex-grow">
+                <NewTradeButton toggleLoader={toggleLoader} />
+              </div>
+              : 
+              <></>
+            }
           </div>
         </div>
-
-        <div className="w-full grid gap-6 mb-8">
-          {filteredPosts.map((feedPost: any, i: any) => {
-            return (
-              <FeedPost key={i} post={feedPost} toggleLoader={toggleLoader} />
-            );
-          })}
-        </div>
-
-        <div className="flex justify-center">
-          <button
-            className="flex items-center gap-2 rounded-full bg-blue-500 py-2 px-4 text-base capitalize font-semibold text-white"
-            onClick={getMorePosts}
-          >
-            <FaPlus /> carregar mais
-          </button>
-        </div>
+        { tradesOpen 
+          ? <Posts filteredPosts={filteredPosts} toggleLoader={toggleLoader} getMorePosts={getMorePosts}/>
+          : (tradesOpen == false) 
+              ? <TradesClosed/>
+              : <></> 
+        }
       </div>
+
+
+      {/* Loader and Toast Components */}
       {loader && <Loader />}
       <ToastContainer
         position="bottom-right"
