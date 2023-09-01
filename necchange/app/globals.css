@@ -132,3 +132,7 @@
 .rct-node-icon {
   @apply hidden;
 }
+
+.fc-event-title-container {
+  @apply font-semibold;
+}
