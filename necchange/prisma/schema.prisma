@@ -7,30 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//model student {
-//  id        Int      @id
-//  number    String?  @unique @db.VarChar(20)
-//  firstname String?  @db.VarChar(100)
-//  lastname  String?  @db.VarChar(100)
-//  email     String?  @db.VarChar(100)
-//  password  String?  @db.VarChar(100)
-//  is_admin  Boolean?
-//
-//  student_lesson   student_lesson[]
-//  from_student_id trade[]         @relation("from_student_id")
-//  to_student_id   trade[]         @relation("to_student_id")
-//}
-
 // OLD: uc_class 
 model lesson {
-  id         Int     @id
-  course_id  Int?
-  weekday    Int?
-  start_time String  @db.VarChar(10)
-  end_time   String  @db.VarChar(10)
-  local      String? @db.VarChar(100)
-  type       Int?
-  shift      Int?
+  id             Int              @id
+  course_id      Int?
+  weekday        Int?
+  start_time     String           @db.VarChar(10)
+  end_time       String           @db.VarChar(10)
+  local          String?          @db.VarChar(100)
+  type           Int?
+  shift          Int?
 
   course         course?          @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   student_lesson student_lesson[]
@@ -129,6 +115,13 @@ model User {
   student_lesson  student_lesson[]
   from_student_id trade[]          @relation("from_student_id")
   to_student_id   trade[]          @relation("to_student_id")
+}
+
+model TradePeriods {
+  id        Int       @id @default(autoincrement())
+  isOpen    Boolean   @default(false)
+  openDate  DateTime?
+  closeDate DateTime?
 }
 
 model VerificationToken {
