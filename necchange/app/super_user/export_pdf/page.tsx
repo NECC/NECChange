@@ -1,6 +1,5 @@
 'use client'
 
-import Link from "next/link";
 import axios from 'axios'
 import jsPDF from 'jspdf'
 import "jspdf-autotable"
@@ -67,7 +66,6 @@ export default function SuperUser() {
                 .get(`/api/admin/uc_shifts_list/${ucSelected}`)
                 .then(res => {
                     generatePDF(res.data.data)
-
                 })
                 .catch(err => console.log(err))
         }
