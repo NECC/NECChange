@@ -24,20 +24,22 @@ interface id_uc{
 }
 const ucs_ids: {[id: string]: id_uc} = {}
 
-function populate_ucs(){
+async function populate_ucs(){
   let result_ucs: Prisma.courseCreateInput[] = [];
   let i = 1;
-  ucs.map((uc) => {
-    let uc_to_add = {
-      id: i,
-      name: uc.uc,
-      year: uc.ano,
-      semester: uc.semestre
-    }
-    result_ucs.push(uc_to_add);
-    ucs_ids[uc.uc] = {id: i};
-    i++;
-  })
+  Promise.all(
+    ucs.map((uc) => {
+      let uc_to_add = {
+        id: i,
+        name: uc.uc,
+        year: uc.ano,
+        semester: uc.semestre
+      }
+      result_ucs.push(uc_to_add);
+      ucs_ids[uc.uc] = {id: i};
+      i++;
+    })
+  )
   console.log(result_ucs)
   return result_ucs;
 } 
@@ -65,25 +67,26 @@ let classes: {
   shift: number; 
 }[] = [];
 
-function populate_classes(){
+async function populate_classes(){
   let i = 1;
-
-  schedule.map((class_schedule) =>{
-    class_schedule.slots.map((slot) =>{
-      let class_to_add = {
-        id: i,
-        course_id: ucs_ids[class_schedule.uc].id,
-        weekday: weekdays[slot[0]],
-        start_time: slot[1] + ":" + slot[2],
-        end_time: slot[3] + ":" + slot[4],
-        local: slot[5],
-        type: type_class[class_schedule.type_class],
-        shift: parseInt(class_schedule.shift)
-      };
-      classes.push(class_to_add);
-      i++;
+  Promise.all(
+    schedule.map((class_schedule) =>{
+      class_schedule.slots.map((slot) =>{
+        let class_to_add = {
+          id: i,
+          course_id: ucs_ids[class_schedule.uc].id,
+          weekday: weekdays[slot[0]],
+          start_time: slot[1] + ":" + slot[2],
+          end_time: slot[3] + ":" + slot[4],
+          local: slot[5],
+          type: type_class[class_schedule.type_class],
+          shift: parseInt(class_schedule.shift)
+        };
+        classes.push(class_to_add);
+        i++;
+      })
     })
-  })
+  )
 
   return classes
 }
@@ -108,33 +111,48 @@ let students: {
   //password: null
   is_admin: boolean;
 }[] = [];
-function populate_students(){
+async function populate_students(){
     let i = 1;
     const portugueseFaker = new Faker({ locale: [pt_PT] });
 
 
-
-    Object.keys(alocation).map((student_nr) =>{
-        let student = {
-          uniqueId: i,
-          number: student_nr,
-          firstname: portugueseFaker.person.firstName(),
-          lastname: portugueseFaker.person.lastName(),
-          email: encrypt(student_nr).toLowerCase() + "@alunos.uminho.pt",
-          //password: null
-          is_admin: false,
-          role: Role.STUDENT
+    Promise.all(
+      Object.keys(alocation).map(async(student_nr) =>{
+        if(student_nr != "default"){
+          let student = {
+            uniqueId: i,
+            number: student_nr,
+            firstname: portugueseFaker.person.firstName(),
+            lastname: portugueseFaker.person.lastName(),
+            email: encrypt(student_nr).toLowerCase() + "@alunos.uminho.pt",
+            //password: null
+            is_admin: false,
+            role: Role.STUDENT
+          }
+          students.push(student);
+          i++;
         }
-        students.push(student);
-        i++;
-    })
+      })
+    )
+
+    const super_user: any = {
+      uniqueId: i,
+      firstname: "NECC",
+      lastname: "Dev",
+      email: "dev@necc.di.uminho.pt",
+      //password: null
+      is_admin: true,
+      role: Role.SUPER_USER
+    }
+
+    students.push(super_user)
 
     return students;
 }
 
 
 
-function populate_student_class() {
+async function populate_student_class() {
   let students_classes: { 
     id: number; 
     student_id: number | undefined; 
@@ -145,35 +163,37 @@ function populate_student_class() {
   Object.keys(alocation).forEach((studentNr) => {
     let entries = alocation[studentNr]
     if(Array.isArray(entries)){
-      entries.map((student_class) => {
-        let student_id = students.filter((student) => student.number == studentNr).at(0)?.uniqueId;
-        
-        let uc_id = ucs_ids[student_class.uc].id;
-        let type_class_int = type_class[student_class.type_class]
-        let shift = parseInt(student_class.shift)
-        student_class.slots.map((slot) =>{
-          if(slot[0] != true && slot[0] != false){
-            let weekday_int = weekdays[slot[0]]
-            let start_time = slot[1] + ":" + slot[2]
-            let end_time = slot[3] + ":" + slot[4]
+      Promise.all(
+        entries.map((student_class) => {
+          let student_id = students.filter((student) => student.number == studentNr).at(0)?.uniqueId;
+          
+          let uc_id = ucs_ids[student_class.uc].id;
+          let type_class_int = type_class[student_class.type_class]
+          let shift = parseInt(student_class.shift)
+          student_class.slots.map((slot) =>{
+            if(slot[0] != true && slot[0] != false){
+              let weekday_int = weekdays[slot[0]]
+              let start_time = slot[1] + ":" + slot[2]
+              let end_time = slot[3] + ":" + slot[4]
 
-            let class_id = classes.filter((class_check) => class_check.course_id == uc_id 
-                                                        && class_check.type == type_class_int
-                                                        && class_check.shift == shift
-                                                        && class_check.weekday == weekday_int
-                                                        && class_check.start_time == start_time
-                                                        && class_check.end_time == end_time
-            ).at(0)?.id
-            let student_lesson = {
-              id: i,
-              student_id: student_id,
-              lesson_id: class_id
+              let class_id = classes.filter((class_check) => class_check.course_id == uc_id 
+                                                          && class_check.type == type_class_int
+                                                          && class_check.shift == shift
+                                                          && class_check.weekday == weekday_int
+                                                          && class_check.start_time == start_time
+                                                          && class_check.end_time == end_time
+              ).at(0)?.id
+              let student_lesson = {
+                id: i,
+                student_id: student_id,
+                lesson_id: class_id
+              }
+              students_classes.push(student_lesson);
+              i++;
             }
-            students_classes.push(student_lesson);
-            i++;
-          }
+          })
         })
-      })
+      )
     }
   });
   return students_classes
@@ -184,12 +204,18 @@ const prisma = new PrismaClient()
 
 async function main() {
   
-    let ucs: Prisma.courseCreateInput[] = populate_ucs();
-    let classes = populate_classes();
-    let students = populate_students();
-    let students_classes = populate_student_class()
+    const ucs: Prisma.courseCreateInput[] = await populate_ucs();
+    const classes = await populate_classes();
+    const students = await populate_students();
+    const students_classes = await populate_student_class()
 
     await nuclear_bomb()
+
+    await prisma.tradePeriods.create({
+      data: {
+        isOpen: false
+      }
+    });
 
     
     ucs.map(async (uc) => {
@@ -198,32 +224,24 @@ async function main() {
       })
     });
 
-    
-    students.map( async (student) => {
+    students.map( async (student: any) => {
       await prisma.user.create({
         data: student
       })
-    })
+    });
 
     classes.map(async (class_add) =>{
       await prisma.lesson.create({
         data: class_add
       })
     });
-  
+    
     students_classes.map( async (student_class) => {
       await prisma.student_lesson.create({
         data: student_class
       })
     });
-
-    await prisma.tradePeriods.create({
-      data: {
-        isOpen: false
-      }
-    });
     
- 
 }
 
 main()

@@ -35,7 +35,7 @@ function NavbarLinks(props: NavbarLinksProps) {
             (session?.user.role == 'SUPER_USER') 
                 ? 
                 <li>
-                   <Link className={linkStyle + " text-left"} href='super_user/'>Back-Office</Link> 
+                   <Link className={linkStyle + " text-left"} href='/super_user'>Back-Office</Link> 
                 </li>
                 :
                 <></>

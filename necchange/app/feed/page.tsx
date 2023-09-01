@@ -44,7 +44,7 @@ const Posts = ({filteredPosts, toggleLoader, getMorePosts}: PostsI) => {
 
 const TradesClosed = () => {
   return(
-    <div className="w-full mt-16 p-12 border rounded-md shadow-md  text-center font-bold">
+    <div className="w-full mt-16 p-12 border rounded-md shadow-md  text-center font-bold text-blue-600">
       A época de trocas encontra-se fechada.
     </div>
   )
