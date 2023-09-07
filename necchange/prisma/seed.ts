@@ -208,40 +208,46 @@ async function main() {
     const classes = await populate_classes();
     const students = await populate_students();
     const students_classes = await populate_student_class()
-
+  
+    console.log("A apagar tudo!");
     await nuclear_bomb()
 
+    console.log("A introduzir tradePeriods");
     await prisma.tradePeriods.create({
       data: {
         isOpen: false
       }
     });
 
-    
+    console.log("A introduzir courses");
     ucs.map(async (uc) => {
       await prisma.course.create({
         data: uc
       })
     });
-
-    students.map( async (student: any) => {
+  
+    console.log("A introduzir users");
+    await Promise.all(students.map( async (student: any) => {
       await prisma.user.create({
         data: student
       })
-    });
-
-    classes.map(async (class_add) =>{
+    }));
+  
+    console.log("A introduzir lessons");
+    await Promise.all(classes.map(async (class_add) =>{
       await prisma.lesson.create({
         data: class_add
       })
-    });
+    }));
     
-    students_classes.map( async (student_class) => {
+
+    console.log("A introduzir student_lessons");
+    await Promise.all(students_classes.map( async (student_class) => {
       await prisma.student_lesson.create({
         data: student_class
       })
-    });
-    
+    }));
+  
 }
 
 main()

@@ -11,9 +11,11 @@ export default function Home() {
 
   useEffect(() => {
     if (!session) return;
+    console.log(session.user?.number);
     axios
       .get(`api/trades/student_schedule/${session.user?.number}`)
       .then((response) => {
+        console.log(response);
         setClasses(response.data.response);
       })
       .catch((error) => {
