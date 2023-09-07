@@ -1,0 +1,5 @@
+[context.production]
+command = "npm run build && echo \"NEXTAUTH_URL=$URL\" > .env.local"
+
+[context.deploy-preview]
+command = "npm run build && echo \"NEXTAUTH_URL=$DEPLOY_PRIME_URL\" > .env.local"
