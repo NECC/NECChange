@@ -5,7 +5,7 @@ import { PrismaClient, Role } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const authOptions = {
+export const authOptions: any = {
   adapter: PrismaAdapter(prisma),
 
   pages: {
@@ -22,11 +22,11 @@ export const authOptions = {
   debug: true,
 
   callbacks: {
-    async jwt({token, user}){
+    async jwt({token, user}: any){
       return {...token, ...user};
     },
     
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       // Add role to session provided from useSession
       session.user.role = token.role
       session.user.number = token.number
