@@ -3,3 +3,6 @@ command = "npx prisma generate && npm run build && echo \"NEXTAUTH_URL=$URL\" > 
 
 [context.deploy-preview]
 command = "npm run build && echo \"NEXTAUTH_URL=$DEPLOY_PRIME_URL\" > .env.local"
+
+[build]
+   ignore = "/bin/false"
