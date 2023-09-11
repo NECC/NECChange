@@ -6,9 +6,3 @@ command = "npm run build && echo \"NEXTAUTH_URL=$DEPLOY_PRIME_URL\" > .env.local
 
 [build]
    ignore = "/bin/false"
-
-
-[[redirects]]
-   from="/*"
-   to="/necchange/app/page.tsx"
-   status=200
