@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
         return session
       },   
     },
-    session: { strategy: "jwt", maxAge: 24 * 60 * 60 },
+    session: { strategy: "jwt", maxAge: 365* 24 * 60 * 60 },
     events: {
     }
   
