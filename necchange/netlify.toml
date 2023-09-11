@@ -1,8 +1,12 @@
 [context.production]
-command = "npx prisma generate && npm run build && echo \"NEXTAUTH_URL=$URL\" > .env.local"
+command = "npx prisma generate && npm run build"
 
 [context.deploy-preview]
-command = "npm run build && echo \"NEXTAUTH_URL=$DEPLOY_PRIME_URL\" > .env.local"
+command = "npx prisma generate && npm run build"
 
 [build]
+   publish = ".next"
    ignore = "/bin/false"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
