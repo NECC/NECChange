@@ -5,6 +5,8 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(request: NextRequest) {
     const token = await getToken({req: request});
     //console.log('My token middleware:', token);
+
+    console.log("request", JSON.stringify(request));
     
     // Admin paths
     // if signed in and doesn't have role SUPER_USER, can't access /super_user/**
