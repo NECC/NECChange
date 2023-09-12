@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 //const handler = NextAuth(authOptions)
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
-    if(req.method === "HEAD") {
+    if(req.url && req.method === "HEAD") {
         return res.status(200).end()
     }
 
@@ -13,7 +13,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export async function POST(req: NextApiRequest, res: NextApiResponse) {
-    if(req.method === "HEAD") {
+    if(req.url && req.method === "HEAD") {
         return res.status(200).end()
     }
 
