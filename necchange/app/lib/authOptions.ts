@@ -15,8 +15,7 @@ export const authOptions: NextAuthOptions = {
       EmailProvider({
         
         server: process.env.EMAIL_SERVER,
-        from: process.env.EMAIL_FROM,  
-        maxAge: 365*24*60*60
+        from: process.env.EMAIL_FROM
       }),
     ],
     secret: process.env.NEXTAUTH_SECRET,
