@@ -146,6 +146,18 @@ async function populate_students(){
     }
 
     students.push(super_user)
+    i++
+    const super_user2: any = {
+      uniqueId: i,
+      firstname: "Bruno",
+      lastname: "Doe",
+      email: "brunofjm@gmail.com",
+      //password: null
+      is_admin: true,
+      role: Role.SUPER_USER
+    }
+
+    students.push(super_user2)
 
     return students;
 }

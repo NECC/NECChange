@@ -36,14 +36,14 @@ export default function Home() {
   }
 
   const email_validator = async () => {
-    if (inputEmail == "brunofjm@gmail.com") return true;
-     else {
+    // if (inputEmail == "dev@necc.di.uminho.pt") return true;
+    // else {
     const result = await axios.get(`/api/user_exists/${inputEmail}`).then(res => {
       if (res.data.response == 'success') return true;
       else return false;
     })
     return result
-    }
+    //}
   }
 
   return (
