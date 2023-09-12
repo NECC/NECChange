@@ -94,6 +94,7 @@ export default function Feed(){
           axios.get(`api/info/${session?.user?.number}`).then((res) => {
             setUcsArray(res.data.student_classes);
             console.log(res.data.student_classes);
+            console.log(session);
           });
         } catch (error) {
           console.error("Error fetching data:", error);

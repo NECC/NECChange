@@ -13,9 +13,11 @@ export const authOptions: NextAuthOptions = {
     },
     providers: [
       EmailProvider({
+        
         server: process.env.EMAIL_SERVER,
-        from: process.env.EMAIL_FROM,
-        }),
+        from: process.env.EMAIL_FROM,  
+        maxAge: 365*24*60*60
+      }),
     ],
     secret: process.env.NEXTAUTH_SECRET,
     debug: true,
@@ -27,10 +29,11 @@ export const authOptions: NextAuthOptions = {
       
       async session({ session, token }: any) {
         // Add role to session provided from useSession
-        session.user.role = token.role
-        session.user.number = token.number
+        session.user = token
+        //session.user.role = token.role
+        //session.user.number = token.number
   
-        return {...session, ...token};
+        return session;
       },   
     },
     session: { strategy: "jwt"},
