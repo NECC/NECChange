@@ -30,10 +30,10 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role
         session.user.number = token.number
   
-        return session
+        return {...session, ...token};
       },   
     },
-    session: { strategy: "jwt", maxAge: 365* 24 * 60 * 60 },
+    session: { strategy: "jwt"},
     events: {
     }
   
