@@ -5,6 +5,6 @@ import { NextResponse } from 'next/server'
 
 const handler = NextAuth(authOptions)
 
-const fuckAll = NextResponse.json({}, {status: 200})
+const fuckAll = () => NextResponse.json({}, {status: 200})
 
 export { handler as GET, handler as POST, fuckAll as HEAD }
