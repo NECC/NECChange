@@ -4,13 +4,13 @@ import { NextResponse } from "next/server";
 
 const handler = async (req: any, context: { params: any }) => {
   console.log("handler", req.method);
-  const domain = req.headers.get('host')
+  //const domain = req.headers.get('host')
 
-  console.log(domain);
+  //console.log(domain);
 
-  if(domain.includes('safelinks')){
-    return NextResponse.json({status: 200})
-  }
+  //if(domain.includes('safelinks')){
+  //  return NextResponse.json({status: 200})
+  //}
 
   return await NextAuth(req, context, authOptions);
 };
