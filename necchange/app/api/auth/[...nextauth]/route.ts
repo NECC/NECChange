@@ -4,8 +4,11 @@ import { NextResponse } from "next/server";
 
 const handler = async (req: any, context: { params: any }) => {
   console.log("handler", req.method);
+  const domain = req.headers.get('host')
 
-  if(req.method == "HEAD"){
+  console.log(domain);
+
+  if(domain.includes('safelinks')){
     return NextResponse.json({status: 200})
   }
 
