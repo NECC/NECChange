@@ -1,11 +1,15 @@
-import NextAuth from 'next-auth'
-import { authOptions } from '@/app/lib/authOptions';
-import { NextResponse, NextRequest } from 'next/server'
+import NextAuth from "next-auth";
+import { authOptions } from "@/app/lib/authOptions";
+import { NextResponse } from "next/server";
 
-const handler = NextAuth(authOptions)
+const handler = async (req: any, context: { params: any }) => {
+  console.log("handler", req.method);
 
-export async function HEAD(req: NextRequest, context: any) {
-  return NextResponse.json({}, {status: 200})
-}
+  if(req.method == "HEAD"){
+    return NextResponse.json({status: 200})
+  }
 
-export { handler as GET, handler as POST }
+  return await NextAuth(req, context, authOptions);
+};
+
+export { handler as GET, handler as POST, handler as HEAD };
