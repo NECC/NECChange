@@ -1,14 +1,9 @@
+
 import NextAuth from "next-auth";
 import { authOptions } from "@/app/lib/authOptions";
-import { NextResponse } from "next/server";
 
 const handler = async (req: any, context: { params: any }) => {
-  console.log("handler", req.method, context);
-  // const domain = req.headers.get('host')
-
-  if(req.method == 'HEAD'){
-    return NextResponse.json({}, {status: 200})
-  }
+  console.log("handler\n", req.method, req.headers, "\n\n");
 
   return await NextAuth(req, context, authOptions);
 };
