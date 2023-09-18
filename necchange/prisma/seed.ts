@@ -212,66 +212,71 @@ async function populate_student_class() {
 }
 
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
-  
-    const ucs: Prisma.courseCreateInput[] = await populate_ucs();
+  try {
+    const ucs = await populate_ucs();
     const classes = await populate_classes();
     const students = await populate_students();
-    const students_classes = await populate_student_class()
-  
+    const students_classes = await populate_student_class();
+
     console.log("A apagar tudo!");
-    await nuclear_bomb()
+    // await nuclear_bomb();
 
     console.log("A introduzir tradePeriods");
-    await prisma.tradePeriods.create({
-      data: {
-        isOpen: false
+
+    prisma.$transaction(async (tx) => {
+      await tx.tradePeriods.create({
+        data: {
+          isOpen: false,
+        },
+      });
+      
+      console.log("A introduzir courses");
+      for (let i = 0; i < ucs.length; i++) {
+        await tx.course.create({
+          data: ucs[i],
+        });
       }
-    });
 
-    console.log("A introduzir courses");
-    ucs.map(async (uc) => {
-      await prisma.course.create({
-        data: uc
-      })
-    });
-  
-    console.log("A introduzir users");
-    await Promise.all(students.map( async (student: any) => {
-      await prisma.user.create({
-        data: student
-      })
-    }));
-  
-    console.log("A introduzir lessons");
-    await Promise.all(classes.map(async (class_add) =>{
-      await prisma.lesson.create({
-        data: class_add
-      })
-    }));
-    
+      console.log("A introduzir users");
+      for (let i = 0; i < students.length; i++) {
+        await tx.user.create({
+          data: students[i],
+        });
+      }
 
-    console.log("A introduzir student_lessons");
-    await Promise.all(students_classes.map( async (student_class) => {
-      await prisma.student_lesson.create({
-        data: student_class
-      })
-    }));
-  
+      console.log("A introduzir lessons");
+      for (let i = 0; i < classes.length; i++) {
+        await tx.lesson.create({
+          data: classes[i],
+        });
+      }
+
+      console.log("A introduzir student_lessons");
+      for (let i = 0; i < students_classes.length; i++) {
+        await tx.student_lesson.create({
+          data: students_classes[i],
+        });
+      }
+    },
+    {
+      isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
+      maxWait: 1000000, 
+      timeout: 1000000, 
+    });
+  } catch (error) {
+    console.error("Error in main:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
-main()
-  .then(async () => {
-    await prisma.$disconnect()
-  })
-  .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
-
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
 
 
 async function nuclear_bomb(){
