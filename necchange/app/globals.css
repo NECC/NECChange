@@ -41,6 +41,20 @@
     color: #fff;
   }
 
+  @media screen and (max-width: 600px) {
+    .fc .fc-toolbar-title {
+      @apply text-sm;
+    }
+
+    .fc-toolbar.fc-toolbar-ltr {
+      @apply mb-2;
+    }
+
+    .fc .fc-button {
+      @apply px-[0.3em] py-[0.5em] text-[.7em];
+    }
+  }
+
   table.fc-scrollgrid {
     border-radius: 8px !important;
     overflow: hidden;
