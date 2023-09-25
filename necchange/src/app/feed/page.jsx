@@ -13,9 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 import UCFilter from "@/app/components/Feed/Sidebar/Filters/UCFilter";
 import NewTradeButton from "@/app/components/Feed/Sidebar/NewTrade/NewTradeButton";
 
-
-const Posts = ({filteredPosts, toggleLoader, getMorePosts}) => {
-  return(
+const Posts = ({ filteredPosts, toggleLoader, getMorePosts }) => {
+  return (
     <div>
       <div className="w-full grid gap-6 mb-8">
         {filteredPosts.map((feedPost, i) => {
@@ -34,22 +33,20 @@ const Posts = ({filteredPosts, toggleLoader, getMorePosts}) => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const TradesClosed = () => {
-  return(
+  return (
     <div className="w-full mt-16 p-12 border rounded-md shadow-md  text-center font-bold text-blue-600">
       A época de trocas encontra-se fechada.
     </div>
-  )
-}
+  );
+};
 
-
-
-export default function Feed(){
+export default function Feed() {
   const { data: session } = useSession();
-  const [tradesOpen, setTradesOpen] = useState(null)
+  const [tradesOpen, setTradesOpen] = useState(null);
 
   const [loader, setLoader] = useState(false);
 
@@ -67,20 +64,20 @@ export default function Feed(){
   };
 
   // This effect checks if trade period is open
-  useEffect(() =>{
-    const checkTradePeriod = () =>{
+  useEffect(() => {
+    const checkTradePeriod = () => {
       axios
-        .get('/api/feed/feed_post/trade_period_info')
-        .then(res =>{
-          setTradesOpen(res.data.open)
+        .get("/api/feed/feed_post/trade_period_info")
+        .then((res) => {
+          setTradesOpen(res.data.open);
           console.log(res);
         })
-        .catch(err => console.log(err))
-    }
+        .catch((err) => console.log(err));
+    };
 
-    checkTradePeriod()
+    checkTradePeriod();
   }, [tradesOpen]);
-  
+
   // This effect gets the courses that the student is taking
   useEffect(() => {
     if (session) {
@@ -120,8 +117,8 @@ export default function Feed(){
         console.error("Error fetching data:", error);
       }
     };
-    
-    if(tradesOpen) startingFeed();
+
+    if (tradesOpen) startingFeed();
   }, [session, ucsFilter, myTrades]);
 
   // This effect filters the posts already taken
@@ -131,9 +128,8 @@ export default function Feed(){
     } else {
       setFilteredPosts(
         feedPosts.filter((feedPost) =>
-          feedPost.trade_id.some(
-            (tradeId) =>
-              ucsFilter.includes(tradeId.lessonFrom.course.name)
+          feedPost.trade_id.some((tradeId) =>
+            ucsFilter.includes(tradeId.lessonFrom.course.name)
           )
         )
       );
@@ -196,25 +192,27 @@ export default function Feed(){
               ucsArray={ucsArray}
               ucsFilter={ucsFilter}
             />
-            {
-              tradesOpen 
-              ? 
+            {tradesOpen ? (
               <div className="flex-grow">
                 <NewTradeButton toggleLoader={toggleLoader} />
               </div>
-              : 
+            ) : (
               <></>
-            }
+            )}
           </div>
         </div>
-        { tradesOpen 
-          ? <Posts filteredPosts={filteredPosts} toggleLoader={toggleLoader} getMorePosts={getMorePosts}/>
-          : (tradesOpen == false) 
-              ? <TradesClosed/>
-              : <></> 
-        }
+        {tradesOpen ? (
+          <Posts
+            filteredPosts={filteredPosts}
+            toggleLoader={toggleLoader}
+            getMorePosts={getMorePosts}
+          />
+        ) : tradesOpen == false ? (
+          <TradesClosed />
+        ) : (
+          <></>
+        )}
       </div>
-
 
       {/* Loader and Toast Components */}
       {loader && <Loader />}

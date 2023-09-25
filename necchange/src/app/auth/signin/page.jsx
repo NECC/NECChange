@@ -1,50 +1,51 @@
-'use client'
+"use client";
 import Image from "next/image";
-import Loader from "@/components/globals/Loader";
-import { signIn } from 'next-auth/react';
+import Loader from "@/app/components/globals/Loader";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
 
 import axios from "axios";
 
 export default function Home() {
   const [inputEmail, setInputEmail] = useState("");
-  const [loader, setLoader] = useState(false)
-  const [errorMessage, setErrorMessage] = useState(false)
+  const [loader, setLoader] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
 
   const toggleLoader = (value) => {
     setLoader(value);
-  }
+  };
 
   const handleSignin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      toggleLoader(true)
-      const result = await email_validator()
+      toggleLoader(true);
+      const result = await email_validator();
       if (result == true) {
-        setErrorMessage(false)
-        await signIn('email', { email: inputEmail, callbackUrl: '/horario' })
+        setErrorMessage(false);
+        await signIn("email", { email: inputEmail, callbackUrl: "/horario" });
       } else {
-        setErrorMessage(true)
+        setErrorMessage(true);
         console.log("Invalid email");
       }
-      toggleLoader(false)
+      toggleLoader(false);
+    } catch (error) {
+      toggleLoader(false);
+      console.log("Unable to sign-in: ", error);
     }
-    catch (error) {
-      toggleLoader(false)
-      console.log('Unable to sign-in: ', error)
-    }
-  }
+  };
 
   const email_validator = async () => {
     // if (inputEmail == "dev@necc.di.uminho.pt") return true;
     // else {
-    const result = await axios.get(`/api/user_exists/${inputEmail}`).then(res => {
-      if (res.data.response == 'success') return true;
-      else return false;
-    })
-    return result
+    const result = await axios
+      .get(`/api/user_exists/${inputEmail}`)
+      .then((res) => {
+        if (res.data.response == "success") return true;
+        else return false;
+      });
+    return result;
     //}
-  }
+  };
 
   return (
     <main className="flex min-h-screen  items-center justify-between  bg-white">
@@ -72,17 +73,18 @@ export default function Home() {
                       onChange={(e) => setInputEmail(e.target.value)}
                     />
                   </div>
-                  {
-                    errorMessage &&
+                  {errorMessage && (
                     <p className="text-red-600">Email inválido!</p>
-                  }
+                  )}
                 </div>
 
                 <div>
                   <button
                     type="submit"
                     className="flex w-full justify-center rounded-md bg-[#018ccb]  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={(e) => { handleSignin(e) }}
+                    onClick={(e) => {
+                      handleSignin(e);
+                    }}
                   >
                     Sign in
                   </button>

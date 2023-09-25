@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, context: any) {
+export async function GET(req, context) {
   const student_nr = context.params.student_nr;
   const prisma = new PrismaClient();
 
