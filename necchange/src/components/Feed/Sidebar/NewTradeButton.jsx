@@ -15,19 +15,17 @@ const emptyTrade = {
   toShift: 0,
 };
 
-
 const format_validator = (trades) => {
   // verificar se tudo está preenchido
   const entries_empty = trades.filter(
-    (trade ) =>
-      trade.fromShift == 0 || trade.toShift == 0 || trade.ucId == 0
+    (trade) => trade.fromShift == 0 || trade.toShift == 0 || trade.ucId == 0
   );
 
   // verificar se não há repetições
   let no_repetitions = true;
-  trades.forEach((trade ) => {
+  trades.forEach((trade) => {
     const repeated_entry = trades.filter(
-      (trade_aux ) =>
+      (trade_aux) =>
         trade_aux.fromShift == trade.fromShift && trade_aux.ucId == trade.ucId
     );
     if (repeated_entry.length > 1) {
@@ -49,10 +47,10 @@ export default function NewTrade({ toggleLoader }) {
 
   useEffect(() => {
     axios
-      .get(`api/trades/student_ucs/${session?.user.number}`)
+      .get(`/api/trades/student_ucs/${session?.user.number}`)
       .then((response) => {
         const data = response.data.student_ucs;
-        const parsed = data.reduce((acc , { lesson } ) => {
+        const parsed = data.reduce((acc, { lesson }) => {
           if (!acc[lesson.course.name]) {
             acc[lesson.course.name] = {
               ucId: lesson.course.id,
@@ -61,7 +59,7 @@ export default function NewTrade({ toggleLoader }) {
           }
 
           const result = acc[lesson.course.name].classes.filter(
-            (lesson_aux ) =>
+            (lesson_aux) =>
               lesson_aux.shift == lesson.shift && lesson_aux.type == lesson.type
           );
 
@@ -76,19 +74,19 @@ export default function NewTrade({ toggleLoader }) {
         }, {});
         setEnrolledClasses(parsed);
 
-        const ucs = Object.values(parsed).map(({ ucId } ) => ucId);
+        const ucs = Object.values(parsed).map(({ ucId }) => ucId);
         return axios.get(
-          `api/trades/shifts?${ucs
+          `/api/trades/shifts?${ucs
             .map((n, index) => `ucs[${index}]=${n}`)
             .join("&")}`
         );
       })
       .then((response) => {
         const res = response.data.classes;
-        const parsed = res.reduce((acc , { name, id, lesson } ) => {
+        const parsed = res.reduce((acc, { name, id, lesson }) => {
           acc[name] = {
             ucId: id,
-            classes: lesson.map(({ id, shift, type } ) => ({
+            classes: lesson.map(({ id, shift, type }) => ({
               //classId: id,
               shift,
               type,
@@ -118,7 +116,7 @@ export default function NewTrade({ toggleLoader }) {
     setTrades(newTrades);
   };
 
-  const updateTrade = (id, tradeData ) => {
+  const updateTrade = (id, tradeData) => {
     const newTrades = trades.map((trade) => {
       if (trade.id == id) {
         trade = { ...trade, ...tradeData };
@@ -139,7 +137,7 @@ export default function NewTrade({ toggleLoader }) {
 
     if (format_validator(trades) == true) {
       axios
-        .post("api/feed/feed_post/add_trade", {
+        .post("/api/feed/feed_post/add_trade", {
           params: { trades: trades, student_nr: session?.user.number },
         })
         .then((response) => {
@@ -176,7 +174,7 @@ export default function NewTrade({ toggleLoader }) {
             <TradeEntry
               key={trade.id}
               removeTrade={() => removeTrade(trade.id)}
-              updateTrade={(tradeData ) => updateTrade(trade.id, tradeData)}
+              updateTrade={(tradeData) => updateTrade(trade.id, tradeData)}
               enrolledClasses={enrolledClasses}
               availableClasses={availableClasses}
             />

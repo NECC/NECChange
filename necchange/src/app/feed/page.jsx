@@ -83,7 +83,7 @@ export default function Feed() {
     if (session) {
       const uc_names = async () => {
         try {
-          axios.get(`api/info/${session?.user?.number}`).then((res) => {
+          axios.get(`/api/info/${session?.user?.number}`).then((res) => {
             setUcsArray(res.data.student_classes);
             console.log(res.data.student_classes);
           });
@@ -105,7 +105,7 @@ export default function Feed() {
 
         axios
           .get(
-            `api/feed/feed_post/${5}/landing/${
+            `/api/feed/feed_post/${5}/landing/${
               myTrades ? `/${session?.user?.number}` : "/undefined"
             }/${query_filtered_ucs}`
           )
@@ -144,7 +144,7 @@ export default function Feed() {
       console.log("dbCursor", dbCursor);
       axios
         .get(
-          `api/feed/feed_post/${5}/${dbCursor}${
+          `/api/feed/feed_post/${5}/${dbCursor}${
             myTrades ? `/${session?.user?.number}` : "/undefined"
           }/${query_filtered_ucs}`
         )

@@ -25,13 +25,13 @@ const type_class: any = {
 
 interface FeedPostProps {
   post: {
-    id: number;
+    id: number,
     from_student: {
-      number: string;
-    };
-    publish_time: string;
-    status: "ACCEPTED" | "PENDING" | "REMOVED";
-    trade_id: any[];
+      number: string,
+    },
+    publish_time: string,
+    status: "ACCEPTED" | "PENDING" | "REMOVED",
+    trade_id: any[],
   };
   toggleLoader: Function;
 }
@@ -46,8 +46,12 @@ export default function FeedPost({ post, toggleLoader }: FeedPostProps) {
   const acceptTrade = () => {
     toggleLoader(true);
     axios
-      .post(`api/feed/feed_post/accept_trade`, {
-        params: { fromStudentNr: fromStudentNr, studentAcceptedNr: session?.user.number, tradeId: tradeId },
+      .post(`/api/feed/feed_post/accept_trade`, {
+        params: {
+          fromStudentNr: fromStudentNr,
+          studentAcceptedNr: session?.user.number,
+          tradeId: tradeId,
+        },
       })
       .then((res) => {
         if (res.data.response == true) {
@@ -65,7 +69,7 @@ export default function FeedPost({ post, toggleLoader }: FeedPostProps) {
   const removeTrade = () => {
     toggleLoader(true);
     axios
-      .put(`api/feed/feed_post/remove_trade`, {
+      .put(`/api/feed/feed_post/remove_trade`, {
         params: { tradeId: tradeId },
       })
       .then((res) => {
