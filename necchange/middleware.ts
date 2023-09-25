@@ -5,10 +5,10 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request , 
                                  secret: process.env.NEXTAUTH_SECRET,
-                                 cookieName: process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token'
+               //                  cookieName: process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token'
                                 })
 
-  console.log('Request', request);
+  //console.log('Request', request);
   console.log('My token middleware:', token);
 
   // Admin paths
