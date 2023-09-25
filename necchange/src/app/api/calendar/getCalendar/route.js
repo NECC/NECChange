@@ -1,6 +1,6 @@
 // Get events from Google Calendar
 
-function getColor(title: string){
+function getColor(title){
   // text-sky-500 : #0ea4e9
   // text-cian-500 : #06b5d4
   // text-teal-500 : #14b8a5
@@ -17,12 +17,12 @@ function getColor(title: string){
 
 import axios from "axios";
 import { NextResponse } from "next/server";
-export async function GET(req: any, res: any) {
+export async function GET(req, res) {
   const { data } = await axios.get(
     `https://www.googleapis.com/calendar/v3/calendars/${process.env.NEXT_PUBLIC_GOOGLECALENDAR_CALENDAR_ID}/events?key=${process.env.NEXT_PUBLIC_GOOGLECALENDAR_API_KEY}`
   );
 
-  const events = data.items.map((event: any) => {
+  const events = data.items.map((event) => {
     const color = getColor(event.summary);
     
     return {

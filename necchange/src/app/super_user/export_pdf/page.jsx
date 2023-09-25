@@ -5,26 +5,26 @@ import jsPDF from 'jspdf'
 import "jspdf-autotable"
 
 import { useEffect, useState } from "react";
-import Select from "@/app/components/globals/Select";
+import Select from "@/components/globals/Select";
 
 
 export default function SuperUser() {
     const buttonStyles = "p-2 mt-2 w-full text-base border-2 border-sky-500 shadow-md rounded-md bg-white hover:bg-slate-50";
 
-    const [ucs, setUcs] = useState<any>([])
-    const [ucSelected, setUcSelected] = useState<string>("")
+    const [ucs, setUcs] = useState([])
+    const [ucSelected, setUcSelected] = useState("")
     
     useEffect(() =>{
         axios
             .get('/api/calendar/getUCS')
-            .then((res: any) => {
-                setUcs(res.data.response.map((uc: any) => uc.name))
+            .then((res) => {
+                setUcs(res.data.response.map((uc) => uc.name))
             })
-            .catch((err: any) => console.log(err))
+            .catch((err) => console.log(err))
     }, [])
 
-    const generatePDF = (data: any) => {
-        const doc: any = new jsPDF(
+    const generatePDF = (data) => {
+        const doc  = new jsPDF(
             {
              orientation: 'portrait',
              unit: 'mm',
@@ -42,7 +42,7 @@ export default function SuperUser() {
               const headers = [ucSelected + " - " + key];
               
               // Prepare table data
-              const table_data = values.map((value: any) => [value]);
+              const table_data = values.map((value ) => [value]);
               
               doc.autoTable({
                 startY: currentY,

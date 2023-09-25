@@ -1,6 +1,6 @@
 'use client'
 import Image from "next/image";
-import Loader from "@/app/components/globals/Loader";
+import Loader from "@/components/globals/Loader";
 import { signIn } from 'next-auth/react';
 import { useState } from "react";
 
@@ -11,15 +11,15 @@ export default function Home() {
   const [loader, setLoader] = useState(false)
   const [errorMessage, setErrorMessage] = useState(false)
 
-  const toggleLoader = (value: boolean) => {
+  const toggleLoader = (value) => {
     setLoader(value);
   }
 
-  const handleSignin = async (e: any) => {
+  const handleSignin = async (e) => {
     e.preventDefault()
     try {
       toggleLoader(true)
-      const result: any = await email_validator()
+      const result = await email_validator()
       if (result == true) {
         setErrorMessage(false)
         await signIn('email', { email: inputEmail, callbackUrl: '/horario' })

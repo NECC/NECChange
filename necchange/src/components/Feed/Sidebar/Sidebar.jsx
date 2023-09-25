@@ -1,16 +1,8 @@
 import UCFilter from "./Filters/UCFilter";
 import NewTradeButton from '@/app/components/Feed/Sidebar/NewTrade/NewTradeButton'
 
-interface FilterProps {
-    setUcsFilter: Function,
-    ucsArray: string[],
-    ucsFilter: string[],
-    myTrades: boolean,
-    setMyTrades: Function,
-    toggleLoader: Function,
-}
 
-export default function Filters(props: FilterProps) {
+export default function Filters(props) {
     const { 
         setUcsFilter,
         ucsArray,

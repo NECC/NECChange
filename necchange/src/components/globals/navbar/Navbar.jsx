@@ -5,8 +5,8 @@ import Image from "next/image";
 import NavbarLinks from "./NavbarLinks";
 import MobileNavbarLinks from "./MobileNavbarLinks";
 
-function Navbar({session}: any) {
-  const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
+function Navbar({session}) {
+  const [isMenuOpened, setIsMenuOpened] = useState(false);
 
   const toggleMenu = () => setIsMenuOpened(!isMenuOpened);
 

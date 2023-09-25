@@ -1,20 +1,6 @@
-import { get } from "http";
 import React from "react";
-interface SelectI {
-  options: any[];
-  getOptionLabel: (option: any) => string;
-  changeHandler: Function;
-  selected: string;
-  placeholder?: string;
-}
 
-const Select = ({
-  options,
-  getOptionLabel,
-  changeHandler,
-  selected,
-  placeholder,
-}: SelectI) => {
+const Select = () => {
   return (
     <select
       className="bg-slate-200 cursor-pointer text-base text-slate-900 p-1 rounded w-full"

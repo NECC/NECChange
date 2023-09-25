@@ -3,20 +3,13 @@ import React, { useEffect, useState } from "react";
 import { FaArrowRightArrowLeft, FaMinus, FaTrashCan } from "react-icons/fa6";
 import Select from "@/app/components/globals/Select";
 
-const classMap: any = {
+const classMap = {
   1: "T",
   2: "TP",
   3: "PL",
 };
 
-interface TradeEntryI {
-  removeTrade: any;
-  updateTrade: any;
-  enrolledClasses: any;
-  availableClasses: any;
-}
-
-export default function TradeEntry(props: TradeEntryI) {
+export default function TradeEntry(props) {
   const { removeTrade, updateTrade, enrolledClasses, availableClasses } = props;
   // selection controls
   const [ucSelection, setUcSelection] = useState("");
@@ -30,9 +23,9 @@ export default function TradeEntry(props: TradeEntryI) {
     key: 0,
   });
 
-  const classToText = ({ type, shift }: any) => `${classMap[type]}${shift}`;
+  const classToText = ({ type, shift }) => `${classMap[type]}${shift}`;
 
-  const handleUcSelection = (selected: any) => {
+  const handleUcSelection = (selected) => {
     console.log("Uc selected", selected);
     setUcSelection(selected);
     updateTrade({
@@ -51,7 +44,7 @@ export default function TradeEntry(props: TradeEntryI) {
     });
   };
 
-  const handleFromSelection = (selected: any) => {
+  const handleFromSelection = (selected) => {
     console.log("From selected", selected);
     updateTrade({
       type: selected.type,
@@ -60,8 +53,7 @@ export default function TradeEntry(props: TradeEntryI) {
     });
 
     const available = availableClasses[ucSelection].classes.filter(
-      ({ type, shift }: any) =>
-        type === selected.type && shift !== selected.shift
+      ({ type, shift }) => type === selected.type && shift !== selected.shift
     );
     setToOptions({
       options: available,
@@ -69,7 +61,7 @@ export default function TradeEntry(props: TradeEntryI) {
     });
   };
 
-  const handleToSelection = (selected: any) => {
+  const handleToSelection = (selected) => {
     console.log("To selected", selected);
     updateTrade({ toShift: selected.shift });
   };
@@ -81,7 +73,7 @@ export default function TradeEntry(props: TradeEntryI) {
           <div className="col-span-6">
             <Select
               options={Object.keys(enrolledClasses)}
-              getOptionLabel={(option: any) => option}
+              getOptionLabel={(option) => option}
               changeHandler={handleUcSelection}
               selected={"-1"}
               placeholder="Selecione a UC"

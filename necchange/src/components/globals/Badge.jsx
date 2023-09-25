@@ -1,9 +1,4 @@
-interface BadgeProps {
-  variant: "green" | "yellow" | "red";
-  children: any;
-}
-
-const Badge = ({ variant, children }: BadgeProps) => {
+const Badge = ({ variant, children }) => {
   const variants = {
     green: ["text-green-800 bg-green-100", "bg-green-500"],
     yellow: ["text-yellow-800 bg-yellow-100", "bg-yellow-500"],

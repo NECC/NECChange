@@ -10,7 +10,7 @@ import { ToastContainer , toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-function convertToRegularDate(date: any){
+function convertToRegularDate(date){
     const day = date.date();
     const month = date.month();
     const hour = date.hour();
@@ -49,7 +49,7 @@ export default function ManageTrades(){
         get_status()
     }, [loader]) 
 
-    const handleTrades = async (action: any) => {
+    const handleTrades = async (action) => {
         setLoader(true)
         await axios
             .put('/api/admin/handle_trades_date', {close: action, openDate: startDate?.["$d"], closeDate: closeDate?.["$d"]})

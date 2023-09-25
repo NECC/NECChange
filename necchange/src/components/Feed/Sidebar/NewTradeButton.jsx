@@ -4,7 +4,7 @@ import { FaPlus } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
 import Modal from "@/app/components/globals/Modal";
-import TradeEntry from "./popUp/TradeEntry";
+import TradeEntry from "./NewTrade/popUp/TradeEntry";
 import { useSession } from "next-auth/react";
 
 const emptyTrade = {
@@ -15,22 +15,19 @@ const emptyTrade = {
   toShift: 0,
 };
 
-interface FilterProps {
-  toggleLoader: Function;
-}
 
-const format_validator = (trades: any) => {
+const format_validator = (trades) => {
   // verificar se tudo está preenchido
   const entries_empty = trades.filter(
-    (trade: any) =>
+    (trade ) =>
       trade.fromShift == 0 || trade.toShift == 0 || trade.ucId == 0
   );
 
   // verificar se não há repetições
   let no_repetitions = true;
-  trades.forEach((trade: any) => {
+  trades.forEach((trade ) => {
     const repeated_entry = trades.filter(
-      (trade_aux: any) =>
+      (trade_aux ) =>
         trade_aux.fromShift == trade.fromShift && trade_aux.ucId == trade.ucId
     );
     if (repeated_entry.length > 1) {
@@ -43,7 +40,7 @@ const format_validator = (trades: any) => {
   else return false;
 };
 
-export default function NewTrade({ toggleLoader }: FilterProps) {
+export default function NewTrade({ toggleLoader }) {
   const [showModal, setShowModal] = useState(false);
   const [trades, setTrades] = useState([emptyTrade]);
   const [enrolledClasses, setEnrolledClasses] = useState({});
@@ -55,7 +52,7 @@ export default function NewTrade({ toggleLoader }: FilterProps) {
       .get(`api/trades/student_ucs/${session?.user.number}`)
       .then((response) => {
         const data = response.data.student_ucs;
-        const parsed = data.reduce((acc: any, { lesson }: any) => {
+        const parsed = data.reduce((acc , { lesson } ) => {
           if (!acc[lesson.course.name]) {
             acc[lesson.course.name] = {
               ucId: lesson.course.id,
@@ -64,7 +61,7 @@ export default function NewTrade({ toggleLoader }: FilterProps) {
           }
 
           const result = acc[lesson.course.name].classes.filter(
-            (lesson_aux: any) =>
+            (lesson_aux ) =>
               lesson_aux.shift == lesson.shift && lesson_aux.type == lesson.type
           );
 
@@ -79,7 +76,7 @@ export default function NewTrade({ toggleLoader }: FilterProps) {
         }, {});
         setEnrolledClasses(parsed);
 
-        const ucs = Object.values(parsed).map(({ ucId }: any) => ucId);
+        const ucs = Object.values(parsed).map(({ ucId } ) => ucId);
         return axios.get(
           `api/trades/shifts?${ucs
             .map((n, index) => `ucs[${index}]=${n}`)
@@ -88,10 +85,10 @@ export default function NewTrade({ toggleLoader }: FilterProps) {
       })
       .then((response) => {
         const res = response.data.classes;
-        const parsed = res.reduce((acc: any, { name, id, lesson }: any) => {
+        const parsed = res.reduce((acc , { name, id, lesson } ) => {
           acc[name] = {
             ucId: id,
-            classes: lesson.map(({ id, shift, type }: any) => ({
+            classes: lesson.map(({ id, shift, type } ) => ({
               //classId: id,
               shift,
               type,
@@ -115,13 +112,13 @@ export default function NewTrade({ toggleLoader }: FilterProps) {
     ]);
   };
 
-  const removeTrade = (id: number) => {
+  const removeTrade = (id) => {
     console.log("Removing trade", id);
     const newTrades = trades.filter((trade) => trade.id != id);
     setTrades(newTrades);
   };
 
-  const updateTrade = (id: number, tradeData: any) => {
+  const updateTrade = (id, tradeData ) => {
     const newTrades = trades.map((trade) => {
       if (trade.id == id) {
         trade = { ...trade, ...tradeData };
@@ -179,7 +176,7 @@ export default function NewTrade({ toggleLoader }: FilterProps) {
             <TradeEntry
               key={trade.id}
               removeTrade={() => removeTrade(trade.id)}
-              updateTrade={(tradeData: any) => updateTrade(trade.id, tradeData)}
+              updateTrade={(tradeData ) => updateTrade(trade.id, tradeData)}
               enrolledClasses={enrolledClasses}
               availableClasses={availableClasses}
             />

@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-export async function GET(req: any, res: any) {
+export async function GET(req, res) {
     const prisma = new PrismaClient();
     const ucs = await prisma.course.findMany({
         select: {

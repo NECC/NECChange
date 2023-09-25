@@ -1,12 +1,7 @@
 import React from "react";
 import NavbarLinks from "./NavbarLinks";
 
-interface MobileNavbarLinksProps {
-    isMenuOpened: boolean,
-    session: any
-}
-
-function MobileNavbarLinks(props: MobileNavbarLinksProps) {
+function MobileNavbarLinks(props) {
     const { isMenuOpened, session } = props;
 
     return (

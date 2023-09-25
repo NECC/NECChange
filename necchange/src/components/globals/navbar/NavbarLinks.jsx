@@ -1,13 +1,9 @@
-import { useSession, signIn, signOut, } from "next-auth/react";
+import { signIn, signOut, } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
-interface NavbarLinksProps {
-    containerDinamicClass: string,
-    session: any
-}
 
-function NavbarLinks(props: NavbarLinksProps) {
+function NavbarLinks(props) {
     const { containerDinamicClass, session } = props;
     const linkStyle = "hover:bg-gray-100 px-5 py-2 rounded-md inline-block w-full transition duration-300"
     return (

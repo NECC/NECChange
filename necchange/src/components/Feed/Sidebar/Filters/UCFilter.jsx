@@ -1,25 +1,19 @@
 import { useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
-interface UcsFilterProps {
-  setUcsFilter: Function;
-  ucsFilter: string[];
-  ucsArray: string[];
-}
-
-export default function UCFilter(props: UcsFilterProps) {
+export default function UCFilter(props) {
   const { ucsArray, ucsFilter, setUcsFilter } = props;
 
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen(!isOpen);
 
   // function to change the filter state
-  const handleFilter = (e: any) => {
+  const handleFilter = (e) => {
     const chosenUc = e.target.id;
     if (ucsFilter.indexOf(chosenUc) == -1) {
       setUcsFilter([...ucsFilter, chosenUc]);
     } else {
-      const newFilter = ucsFilter.filter((uc: any) => uc != chosenUc);
+      const newFilter = ucsFilter.filter((uc) => uc != chosenUc);
       setUcsFilter(newFilter);
     }
   };

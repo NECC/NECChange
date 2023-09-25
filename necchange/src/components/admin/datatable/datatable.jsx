@@ -1,32 +1,23 @@
 import React from "react";
 
-export const DataTableContext = React.createContext(null);
+export const DataTableContext = React.createContext(null);               
 
-export interface DataRow {
-    uniqueId: number;
-    number: string;
-    firstname: string;
-    lastname: string;
-    email: string; 
-    role: string;
-}                         
-
-export default function DataTable(props: {data: DataRow[]}){
+export default function DataTable(props){
     const usersArray = props.data; 
-    const [editedUsers, setEditedUser] = React.useState(new Map<number,string>());
-    const updateEditedUsers = (key: number, value: string) => {
+    const [editedUsers, setEditedUser] = React.useState(new Map());
+    const updateEditedUsers = (key, value) => {
         setEditedUser(map => new Map(map.set(key, value)));
     }
     
     console.log(usersArray);
     console.log(editedUsers);
 
-    function DropDown_Roles(props : any){
+    function DropDown_Roles(props){
         const roles = ["STUDENT", "SUPER_USER", "PROFESSOR"];
     
         return ( 
             <select value={props.role} onChange={(e) => updateEditedUsers(props.uniqueId, e.target.value)} className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
-                    {roles.map((role: string, index: number) => (
+                    {roles.map((role, index) => (
                         <option key={index} value={role}>{role}</option>
                     )) }
             </select>
@@ -57,7 +48,7 @@ export default function DataTable(props: {data: DataRow[]}){
                     </tr>
                 </thead>
                 <tbody>
-                    {usersArray.map((user : DataRow, index: number) => ( 
+                    {usersArray.map((user, index) => ( 
                     <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
                         <th scope="row" className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {user.number}

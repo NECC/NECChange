@@ -1,10 +1,9 @@
-import { NextAuthOptions, Theme } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   adapter: PrismaAdapter(prisma),
 
   pages: {
@@ -22,11 +21,11 @@ export const authOptions: NextAuthOptions = {
   debug: true,
 
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user }) {
       return { ...token, ...user };
     },
 
-    async session({ session, token }: any) {
+    async session({ session, token }) {
       // Add role to session provided from useSession
       session.user = token;
       //session.user.role = token.role
@@ -41,7 +40,7 @@ export const authOptions: NextAuthOptions = {
 
 import { createTransport } from "nodemailer";
 
-async function sendVerificationRequest(params: any) {
+async function sendVerificationRequest(params) {
   const { identifier, url, provider, theme } = params;
   const { host } = new URL(url);
   // NOTE: You are not required to use `nodemailer`, use whatever you want.
@@ -67,7 +66,7 @@ async function sendVerificationRequest(params: any) {
  *
  * @note We don't add the email address to avoid needing to escape it, if you do, remember to sanitize it!
  */
-function html(params: { url: string; host: string; theme: Theme }) {
+function html(params) {
   const { url, host, theme } = params;
 
   const escapedHost = host.replace(/\./g, "&#8203;.");
@@ -130,6 +129,6 @@ function html(params: { url: string; host: string; theme: Theme }) {
 }
 
 /** Email Text body (fallback for email clients that don't render HTML, e.g. feature phones) */
-function text({ url, host }: { url: string; host: string }) {
+function text({ url, host }) {
   return `Sign in to ${host}\n${url}\n\n`;
 }

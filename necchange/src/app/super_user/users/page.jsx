@@ -1,15 +1,14 @@
 "use client"
 
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 
-import DataTable, { DataRow } from "../../components/admin/datatable/datatable";
+import { DataRow } from "../../components/admin/datatable/datatable";
 import Modal from "../../components/globals/Modal";
 
 
-function filterUsers(user: DataRow, loweredCasedSearch: string){
+function filterUsers(user, loweredCasedSearch){
     const searchIsEmpty = loweredCasedSearch === '';
     const checkNumber = user.number.toLowerCase().includes(loweredCasedSearch); 
     const checkFirstName = user.firstname.toLowerCase().includes(loweredCasedSearch); 
@@ -21,10 +20,9 @@ function filterUsers(user: DataRow, loweredCasedSearch: string){
 
 export default function ManageUsers(){
     const { data: session } = useSession();
-    const [users, setUsers] = useState(new Array<DataRow>()); 
     const [search, setSearch] = useState('');
     const [showModal, setShowModal] = useState(false);
-    const [editedUsersMap, setEditedUsersMap] = useState(new Map<number, string>());
+    const [editedUsersMap, setEditedUsersMap] = useState();
 
     useEffect(() => {
         if (session) {
