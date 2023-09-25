@@ -5,7 +5,7 @@ import Image from "next/image";
 import NavbarLinks from "./NavbarLinks";
 import MobileNavbarLinks from "./MobileNavbarLinks";
 
-function Navbar() {
+function Navbar({session}: any) {
   const [isMenuOpened, setIsMenuOpened] = useState<boolean>(false);
 
   const toggleMenu = () => setIsMenuOpened(!isMenuOpened);
@@ -36,10 +36,10 @@ function Navbar() {
             <div className="w-5/12 h-[2px] rounded bg-black m-[1px]"></div>
           </div>
 
-          <NavbarLinks containerDinamicClass="hidden items-center" />
+          <NavbarLinks containerDinamicClass="hidden items-center" session={session}/>
         </div>
 
-        <MobileNavbarLinks isMenuOpened={isMenuOpened} />
+        <MobileNavbarLinks isMenuOpened={isMenuOpened} session={session}/>
       </div>
     </div>
   );

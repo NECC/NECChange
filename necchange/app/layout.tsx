@@ -1,6 +1,9 @@
+'use client'
+
 import "./globals.css";
 import Navbar from "./components/globals/navbar/Navbar";
 import Provider from "./components/Provider";
+import { useSession } from "next-auth/react";
 
 export const metadata = {
   title: "Necchange",
@@ -12,11 +15,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+  const session = useSession()
+
   return (
     <html lang="en">
       <body>
         <Provider>
-          <Navbar />
+          <Navbar session={session}/>
           {children}
         </Provider>
       </body>
