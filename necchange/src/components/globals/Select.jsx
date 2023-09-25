@@ -1,6 +1,12 @@
 import React from "react";
 
-const Select = () => {
+const Select = ({
+  options,
+  getOptionLabel,
+  changeHandler,
+  selected,
+  placeholder,
+}) => {
   return (
     <select
       className="bg-slate-200 cursor-pointer text-base text-slate-900 p-1 rounded w-full"

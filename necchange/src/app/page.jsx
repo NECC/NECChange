@@ -15,11 +15,11 @@ export default function CalendarPage() {
       console.log(res.data.response);
     });
   }, []);
-
+/*
   useEffect(() => {
     axios.get("/api/calendar/getUCS").then((res) => setUcs(res.data.response));
   }, []);
-
+*/
   return (
     <div className="bg-white min-h-screen pt-24">
       <div className="py-14 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">

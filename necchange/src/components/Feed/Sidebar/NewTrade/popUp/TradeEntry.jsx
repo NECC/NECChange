@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaArrowRightArrowLeft, FaMinus, FaTrashCan } from "react-icons/fa6";
-import Select from "@/app/components/globals/Select";
+import Select from "@/components/globals/Select";
 
 const classMap = {
   1: "T",

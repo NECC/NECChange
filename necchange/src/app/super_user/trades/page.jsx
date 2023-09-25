@@ -1,8 +1,8 @@
 "use client";
-import BasicDateTimePicker from "@/app/components/globals/BasicDateTimePicker";
+import BasicDateTimePicker from "@/components/globals/BasicDateTimePicker";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Loader from "@/app/components/globals/Loader";
+import Loader from "@/components/globals/Loader";
 import moment from "moment";
 import "moment/locale/pt";
 

@@ -23,7 +23,7 @@ export async function middleware(request) {
   });
 
   //console.log('Request', request);
-  console.log("My token middleware:", token);
+  //console.log("My token middleware:", token);
 
   // Admin paths
   // if signed in and doesn't have role SUPER_USER, can't access /super_user/**

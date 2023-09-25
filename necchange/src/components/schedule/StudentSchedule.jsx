@@ -8,13 +8,12 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import ptLocale from "@fullcalendar/core/locales/pt";
-import { CalendarProps } from "./interface";
 
-export default function StudentSchedule(props: CalendarProps) {
+export default function StudentSchedule(props) {
   const { events } = props;
   const { innerWidth } = useWindowSize();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const calendarRef = useRef<FullCalendar | null>(null);
+  const calendarRef = useRef(null);
   // breakpoints
   const isPhone = innerWidth && innerWidth < 640;
   const isTablet = innerWidth && innerWidth < 768;
@@ -23,7 +22,7 @@ export default function StudentSchedule(props: CalendarProps) {
   const startDate = new Date().setDate(now.getDate() - now.getDay() + 1);
   const endDate = new Date().setDate(now.getDate() + (5 - now.getDay()));
 
-  const updateDate = (dateModifier: number) => {
+  const updateDate = (dateModifier) => {
     const date = new Date(
       currentDate.setDate(currentDate.getDate() + dateModifier)
     );

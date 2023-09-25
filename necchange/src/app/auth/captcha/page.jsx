@@ -1,5 +1,5 @@
 "use client";
-import Loader from "@/app/components/globals/Loader";
+import Loader from "@/components/globals/Loader";
 
 import {redirect } from "next/navigation";
 import {useSearchParams } from "next/navigation";

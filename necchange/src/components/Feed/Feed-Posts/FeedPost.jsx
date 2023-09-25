@@ -8,35 +8,21 @@ import Badge from "../../globals/Badge";
 import moment from "moment";
 import "moment/locale/pt";
 
-interface statusMapProps {
-  [key: string]: [string, "green" | "yellow" | "red"];
-}
-const statusMap: statusMapProps = {
+
+const statusMap = {
   ACCEPTED: ["Aceite", "green"],
   PENDING: ["Pendente", "yellow"],
   REMOVED: ["Removido", "red"],
 };
 
-const type_class: any = {
+const type_class = {
   1: "T",
   2: "TP",
   3: "PL",
 };
 
-interface FeedPostProps {
-  post: {
-    id: number,
-    from_student: {
-      number: string,
-    },
-    publish_time: string,
-    status: "ACCEPTED" | "PENDING" | "REMOVED",
-    trade_id: any[],
-  };
-  toggleLoader: Function;
-}
 
-export default function FeedPost({ post, toggleLoader }: FeedPostProps) {
+export default function FeedPost({ post, toggleLoader }) {
   const { data: session } = useSession();
   const isViewingOwnPost = session?.user.number === post.from_student.number;
   const fromStudentNr = post.from_student.number;
@@ -96,7 +82,7 @@ export default function FeedPost({ post, toggleLoader }: FeedPostProps) {
       </div>
 
       <div className="grid">
-        {post.trade_id.map((lesson_trade: any, i: number) => {
+        {post.trade_id.map((lesson_trade, i) => {
           const { year, name } = lesson_trade.lessonFrom.course;
           const type = type_class[lesson_trade.lessonFrom.type];
           const from = `${type}${lesson_trade.lessonFrom.shift}`;

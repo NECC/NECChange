@@ -1,5 +1,5 @@
 import UCFilter from "./Filters/UCFilter";
-import NewTradeButton from '@/app/components/Feed/Sidebar/NewTrade/NewTradeButton'
+import NewTradeButton from '@/components/Feed/Sidebar/NewTrade/NewTradeButton'
 
 
 export default function Filters(props) {

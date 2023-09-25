@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Loader from "@/app/components/globals/Loader";
+import Loader from "@/components/globals/Loader";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 

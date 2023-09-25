@@ -1,4 +1,10 @@
-const Modal = () => {
+const Modal = ({
+  showModal,
+  setShowModal,
+  title,
+  children,
+  overflowY = false,
+}) => {
   return showModal ? (
     <div className="flex justify-center items-center fixed inset-0 z-50 w-full">
       <div

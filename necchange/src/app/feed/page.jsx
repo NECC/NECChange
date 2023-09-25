@@ -1,17 +1,17 @@
 "use client";
-import { useState, useEffect, MouseEventHandler } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 
-import FeedPost from "@/app/components/Feed/Feed-Posts/FeedPost";
-import Loader from "../components/globals/Loader";
+import FeedPost from "@/components/Feed/Feed-Posts/FeedPost";
+import Loader from "@/components/globals/Loader";
 
 import { FaPlus } from "react-icons/fa6";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import UCFilter from "@/app/components/Feed/Sidebar/Filters/UCFilter";
-import NewTradeButton from "@/app/components/Feed/Sidebar/NewTrade/NewTradeButton";
+import UCFilter from "@/components/Feed/Sidebar/Filters/UCFilter";
+import NewTradeButton from "@/components/Feed/Sidebar/NewTradeButton";
 
 const Posts = ({ filteredPosts, toggleLoader, getMorePosts }) => {
   return (

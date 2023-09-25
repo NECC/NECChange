@@ -5,7 +5,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 import { useEffect, useState } from "react";
-import Select from "@/app/components/globals/Select";
+import Select from "@/components/globals/Select";
 
 export default function SuperUser() {
   const buttonStyles =

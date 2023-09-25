@@ -3,7 +3,7 @@ import axios from "axios";
 import { FaPlus } from "react-icons/fa6";
 import { toast } from "react-toastify";
 
-import Modal from "@/app/components/globals/Modal";
+import Modal from "@/components/globals/Modal";
 import TradeEntry from "./NewTrade/popUp/TradeEntry";
 import { useSession } from "next-auth/react";
 
