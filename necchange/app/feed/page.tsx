@@ -84,7 +84,7 @@ export default function Feed(){
     }
 
     checkTradePeriod()
-  }, []);
+  }, [tradesOpen]);
   
   // This effect gets the courses that the student is taking
   useEffect(() => {

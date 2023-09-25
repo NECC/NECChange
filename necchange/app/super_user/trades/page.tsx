@@ -19,7 +19,7 @@ function convertToRegularDate(date: any){
     return day + "/" + month + " às " + hour + ":" + minutes;
 }
 
-export default function manageTrades(){
+export default function ManageTrades(){
     const [status, setStatus] = useState('Fechado')
     const [loader, setLoader] = useState(false)
     const [startDate, setStartDate] = useState(null);
@@ -35,8 +35,8 @@ export default function manageTrades(){
                     
                     if(res.data.status.isOpen) {
                         const openDate = convertToRegularDate(moment(res.data.status.openDate))
-                        const closeDate = convertToRegularDate(moment(res.data.status.closeDate))
-                        setStatus(`Aberto de ${openDate} até ${closeDate}`)
+                        const closingDate = convertToRegularDate(moment(res.data.status.closeDate))
+                        setStatus(`Aberto de ${openDate} até ${closingDate}`)
                     } else {
                         setStatus('Fechado')
                     }
