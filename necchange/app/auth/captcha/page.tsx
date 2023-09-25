@@ -23,7 +23,7 @@ export default function Home() {
     const newUrl = new URL(`${redirect}&token=${token}&email=${email}`);
     router.push(newUrl.href)
 
-    window.location.reload();
+    //window.location.reload();
   }, [pathname, searchParams]);
 
   return (
