@@ -83,7 +83,7 @@ export default function Feed() {
     if (session) {
       const uc_names = async () => {
         try {
-          axios.get(`/api/info/${session?.user?.number}`).then((res) => {
+          axios.get(`/api/users/user_ucs/${session?.user?.number}`).then((res) => {
             setUcsArray(res.data.student_classes);
             console.log(res.data.student_classes);
           });

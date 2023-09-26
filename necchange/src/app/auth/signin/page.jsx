@@ -38,7 +38,7 @@ export default function Home() {
     // if (inputEmail == "dev@necc.di.uminho.pt") return true;
     // else {
     const result = await axios
-      .get(`/api/user_exists/${inputEmail}`)
+      .get(`/api/users/user_exists/${inputEmail}`)
       .then((res) => {
         if (res.data.response == "success") return true;
         else return false;

@@ -47,7 +47,7 @@ export default function NewTrade({ toggleLoader }) {
 
   useEffect(() => {
     axios
-      .get(`/api/trades/student_ucs/${session?.user.number}`)
+      .get(`/api/users/user_courses/${session?.user.number}`)
       .then((response) => {
         const data = response.data.student_ucs;
         const parsed = data.reduce((acc, { lesson }) => {
@@ -76,7 +76,7 @@ export default function NewTrade({ toggleLoader }) {
 
         const ucs = Object.values(parsed).map(({ ucId }) => ucId);
         return axios.get(
-          `/api/trades/shifts?${ucs
+          `/api/users/user_shifts?${ucs
             .map((n, index) => `ucs[${index}]=${n}`)
             .join("&")}`
         );

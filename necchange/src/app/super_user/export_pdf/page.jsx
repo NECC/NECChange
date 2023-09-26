@@ -61,7 +61,7 @@ export default function SuperUser() {
   const exportPDF = () => {
     if (ucSelected != "") {
       axios
-        .get(`/api/admin/uc_shifts_list/${ucSelected}`)
+        .get(`/api/admin/export_pdf/uc_shifts_list/${ucSelected}`)
         .then((res) => {
           generatePDF(res.data.data);
         })

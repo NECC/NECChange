@@ -29,7 +29,7 @@ export default function ManageTrades() {
   useEffect(() => {
     const get_status = async () => {
       await axios
-        .get("/api/admin/trades_status")
+        .get("/api/admin/trades_period/status")
         .then((res) => {
           if (res.data.status.isOpen) {
             const openDate = convertToRegularDate(
@@ -54,7 +54,7 @@ export default function ManageTrades() {
   const handleTrades = async (action) => {
     setLoader(true);
     await axios
-      .put("/api/admin/handle_trades_date", {
+      .put("/api/admin/trades_period/change_date", {
         close: action,
         openDate: startDate?.["$d"],
         closeDate: closeDate?.["$d"],
