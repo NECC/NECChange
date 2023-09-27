@@ -1,30 +1,16 @@
-import { Prisma, PrismaClient, Role } from "@prisma/client";
-import { Faker, pt_PT } from "@faker-js/faker";
+const { PrismaClient, Role } = require('@prisma/client');
+const { Faker, pt_PT } = require("@faker-js/faker");
+const schedule = require("../public/data/input/schedule.json")
+const ucs = require("../public/data/input/ucs.json")
+const alocationJson = require("../public/data/input/alocation.json")
 
-import schedule from "../public/data/input/schedule.json";
-import ucs from "../public/data/input/ucs.json";
-import * as alocationJson from "../public/data/input/alocation.json";
+const alocation = alocationJson;
 
-type AlocationEntry = {
-  uc: string;
-  year: string;
-  semester: string;
-  type_class: string;
-  shift: string;
-  slots: (string | boolean)[][];
-};
-type Alocation = {
-  [studentNr: string]: AlocationEntry[];
-};
-const alocation: Alocation = alocationJson;
 
-interface id_uc {
-  id: number;
-}
-const ucs_ids: { [id: string]: id_uc } = {};
+const ucs_ids = {};
 
 async function populate_ucs() {
-  let result_ucs: Prisma.courseCreateInput[] = [];
+  let result_ucs = [];
   let i = 1;
   Promise.all(
     ucs.map((uc) => {
@@ -43,28 +29,21 @@ async function populate_ucs() {
   return result_ucs;
 }
 
-const weekdays: Record<string, number> = {};
-weekdays["Segunda"] = 1;
-weekdays["Terça"] = 2;
-weekdays["Quarta"] = 3;
-weekdays["Quinta"] = 4;
-weekdays["Sexta"] = 5;
+const weekdays = {
+  "Segunda": 1,
+  "Terça": 2,
+  "Quarta": 3,
+  "Quinta": 4,
+  "Sexta": 5
+};
 
-const type_class: Record<string, number> = {};
-type_class["T"] = 1;
-type_class["TP"] = 2;
-type_class["PL"] = 3;
+const type_class = {
+  "T": 1,
+  "TP": 2,
+  "PL": 3
+};
 
-let classes: {
-  id: number;
-  course_id: number;
-  weekday: number;
-  start_time: string;
-  end_time: string;
-  local: string;
-  type: number;
-  shift: number;
-}[] = [];
+let classes = [];
 
 async function populate_classes() {
   let i = 1;
@@ -101,15 +80,7 @@ function encrypt(number) {
   return number_decoded.join("");
 }
 
-let students: {
-  uniqueId: number;
-  number: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  //password: null
-  is_admin: boolean;
-}[] = [];
+let students = [];
 async function populate_students() {
   let i = 1;
   const portugueseFaker = new Faker({ locale: [pt_PT] });
@@ -123,8 +94,7 @@ async function populate_students() {
           firstname: portugueseFaker.person.firstName(),
           lastname: portugueseFaker.person.lastName(),
           email: encrypt(student_nr).toLowerCase() + "@alunos.uminho.pt",
-          //password: null
-          is_admin: false,
+          partner: false,
           role: Role.STUDENT,
         };
         students.push(student);
@@ -139,7 +109,7 @@ async function populate_students() {
     lastname: "Dev",
     email: "dev@necc.di.uminho.pt",
     //password: null
-    is_admin: true,
+    partner: false,
     role: Role.SUPER_USER,
   };
 
@@ -149,11 +119,7 @@ async function populate_students() {
 }
 
 async function populate_student_class() {
-  let students_classes: {
-    id: number;
-    student_id: number | undefined;
-    lesson_id: number | undefined;
-  }[] = [];
+  let students_classes = [];
   let i = 1;
 
   Object.keys(alocation).forEach((studentNr) => {
@@ -204,7 +170,7 @@ async function populate_student_class() {
 const prisma = new PrismaClient();
 
 async function main() {
-  const ucs: Prisma.courseCreateInput[] = await populate_ucs();
+  const ucs = await populate_ucs();
   const classes = await populate_classes();
   const students = await populate_students();
   const students_classes = await populate_student_class();

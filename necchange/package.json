@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.1.0",
     "@fullcalendar/core": "^6.1.9",
     "@fullcalendar/daygrid": "^6.1.9",
     "@fullcalendar/google-calendar": "^6.1.9",
@@ -30,5 +31,8 @@
     "postcss": "latest",
     "prisma": "^5.3.1",
     "tailwindcss": "latest"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }

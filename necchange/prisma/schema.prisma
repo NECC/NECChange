@@ -9,14 +9,14 @@ datasource db {
 
 // OLD: uc_class 
 model lesson {
-  id             Int              @id
-  course_id      Int?
-  weekday        Int?
-  start_time     String           @db.VarChar(10)
-  end_time       String           @db.VarChar(10)
-  local          String?          @db.VarChar(100)
-  type           Int?
-  shift          Int?
+  id         Int     @id
+  course_id  Int?
+  weekday    Int?
+  start_time String  @db.VarChar(10)
+  end_time   String  @db.VarChar(10)
+  local      String? @db.VarChar(100)
+  type       Int?
+  shift      Int?
 
   course         course?          @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   student_lesson student_lesson[]
@@ -107,7 +107,7 @@ model User {
   lastname      String?   @db.VarChar(100)
   email         String?   @unique
   emailVerified DateTime?
-  is_admin      Boolean?
+  partner       Boolean?
   role          Role?
 
   accounts        Account[]
