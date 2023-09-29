@@ -22,7 +22,7 @@ export default function CalendarPage() {
 */
   return (
     <div className="bg-white min-h-screen pt-24">
-      <div className="py-14 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
+      <div className="pt-8 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
         <FullCalendar
           plugins={[dayGridPlugin, googleCalendarPlugin]}
           locale={ptLocale}
