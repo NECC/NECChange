@@ -81,6 +81,8 @@ function html(params) {
     buttonText: theme.buttonText || "#fff",
   };
 
+  const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url
+
   return `
 <body style="background: ${color.background};">
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
@@ -101,7 +103,7 @@ function html(params) {
           <tr>
             <td align="center" style="border-radius: 5px;" bgcolor="${
               color.buttonBackground
-            }"><a href="${url}"
+            }"><a href="${redirect}"
                 target="_blank"
                 style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${
                   color.buttonText
@@ -120,7 +122,6 @@ function html(params) {
         };">
         If you did not request this email you can safely ignore it.
         <br>
-        ${process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url}
       </td>
     </tr>
   </table>
