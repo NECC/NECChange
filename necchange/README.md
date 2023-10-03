@@ -1,3 +1,16 @@
+
+```bash
+sudo pacman -Sy postgres
+systemctl enable postgresql.service
+systemctl start postgresql.service
+sudo -u postgres psql 
+
+grant privileges...
+```
+
+
+---------------
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

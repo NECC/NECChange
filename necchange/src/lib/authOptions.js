@@ -41,6 +41,20 @@ export const authOptions = {
 import { createTransport } from "nodemailer";
 
 async function sendVerificationRequest(params) {
+  
+  // Isso daqui é so um teste, é gambiarra e acho melhor tirar ou testar mais vezes
+  const file2 = process.cwd() + '/neccSticker.png';
+  // const file = __dirname.split("/");
+  // if (file[file.length - 1] == "[...nextauth]") {
+  //   file.pop();
+  //   file.push("signin");
+  // }
+  // const finalFile = file.join("/") + '/neccSticker.png';
+
+  // console.log("FILEEEE: ", file);
+  // console.log("FILEEEE: ", file.join("/"));
+  // console.log("FILE2: ", process.cwd() + '/neccSticker.png');
+
   const { identifier, url, provider, theme } = params;
   const { host } = new URL(url);
   // NOTE: You are not required to use `nodemailer`, use whatever you want.
@@ -50,12 +64,17 @@ async function sendVerificationRequest(params) {
     from: provider.from,
     subject: `Sign in to ${host}`,
     text: text({ url, host }),
-    html: html({ url, host, theme }),
-    // attachments: [{
-    //   filename: 'neccSticker.png',
-    //   path: `${__dirname}/neccSticker.png`,
-    //   cid: 'logoNecc'
-    // }]
+    html: `<body>
+    <div style="width: 100%; display: flex; justify-content: center; align: center;"> 
+      <img height={200} width={200} src="cid:unique@nodemailer.com"/> 
+    <div> <br/> 
+      ${html({ url, host, theme })}
+    </body>`,
+    attachments: [{
+        filename: 'image.png',
+        path: file2,
+        cid: 'unique@nodemailer.com' //same cid value as in the html img src
+    }],
   });
   const failed = result.rejected.concat(result.pending).filter(Boolean);
   if (failed.length) {
@@ -89,15 +108,9 @@ function html(params) {
   const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url
 
   return `
-<body style="background: ${color.background};">
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
     style="background: ${color.mainBackground
     }; max-width: 600px; margin: auto; border-radius: 10px;">
-    <tr>
-      <td align="center">
-       <img src="" alt='Teste' style="width:200px;height:200px;"/>
-     </td>
-    </tr>
     <tr>
       <td>
     Dear <strong>@[User Name]</strong>, <br>
@@ -136,7 +149,6 @@ function html(params) {
       </td>
     </tr>
   </table>
-</body>
 `;
 }
 
