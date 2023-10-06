@@ -12,10 +12,10 @@ export default function CalendarPage() {
 
   useEffect(() => {
     axios.get("/api/calendar/getCalendar").then((res) => {
-      // console.log("Events: ", res.data.response);
       
       // Function that filters 2023/2024 events
       const ucsCurrentSeason = res.data.response.reduce((acc, uc) => {
+
         const season = currentSeason.split('/').map((year) => Number(year));
         const ucArrayData = uc.start.split("-");
         
@@ -31,7 +31,7 @@ export default function CalendarPage() {
           ...uc,
           year
         }
-      })
+      });
       
       setEvents(eventsFinished);
       console.log(eventsFinished);
@@ -54,7 +54,6 @@ export default function CalendarPage() {
   //     console.log("UCS: " ,res.data.response);
   //   })
   // }, []);
-
 
   return (
     <div className="bg-white min-h-screen pt-24">
