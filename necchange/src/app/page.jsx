@@ -8,18 +8,54 @@ import { useEffect, useState } from "react";
 
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
+  const [currentSeason, setCurrentSeason] = useState('2023/2024');
 
   useEffect(() => {
     axios.get("/api/calendar/getCalendar").then((res) => {
-      setEvents(res.data.response);
-      console.log(res.data.response);
+      // console.log("Events: ", res.data.response);
+      
+      // Function that filters 2023/2024 events
+      const ucsCurrentSeason = res.data.response.reduce((acc, uc) => {
+        const season = currentSeason.split('/').map((year) => Number(year));
+        const ucArrayData = uc.start.split("-");
+        
+        if (season.includes(Number(ucArrayData[0]))) {
+          acc.push(uc);
+        } 
+        return acc;
+      }, []);
+      
+      const eventsFinished = ucsCurrentSeason.map((uc) => {
+        const year = getYearByEvent(uc);
+        return {
+          ...uc,
+          year
+        }
+      })
+      
+      setEvents(eventsFinished);
+      console.log(eventsFinished);
     });
   }, []);
-/*
-  useEffect(() => {
-    axios.get("/api/calendar/getUCS").then((res) => setUcs(res.data.response));
-  }, []);
-*/
+
+  const getYearByEvent = (event) => {
+    const regex = /\((1|2|3)º ano\)/
+    const match = event.title.match(regex);
+
+    if (match) {
+      const year = parseInt(match[1]);
+      return year;
+    } else return 0;
+  }
+  
+  // useEffect(() => {
+  //   axios.get("/api/calendar/getUCS").then((res) => {
+  //     setUCs(res.data.response);
+  //     console.log("UCS: " ,res.data.response);
+  //   })
+  // }, []);
+
+
   return (
     <div className="bg-white min-h-screen pt-24">
       <div className="pt-8 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
