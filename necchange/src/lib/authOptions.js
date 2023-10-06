@@ -41,7 +41,7 @@ export const authOptions = {
 import { createTransport } from "nodemailer";
 
 async function sendVerificationRequest(params) {
-  
+
   // Isso daqui é so um teste, é gambiarra e acho melhor tirar ou testar mais vezes
   const file2 = process.cwd() + '/neccSticker.png';
   // const file = __dirname.split("/");
@@ -64,16 +64,20 @@ async function sendVerificationRequest(params) {
     from: provider.from,
     subject: `Sign in to ${host}`,
     text: text({ url, host }),
-    html: `<body>
-    <div style="width: 100%; display: flex; justify-content: center; align: center;"> 
-      <img height={200} width={200} src="cid:unique@nodemailer.com"/> 
-    <div> <br/> 
-      ${html({ url, host, theme })}
-    </body>`,
+    html: `
+ <div style="background-color:#f9f9f9;display:flex;justify-content:center;flex-direction:column;align-items:center">
+  <div style="background-color:#fff ;width:70%;display:flex;justify-content:center">
+      <img style="height:150px; width:150px" src="cid:unique@nodemailer.com"/> 
+  </div>
+  <div style="width:70% ;background-color:#fff">
+    ${html({ url, host, theme })}
+  </div>
+ </div>
+    `,
     attachments: [{
-        filename: 'image.png',
-        path: file2,
-        cid: 'unique@nodemailer.com' //same cid value as in the html img src
+      filename: 'image.png',
+      path: file2,
+      cid: 'unique@nodemailer.com' //same cid value as in the html img src
     }],
   });
   const failed = result.rejected.concat(result.pending).filter(Boolean);
@@ -97,59 +101,58 @@ function html(params) {
 
   const brandColor = theme.brandColor || "#346df1";
   const color = {
-    background: "#f9f9f9",
     text: "#444",
     mainBackground: "#fff",
     buttonBackground: brandColor,
     buttonBorder: brandColor,
     buttonText: theme.buttonText || "#fff",
-  };
+  };  
 
   const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url
-
   return `
-  <table width="100%" border="0" cellspacing="20" cellpadding="0"
-    style="background: ${color.mainBackground
+<body>
+    <table width="100%" border="0" cellspacing="20" cellpadding="0"
+      style="background: ${color.mainBackground
     }; max-width: 600px; margin: auto; border-radius: 10px;">
-    <tr>
-      <td>
-    Dear <strong>@[User Name]</strong>, <br>
-    Thank you for joining our community! To ensure the security of your account, we need to verify your email address.
-    
-    Please click the button below to confirm your email address: <td>
+      <tr>
+        <td style="font-size: 18px; font-family: Helvetica, Arial, sans-serif">
+          <h5>Dear [@username],</h5>
+          To enhance your account security, we require a quick verification process.Please click the button below to proceed:
+        </td>
       </tr>
-    <tr>
-      <td align="center"
-        style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text
+      <tr>
+        <td align="center"
+          style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text
     };">
-        Sign in to <strong>${escapedHost}</strong>
-      </td>
-    </tr>
-    <tr>
-      <td align="center" style="padding: 20px 0;">
-        <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground
+          Sign in to <strong>${escapedHost}</strong>
+        </td>
+      </tr>
+      <tr>  
+        <td align="center" style="padding: 10px 0;">
+          <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground
     }"><a href="${redirect}"
-                target="_blank"
-                style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText
+                  target="_blank"
+                  style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText
     }; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${color.buttonBorder
     }; display: inline-block; font-weight: bold;">Sign
-                in</a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td align="center"
-        style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text
+                  in</a></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td align="center"
+          style="padding: 30px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text
     };">
-        If you did not request this email you can safely ignore it.
-        <br>
-      </td>
-    </tr>
-  </table>
-`;
+          If you did not request this email you can safely ignore it.
+          <br>
+        </td>
+      </tr>
+    </table>
+</body>
+  `;
 }
 
 /** Email Text body (fallback for email clients that don't render HTML, e.g. feature phones) */
