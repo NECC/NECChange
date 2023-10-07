@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+
 export async function GET(req, context) {
   const prisma = new PrismaClient();
 
@@ -11,6 +12,7 @@ export async function GET(req, context) {
       firstname: true,
       lastname: true,
       email: true,
+      partner: true,
       role: true,
     },
   });

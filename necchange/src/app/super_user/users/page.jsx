@@ -1,8 +1,10 @@
 "use client";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import DataTable from "@/components/admin/datatable/datatable";
 import Modal from "@/components/globals/Modal";
-
+import axios from 'axios'
+/*
 function filterUsers(user, loweredCasedSearch) {
   const searchIsEmpty = loweredCasedSearch === "";
   const checkNumber = user.number.toLowerCase().includes(loweredCasedSearch);
@@ -22,7 +24,7 @@ function filterUsers(user, loweredCasedSearch) {
     checkNumber
   );
 }
-
+*/
 export default function ManageUsers() {
   const { data: session } = useSession();
   const [users, setUsers] = useState([]);
@@ -146,7 +148,13 @@ export default function ManageUsers() {
           </div>
         </div>
         {
-          //<DataTable data={users.filter((user) => {return filterUsers(user, search.toLowerCase()) })}/>
+          session ? 
+            <>
+              <DataTable data={users}/>
+            </>  
+            :
+            <>
+             </>
         }
       </div>
     </div>
