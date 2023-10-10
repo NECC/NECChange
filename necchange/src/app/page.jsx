@@ -7,9 +7,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function CalendarPage() {
-  const [events, setEvents] = useState([]);
-  const [filteredEvents, setFilteredEvents] = useState([]);
-  const [yearFilter, setYearFilter] = useState([]);
+  const [events, setEvents] = useState({
+    testes: [],
+    eventos: [],
+  });
+  const [filteredEvents, setFilteredEvents] = useState({
+    testes: [],
+    eventos: [],
+  });
+  const [actualFilter, setActualFilter] = useState({
+    yearFilter: [],
+    typeFilter: [],
+  });
   const [currentSeason, setCurrentSeason] = useState('2023/2024');
   // const [UCs, setUCs] = useState([]);
 
@@ -27,31 +36,58 @@ export default function CalendarPage() {
         } 
         return acc;
       }, []);
-      
-      const eventsFinished = ucsCurrentSeason.map((uc) => {
+
+      const divideByType = ucsCurrentSeason.reduce((acc, uc) => {
         const year = getYearByEvent(uc);
-        return {
-          ...uc,
-          year
+
+        if (year != 0) { 
+
+          acc.testes.push({...uc, year});
+          return acc;
+
+        } else {
+
+          acc.eventos.push({...uc, year});
+          return acc;
+
         }
-      });
+      }, { eventos: [], testes: [] });
       
-      setEvents(eventsFinished);
-      setFilteredEvents(eventsFinished);
-      console.log(eventsFinished);
+      setEvents(divideByType);
+      setFilteredEvents(divideByType);
     });
   }, []);
   
   useEffect(() => {
-    if (yearFilter.length != 0) {
-      const newEvents = events.filter((elem) => {
-        return yearFilter.includes(elem.year) || elem.year == 0;
-      })
-      setFilteredEvents(newEvents);
+
+    if (actualFilter.yearFilter.length != 0) {
+        
+      const newTests = events.testes.filter((elem) => {
+        return actualFilter.yearFilter.includes(elem.year) || elem.year == 0;
+      });
+      
+      setFilteredEvents({ testes: newTests, eventos: events.eventos });
+        
     } else {
       setFilteredEvents(events);
     }
-  }, [yearFilter]);
+
+    // if (actualFilter.typeFilter.includes('testes')) {
+
+    //   const newTests = events.testes.filter((elem) => {
+    //     return actualFilter.yearFilter.includes(elem.year);
+    //   });
+      
+    //   setFilteredEvents({ testes: newTests, eventos: events.eventos }); 
+    // } else setFilteredEvents({ testes: [], eventos: filteredEvents.eventos });
+    
+    // if (actualFilter.typeFilter.includes('eventos')) {
+    //   setFilteredEvents({ testes: filteredEvents.testes, eventos: events.eventos})
+    // } else setFilteredEvents({ testes: filteredEvents.testes, eventos: [] });
+
+
+    console.log(filteredEvents);
+  }, [actualFilter.yearFilter, actualFilter.typeFilter]);
 
   // useEffect(() => {
   //   axios.get("/api/calendar/getUCS").then((res) => {
@@ -63,12 +99,24 @@ export default function CalendarPage() {
   const handleYear = (e) => {
     const year = Number((e.target.id).charAt(0));
 
-    if (yearFilter.includes(year)) {
-      const newArray = yearFilter.filter((y) => y != year);
-      setYearFilter(newArray);
+    if (actualFilter.yearFilter.includes(year)) {
+      const newArray = actualFilter.yearFilter.filter((y) => y != year);
+      setActualFilter({ yearFilter: newArray, typeFilter: actualFilter.typeFilter });
     } else {
-      const newArray = [...yearFilter, year];
-      setYearFilter(newArray);
+      const newArray = [...actualFilter.yearFilter, year];
+      setActualFilter({ yearFilter: newArray, typeFilter: actualFilter.typeFilter });
+    }
+  }
+
+  const handleType = (e) => {
+    const type = e.target.id;
+
+    if (actualFilter.typeFilter.includes(type)) {
+      const newArray = actualFilter.typeFilter.filter((t) => t != type);
+      setActualFilter({ typeFilter: newArray, yearFilter: actualFilter.yearFilter });
+    } else {
+      const newArray = [...actualFilter.typeFilter, type];
+      setActualFilter({ typeFilter: newArray, yearFilter: actualFilter.yearFilter });
     }
   }
 
@@ -83,13 +131,29 @@ export default function CalendarPage() {
   }
 
   return (
-    <div className="bg-white min-h-screen pt-24">
-      <input onChange={handleYear} type="checkbox" name="1ano" id="1ano" />
-      <label htmlFor="1ano">1° ano</label>
-      <input onChange={handleYear} type="checkbox" name="2ano" id="2ano" />
-      <label htmlFor="2ano">2° ano</label>
-      <input onChange={handleYear} type="checkbox" name="3ano" id="3ano" />
-      <label htmlFor="3ano">3° ano</label>
+    <div className="bg-white min-h-screen pt-24 flex">
+      <div className="p-6">
+        <div>
+          <input onChange={handleType} type="checkbox" name="testes" id="testes" />
+          <label className="text-xl pl-2" htmlFor="testes">Testes</label>
+        </div>
+        <div>
+          <input onChange={handleType} type="checkbox" name="eventos" id="eventos" />
+          <label className="text-xl pl-2" htmlFor="eventos">Eventos</label>
+        </div>
+        <div>
+          <input onChange={handleYear} type="checkbox" name="1ano" id="1ano" />
+          <label className="text-xl pl-2" htmlFor="1ano">1° ano</label>
+        </div>
+        <div>
+          <input onChange={handleYear} type="checkbox" name="2ano" id="2ano" />
+          <label className="text-xl pl-2" htmlFor="2ano">2° ano</label>
+        </div>
+        <div>
+          <input onChange={handleYear} type="checkbox" name="3ano" id="3ano" />
+          <label className="text-xl pl-2" htmlFor="3ano">3° ano</label>
+        </div>
+      </div>
       <div className="pt-8 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
         <FullCalendar
           plugins={[dayGridPlugin, googleCalendarPlugin]}
@@ -102,7 +166,7 @@ export default function CalendarPage() {
           }}
           initialView="dayGridMonth"
           displayEventTime={false}
-          events={filteredEvents}
+          events={filteredEvents.testes}
           eventColor="blue-sky-500"
           height="80vh"
         />
