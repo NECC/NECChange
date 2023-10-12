@@ -8,13 +8,14 @@ import { useEffect, useState } from "react";
 
 export default function CalendarPage() {
   const [events, setEvents] = useState({
-    testes: [],
+    avaliacoes: [],
     eventos: [],
   });
   const [filteredEvents, setFilteredEvents] = useState({
-    testes: [],
+    avaliacoes: [],
     eventos: [],
   });
+  const [finalArray, setFinalArray] = useState([]);
   const [actualFilter, setActualFilter] = useState({
     yearFilter: [],
     typeFilter: [],
@@ -38,55 +39,57 @@ export default function CalendarPage() {
       }, []);
 
       const divideByType = ucsCurrentSeason.reduce((acc, uc) => {
-        const year = getYearByEvent(uc);
+        const { year, type } = getYearAndTypeByEvent(uc);
 
         if (year != 0) { 
 
-          acc.testes.push({...uc, year});
+          acc.avaliacoes.push({ ...uc, year, type });
           return acc;
 
         } else {
 
-          acc.eventos.push({...uc, year});
+          acc.eventos.push({ ...uc, year, type });
           return acc;
 
         }
-      }, { eventos: [], testes: [] });
+      }, { eventos: [], avaliacoes: [] });
       
       setEvents(divideByType);
       setFilteredEvents(divideByType);
+      setFinalArray([...divideByType.eventos, ...divideByType.avaliacoes]);
     });
   }, []);
   
+  // This useEffect is the most important, it has all the logic to filter the events in calendar
   useEffect(() => {
 
-    if (actualFilter.yearFilter.length != 0) {
-        
-      const newTests = events.testes.filter((elem) => {
+    if (actualFilter.typeFilter.length == 0) {
+      setFilteredEvents({ eventos: events.eventos, avaliacoes: events.avaliacoes });
+      setFinalArray([...events.eventos, ...events.avaliacoes]);
+    } else {
+      if (actualFilter.typeFilter.includes('avaliacoes') && actualFilter.typeFilter.includes('eventos')) {
+        setFilteredEvents({ eventos: events.eventos, avaliacoes: events.avaliacoes });
+        setFinalArray([...events.eventos, ...events.avaliacoes]);        
+      } else if (actualFilter.typeFilter.includes('avaliacoes')) {
+        setFilteredEvents({ eventos: [], avaliacoes: events.avaliacoes });
+        setFinalArray([...events.avaliacoes]);
+      } else {
+        setFilteredEvents({ eventos: events.eventos, avaliacoes: [] });
+        setFinalArray([...events.eventos]);
+      }
+    }
+
+    if (actualFilter.yearFilter.length != 0) {    
+      const newTests = events.avaliacoes.filter((elem) => {
         return actualFilter.yearFilter.includes(elem.year) || elem.year == 0;
       });
       
-      setFilteredEvents({ testes: newTests, eventos: events.eventos });
-        
-    } else {
-      setFilteredEvents(events);
-    }
-
-    // if (actualFilter.typeFilter.includes('testes')) {
-
-    //   const newTests = events.testes.filter((elem) => {
-    //     return actualFilter.yearFilter.includes(elem.year);
-    //   });
+      setFilteredEvents({ avaliacoes: newTests });
       
-    //   setFilteredEvents({ testes: newTests, eventos: events.eventos }); 
-    // } else setFilteredEvents({ testes: [], eventos: filteredEvents.eventos });
+      if (actualFilter.typeFilter.includes('eventos')) setFinalArray([...newTests, ...events.eventos]);
+      else setFinalArray(newTests);
+    }
     
-    // if (actualFilter.typeFilter.includes('eventos')) {
-    //   setFilteredEvents({ testes: filteredEvents.testes, eventos: events.eventos})
-    // } else setFilteredEvents({ testes: filteredEvents.testes, eventos: [] });
-
-
-    console.log(filteredEvents);
   }, [actualFilter.yearFilter, actualFilter.typeFilter]);
 
   // useEffect(() => {
@@ -120,22 +123,40 @@ export default function CalendarPage() {
     }
   }
 
-  const getYearByEvent = (event) => {
-    const regex = /\((1|2|3)º ano\)/
-    const match = event.title.match(regex);
+  const getYearAndTypeByEvent = (event) => {
+    const yearRegexp = event.title.match(/\((1|2|3)º ano\)/)
+    const matches = event.title.match(/\b(Teste|Exame|Entrega)\b/);
+    const result = {
+      type: null,
+      year: null,
+    };
+  
+    if (matches) {
+      matches.forEach(match => {
+          if (match === "Teste" || match === "Exame" || match === "Entrega") {
+              result.type = match;
+          } 
+          
+          if (yearRegexp) {
+              result.year = Number(yearRegexp[1]);
+          }
+      });
+    }
 
-    if (match) {
-      const year = parseInt(match[1]);
-      return year;
-    } else return 0;
+    if (!result.type && !result.year) {
+      result.type = 'Evento';
+      result.year = 0;
+    }
+
+    return result;
   }
 
   return (
     <div className="bg-white min-h-screen pt-24 flex">
       <div className="p-6">
         <div>
-          <input onChange={handleType} type="checkbox" name="testes" id="testes" />
-          <label className="text-xl pl-2" htmlFor="testes">Testes</label>
+          <input onChange={handleType} type="checkbox" name="avaliacoes" id="avaliacoes" />
+          <label className="text-xl pl-2" htmlFor="avaliacoes">Avaliações</label>
         </div>
         <div>
           <input onChange={handleType} type="checkbox" name="eventos" id="eventos" />
@@ -166,7 +187,7 @@ export default function CalendarPage() {
           }}
           initialView="dayGridMonth"
           displayEventTime={false}
-          events={filteredEvents.testes}
+          events={finalArray}
           eventColor="blue-sky-500"
           height="80vh"
         />
