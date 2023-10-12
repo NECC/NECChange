@@ -8,26 +8,13 @@ export default function FilterCalendar(props) {
   const { setFinalArray } = props;
   const [events, setEvents] = useState({ avaliacoes: [], eventos: [] });
   const [actualFilter, setActualFilter] = useState({ yearFilter: [], typeFilter: [] });
-  const [currentSeason, setCurrentSeason] = useState('2023/2024');
   const [isOpened, setIsOpened] = useState({ avaliacoes: false, eventos: false, year: 0 });
 
 
   useEffect(() => {
     axios.get("/api/calendar/getCalendar").then((res) => {
-      
-      // Function that filters 2023/2024 events (Should be deleted later, it's just to clean old events in the development)
-      const ucsCurrentSeason = res.data.response.reduce((acc, uc) => {
 
-        const season = currentSeason.split('/').map((year) => Number(year));
-        const ucArrayData = uc.start.split("-");
-        
-        if (season.includes(Number(ucArrayData[0]))) {
-          acc.push(uc);
-        } 
-        return acc;
-      }, []);
-
-      const divideByType = ucsCurrentSeason.reduce((acc, uc) => {
+      const divideByType = res.data.response.reduce((acc, uc) => {
         const { year, type } = getYearAndTypeByEvent(uc);
 
         if (year != 0) { 
@@ -43,6 +30,7 @@ export default function FilterCalendar(props) {
         }
       }, { eventos: [], avaliacoes: [] });
       
+      console.log(divideByType);
       setEvents(divideByType);
       setFinalArray([...divideByType.eventos, ...divideByType.avaliacoes]);
     });
