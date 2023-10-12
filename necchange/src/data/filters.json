@@ -1,0 +1,233 @@
+[
+    {
+        "calendar": "AL",
+        "name": "Álgebra Linear",
+        "year": 1,
+        "semester": 1,
+        "shifts": ["TP1", "TP2"]
+    },
+    {
+        "calendar": "Cálculo",
+        "name": "Cálculo",
+        "year": 1,
+        "semester": 1,
+        "shifts": ["TP1", "TP2"]        
+    },
+    {
+        "calendar": "PF",
+        "name": "Programação Funcional",
+        "year": 1,
+        "semester": 1,
+        "shifts": ["TP1", "TP2", "TP3"]
+    },
+    {
+        "calendar": "TM",
+        "name": "Tópicos de Matemática",
+        "year": 1,
+        "semester": 1,
+        "shifts": ["TP1", "TP2"]
+    },
+    {
+        "calendar": "Opção UM",
+        "name": "Opção Uminho",
+        "year": 1,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "Análise",
+        "name": "Análise",
+        "year": 1,
+        "semester": 2,
+        "shifts": ["TP1", "TP2"]
+    },
+    {
+        "calendar": "Geometria",
+        "name": "Geometria",
+        "year": 1,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "LA I",
+        "name": "Laboratório de Algoritmia I",
+        "year": 1,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "MD",
+        "name": "Matemática Discreta",
+        "year": 1,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "PI",
+        "name": "Programação Imperativa",
+        "year": 1,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "SC",
+        "name": "Sistemas de Computação",
+        "year": 1,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "Álgebra",
+        "name": "Álgebra",
+        "year": 2,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "AC",
+        "name": "Algoritmos e Complexidade",
+        "year": 2,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "AN",
+        "name": "Análise Numérica",
+        "year": 2,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "Lógica",
+        "name": "Lógica",
+        "year": 2,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "SCR",
+        "name": "Sistemas de Comunicações e Redes",
+        "year": 2,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "AUC",
+        "name": "Álgebra Universal e Categorias",
+        "year": 2,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "ALF",
+        "name": "Autómatos e Linguagens Formais",
+        "year": 2,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "CP",
+        "name": "Cálculo de Programas",
+        "year": 2,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "LA II",
+        "name": "Laboratório de Algoritmia II",
+        "year": 2,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "POO",
+        "name": "Programação Orientada aos Objetos",
+        "year": 2,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "SO",
+        "name": "Sistemas Operativos",
+        "year": 2,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "BD",
+        "name": "Bases de Dados",
+        "year": 3,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "CC",
+        "name": "Computabilidade e Complexidade",
+        "year": 3,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "LC",
+        "name": "Lógica Computacional",
+        "year": 3,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "PA",
+        "name": "Probabilidades e Aplicações",
+        "year": 3,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "PLC",
+        "name": "Processamento de Linguagens e Compiladores",
+        "year": 3,
+        "semester": 1,
+        "shifts": []
+    },
+    {
+        "calendar": "CG",
+        "name": "Computação Gráfica",
+        "year": 3,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "IC",
+        "name": "Interação e Concorrência",
+        "year": 3,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "PC",
+        "name": "Programação Concorrente",
+        "year": 3,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "Projeto",
+        "name": "Projeto",
+        "year": 3,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "SLP",
+        "name": "Semântica das Linguagens de Programação",
+        "year": 3,
+        "semester": 2,
+        "shifts": []
+    },
+    {
+        "calendar": "TNC",
+        "name": "Teoria de Números Computacional",
+        "year": 3,
+        "semester": 2,
+        "shifts": []
+    }
+]
