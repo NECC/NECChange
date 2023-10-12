@@ -1,20 +1,16 @@
-"use client";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import googleCalendarPlugin from "@fullcalendar/google-calendar";
-import ptLocale from "@fullcalendar/core/locales/pt";
+'use client'
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 
 
-export default function CalendarPage() {
+export default function FilterCalendar(props) {
+  const { setFinalArray } = props;
   const [events, setEvents] = useState({ avaliacoes: [], eventos: [] });
   const [actualFilter, setActualFilter] = useState({ yearFilter: [], typeFilter: [] });
-  const [finalArray, setFinalArray] = useState([]);
   const [currentSeason, setCurrentSeason] = useState('2023/2024');
-
   const [isOpened, setIsOpened] = useState({ avaliacoes: false, eventos: false, year: 0 });
+
 
   useEffect(() => {
     axios.get("/api/calendar/getCalendar").then((res) => {
@@ -139,10 +135,8 @@ export default function CalendarPage() {
   };
 
 
-
   return (
-    <div className="bg-white min-h-screen pt-24 flex">
-      <div className="p-6 border-r w-2/12 flex flex-col items-center">
+    <div className="p-6 border-r w-2/12 flex flex-col items-center">
 
         <div className="p-[6px] border rounded-lg w-full flex flex-row items-center justify-between mb-2">
           <div className="flex flex-row items-center">
@@ -154,6 +148,7 @@ export default function CalendarPage() {
           </div>
         </div>
 
+        {/* Years Container */}
         <div className={`w-full flex flex-col justify-center items-center overflow-hidden transition-all duration-300 ${isOpened.avaliacoes ? 'h-[100px]' : 'h-0'}`}>
           
           <div className="p-[4px] px-3 w-11/12 flex flex-row items-center justify-between border-b">
@@ -179,6 +174,7 @@ export default function CalendarPage() {
           </div>
         </div>
 
+        {/* Eventos Container */}
         <div className="p-[6px] border rounded-lg w-full flex flex-row items-center justify-between mt-2">
           <div className="flex flex-row items-center">
             <input onChange={handleType} className="h-5 w-5 ml-1" type="checkbox" name="eventos" id="eventos"/>
@@ -189,25 +185,6 @@ export default function CalendarPage() {
           </div>
         </div>
 
-      </div>
-
-      <div className="pt-8 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
-        <FullCalendar
-          plugins={[dayGridPlugin, googleCalendarPlugin]}
-          locale={ptLocale}
-          firstDay={0}
-          headerToolbar={{
-            left: "prev,today,next",
-            center: "title",
-            right: "dayGridWeek,dayGridMonth",
-          }}
-          initialView="dayGridMonth"
-          displayEventTime={false}
-          events={finalArray}
-          eventColor="blue-sky-500"
-          height="80vh"
-        />
-      </div>
     </div>
-  );
+  )
 }
