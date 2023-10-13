@@ -2,13 +2,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
-
+import { join } from "path";
 
 export default function FilterCalendar(props) {
   const { setFinalArray } = props;
   const [events, setEvents] = useState({ avaliacoes: [], eventos: [] });
   const [actualFilter, setActualFilter] = useState({ yearFilter: [], typeFilter: [] });
   const [isOpened, setIsOpened] = useState({ avaliacoes: false, eventos: false, year: 0 });
+
+  const filePath = join(process.cwd(), 'src', 'data', 'filters.json');
+  console.log(filePath);
 
 
   useEffect(() => {
