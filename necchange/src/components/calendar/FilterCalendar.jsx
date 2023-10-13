@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
-import UCsJSON from '../../data/filters.json'
+import UCsObj from '../../data/filters.json'
 
 export default function FilterCalendar(props) {
   const { setFinalArray } = props;
@@ -14,16 +14,16 @@ export default function FilterCalendar(props) {
     axios.get("/api/calendar/getCalendar").then((res) => {
 
       const divideByType = res.data.response.reduce((acc, uc) => {
-        const { year, type } = getYearAndTypeByEvent(uc);
+        const { year, type, UC } = getYearAndTypeByEvent(uc);
 
         if (year != 0) { 
 
-          acc.avaliacoes.push({ ...uc, year, type });
+          acc.avaliacoes.push({ ...uc, year, type, UC });
           return acc;
 
         } else {
 
-          acc.eventos.push({ ...uc, year, type });
+          acc.eventos.push({ ...uc, year, type, UC });
           return acc;
 
         }
@@ -62,13 +62,6 @@ export default function FilterCalendar(props) {
     
   }, [actualFilter.yearFilter, actualFilter.typeFilter]);
 
-  // useEffect(() => {
-  //   axios.get("/api/calendar/getUCS").then((res) => {
-  //     setUCs(res.data.response);
-  //     // console.log("UCS: " ,res.data.response);
-  //   })
-  // }, []);
-
   const handleYear = (e) => {
     const year = Number((e.target.id).charAt(0));
 
@@ -96,29 +89,34 @@ export default function FilterCalendar(props) {
   const getYearAndTypeByEvent = (event) => {
     const yearRegexp = event.title.match(/\((1|2|3)º ano\)/)
     const matches = event.title.match(/\b(Teste|Exame|Entrega)\b/);
-
+    
     const result = {
       type: null,
       year: null,
+      UC: null,
     };
-  
+    
     if (matches) {
+      const UC = event.title.split(" ")[0];
+
       matches.forEach(match => {
-          if (match === "Teste" || match === "Exame" || match === "Entrega") {
-              result.type = match;
-          } 
+        if (match === "Teste" || match === "Exame" || match === "Entrega") {
+          result.type = match;
+        } 
           
-          if (yearRegexp) {
-              result.year = Number(yearRegexp[1]);
-          }
+        if (yearRegexp) {
+          result.year = Number(yearRegexp[1]);
+        }
+
+        result.UC = UC;
       });
 
-      console.log(event);
     }
 
-    if (!result.type && !result.year) {
+    if (!result.type && !result.year && !result.UC) {
       result.type = 'Evento';
       result.year = 0;
+      result.UC = '';
     }
 
     return result;
@@ -139,15 +137,32 @@ export default function FilterCalendar(props) {
         </div>
 
         {/* Years Container */}
-        <div className={`w-full flex flex-col justify-center items-center overflow-hidden transition-all duration-300 ${isOpened.avaliacoes ? 'h-[100px]' : 'h-0'}`}>
+        <div className={`w-full flex flex-col justify-center items-center overflow-hidden transition-all duration-300 ${isOpened.avaliacoes ? 'h-[300px]' : 'h-0'}`}>
           
-          <div className="p-[4px] px-3 w-11/12 flex flex-row items-center justify-between border-b">
-            <div className="flex flex-row items-center">
-              <input onChange={handleYear} className="h-[14px] w-[14px] ml-1" type="checkbox" name="1ano" id="1ano" />
-              <label className="text-md pl-2 mt-[2px]" htmlFor="1ano">1° ano</label>
-            </div>
+          <div className="p-[4px] px-3 w-11/12 flex flex-col items-center justify-between border-b">
+            <div className="flex flex-row justify-between items-center w-full">
+              <div>
+                <input onChange={handleYear} className="h-[14px] w-[14px] ml-1" type="checkbox" name="1ano" id="1ano" />
+                <label className="text-md pl-2 mt-[2px]" htmlFor="1ano">1° ano</label>
+              </div>
             <FiChevronDown onClick={() => setIsOpened({ avaliacoes: true, year: 1 })} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 1 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
+            </div>
+
+            <div>
+              <div className="flex flex-row items-center">
+                <input onChange={handleYear} className="h-[14px] w-[14px] ml-1" type="checkbox" name="1ano" id="1ano" />
+                <label className="text-md pl-2 mt-[2px]" htmlFor="1ano">1° ano</label>
+              </div>
+              <div className="flex flex-row items-center">
+                <input onChange={handleYear} className="h-[14px] w-[14px] ml-1" type="checkbox" name="1ano" id="1ano" />
+                <label className="text-md pl-2 mt-[2px]" htmlFor="1ano">1° ano</label>
+              </div>
+            </div>            
+
           </div>
+
+
+
           <div className="p-[4px] px-3 w-11/12 flex flex-row items-center justify-between border-b">
             <div className="flex flex-row items-center">
               <input onChange={handleYear} className="h-[14px] w-[14px] ml-1" type="checkbox" name="2ano" id="2ano" />
@@ -155,6 +170,9 @@ export default function FilterCalendar(props) {
             </div>
             <FiChevronDown onClick={() => setIsOpened({ avaliacoes: true, year: 2 })} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 2 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
           </div>
+
+
+
           <div className="p-[4px] px-3 w-11/12 flex flex-row items-center justify-between">
             <div className="flex flex-row items-center">
               <input onChange={handleYear} className="h-[14px] w-[14px] ml-1" type="checkbox" name="3ano" id="3ano" />
@@ -162,7 +180,12 @@ export default function FilterCalendar(props) {
             </div>
             <FiChevronDown onClick={() => setIsOpened({ avaliacoes: true, year: 3 })} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 3 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
           </div>
+
+
+
         </div>
+
+
 
         {/* Eventos Container */}
         <div className="p-[6px] border rounded-lg w-full flex flex-row items-center justify-between mt-2">
