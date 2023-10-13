@@ -77,7 +77,8 @@ async function sendVerificationRequest(params) {
     attachments: [{
       filename: 'image.png',
       path: file2,
-      cid: 'unique@nodemailer.com' //same cid value as in the html img src
+      cid: 'unique@nodemailer.com', //same cid value as in the html img src
+      contentDisposition: 'inline'
     }],
   });
   const failed = result.rejected.concat(result.pending).filter(Boolean);
