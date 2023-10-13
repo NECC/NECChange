@@ -41,22 +41,11 @@ export const authOptions = {
 import { createTransport } from "nodemailer";
 
 async function sendVerificationRequest(params) {
-
-  // Isso daqui é so um teste, é gambiarra e acho melhor tirar ou testar mais vezes
-  const file2 = process.cwd() + '/neccSticker.png';
-  // const file = __dirname.split("/");
-  // if (file[file.length - 1] == "[...nextauth]") {
-  //   file.pop();
-  //   file.push("signin");
-  // }
-  // const finalFile = file.join("/") + '/neccSticker.png';
-
-  // console.log("FILEEEE: ", file);
-  // console.log("FILEEEE: ", file.join("/"));
-  // console.log("FILE2: ", process.cwd() + '/neccSticker.png');
+  const file = process.cwd() + "/neccSticker.png";
 
   const { identifier, url, provider, theme } = params;
   const { host } = new URL(url);
+
   // NOTE: You are not required to use `nodemailer`, use whatever you want.
   const transport = createTransport(provider.server);
   const result = await transport.sendMail({
@@ -65,21 +54,23 @@ async function sendVerificationRequest(params) {
     subject: `Sign in to ${host}`,
     text: text({ url, host }),
     html: `
- <div style="background-color:#f9f9f9;display:flex;justify-content:center;flex-direction:column;align-items:center">
+<div style="background-color:#f9f9f9;display:flex;justify-content:center;flex-direction:column;align-items:center">
   <div style="background-color:#fff ;width:70%;display:flex;justify-content:center">
-      <img style="height:150px; width:150px" src="cid:unique@nodemailer.com"/> 
+    <img style="height:150px; width:150px" src="cid:unique@nodemailer.com"/> 
   </div>
   <div style="width:70% ;background-color:#fff">
     ${html({ url, host, theme })}
   </div>
- </div>
+</div>
     `,
-    attachments: [{
-      filename: 'image.png',
-      path: file2,
-      cid: 'unique@nodemailer.com', //same cid value as in the html img src
-      contentDisposition: 'inline'
-    }],
+    attachments: [
+      {
+        filename: "image.png",
+        path: file,
+        cid: "unique@nodemailer.com", //same cid value as in the html img src
+        contentDisposition: "inline",
+      },
+    ],
   });
   const failed = result.rejected.concat(result.pending).filter(Boolean);
   if (failed.length) {
@@ -107,51 +98,45 @@ function html(params) {
     buttonBackground: brandColor,
     buttonBorder: brandColor,
     buttonText: theme.buttonText || "#fff",
-  };  
+  };
 
-  const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url
+  const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url;
   return `
 <body>
-    <table width="100%" border="0" cellspacing="20" cellpadding="0"
-      style="background: ${color.mainBackground
-    }; max-width: 600px; margin: auto; border-radius: 10px;">
-      <tr>
-        <td style="font-size: 18px; font-family: Helvetica, Arial, sans-serif">
-          <h5>Dear [@username],</h5>
-          To enhance your account security, we require a quick verification process.Please click the button below to proceed:
-        </td>
-      </tr>
-      <tr>
-        <td align="center"
-          style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text
-    };">
-          Sign in to <strong>${escapedHost}</strong>
-        </td>
-      </tr>
-      <tr>  
-        <td align="center" style="padding: 10px 0;">
-          <table border="0" cellspacing="0" cellpadding="0">
-            <tr>
-              <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground
-    }"><a href="${redirect}"
-                  target="_blank"
-                  style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText
-    }; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${color.buttonBorder
-    }; display: inline-block; font-weight: bold;">Sign
-                  in</a></td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td align="center"
-          style="padding: 30px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text
-    };">
-          If you did not request this email you can safely ignore it.
-          <br>
-        </td>
-      </tr>
-    </table>
+  <table width="100%" border="0" cellspacing="20" cellpadding="0"
+    style="background: ${color.mainBackground}; max-width: 600px; margin: auto; border-radius: 10px;">
+    <tr>
+      <td style="font-size: 18px; font-family: Helvetica, Arial, sans-serif">
+        <h5>Dear [@username],</h5>
+        To enhance your account security, we require a quick verification process.Please click the button below to proceed:
+      </td>
+    </tr>
+    <tr>
+      <td align="center"
+        style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
+        Sign in to <strong>${escapedHost}</strong>
+      </td>
+    </tr>
+    <tr>  
+      <td align="center" style="padding: 10px 0;">
+        <table border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground}"><a href="${redirect}"
+                target="_blank"
+                style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${color.buttonBorder}; display: inline-block; font-weight: bold;">Sign
+                in</a></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td align="center"
+        style="padding: 30px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
+        If you did not request this email you can safely ignore it.
+        <br>
+      </td>
+    </tr>
+  </table>
 </body>
   `;
 }
