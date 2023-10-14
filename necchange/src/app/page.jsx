@@ -13,7 +13,7 @@ export default function CalendarPage() {
   return (
     <div className="bg-white min-h-screen pt-24 flex">
       
-      <FilterCalendar setFinalArray={setFinalArray}/>
+      <FilterCalendar setFinalArray={setFinalArray} finalArray={finalArray}/>
 
       <div className="pt-8 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
         <FullCalendar
