@@ -106,7 +106,7 @@
     },
     {
         "calendar": "SCR",
-        "name": "Sistemas de Comunicações e Redes",
+        "name": "Redes e Comunicações",
         "year": 2,
         "semester": 1,
         "shifts": []
@@ -120,7 +120,7 @@
     },
     {
         "calendar": "ALF",
-        "name": "Autómatos e Linguagens Formais",
+        "name": "Autómatos",
         "year": 2,
         "semester": 2,
         "shifts": []
@@ -141,7 +141,7 @@
     },
     {
         "calendar": "POO",
-        "name": "Programação Orientada aos Objetos",
+        "name": "POO",
         "year": 2,
         "semester": 2,
         "shifts": []
@@ -162,7 +162,7 @@
     },
     {
         "calendar": "CC",
-        "name": "Computabilidade e Complexidade",
+        "name": "CC",
         "year": 3,
         "semester": 1,
         "shifts": []
@@ -183,7 +183,7 @@
     },
     {
         "calendar": "PLC",
-        "name": "Processamento de Linguagens e Compiladores",
+        "name": "PLC",
         "year": 3,
         "semester": 1,
         "shifts": []
@@ -218,14 +218,14 @@
     },
     {
         "calendar": "SLP",
-        "name": "Semântica das Linguagens de Programação",
+        "name": "SLP",
         "year": 3,
         "semester": 2,
         "shifts": []
     },
     {
         "calendar": "TNC",
-        "name": "Teoria de Números Computacional",
+        "name": "TNC",
         "year": 3,
         "semester": 2,
         "shifts": []
