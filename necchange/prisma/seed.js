@@ -1,11 +1,11 @@
-const { PrismaClient, Role } = require('@prisma/client');
+const { PrismaClient, Role } = require("@prisma/client");
 const { Faker, pt_PT } = require("@faker-js/faker");
-const schedule = require("../public/data/input/schedule.json")
-const ucs = require("../public/data/input/ucs.json")
-const alocationJson = require("../public/data/input/alocation.json")
+const schedule = require("../public/data/input/schedule.json");
+const ucs = require("../public/data/input/ucs.json");
+const alocationJson = require("../public/data/input/alocation.json");
+const axios = require("axios");
 
 const alocation = alocationJson;
-
 
 const ucs_ids = {};
 
@@ -30,17 +30,17 @@ async function populate_ucs() {
 }
 
 const weekdays = {
-  "Segunda": 1,
-  "Terça": 2,
-  "Quarta": 3,
-  "Quinta": 4,
-  "Sexta": 5
+  Segunda: 1,
+  Terça: 2,
+  Quarta: 3,
+  Quinta: 4,
+  Sexta: 5,
 };
 
 const type_class = {
-  "T": 1,
-  "TP": 2,
-  "PL": 3
+  T: 1,
+  TP: 2,
+  PL: 3,
 };
 
 let classes = [];
@@ -69,6 +69,7 @@ async function populate_classes() {
   return classes;
 }
 
+/*
 function encrypt(number) {
   const split_string = number.split("");
 
@@ -80,15 +81,15 @@ function encrypt(number) {
   return number_decoded.join("");
 }
 
-let students = [];
-async function populate_students() {
+let users = [];
+async function populate_users() {
   let i = 1;
   const portugueseFaker = new Faker({ locale: [pt_PT] });
 
   Promise.all(
     Object.keys(alocation).map(async (student_nr) => {
       if (student_nr != "default") {
-        let student = {
+        let user = {
           uniqueId: i,
           number: student_nr,
           firstname: portugueseFaker.person.firstName(),
@@ -97,7 +98,7 @@ async function populate_students() {
           partner: false,
           role: Role.STUDENT,
         };
-        students.push(student);
+        users.push(user);
         i++;
       }
     })
@@ -116,6 +117,47 @@ async function populate_students() {
   students.push(super_user);
 
   return students;
+}
+*/
+
+async function populate_partners() {
+  let partners = [];
+
+  const partnersSheet = await axios
+    .get(
+      `https://sheetdb.io/api/v1/5339063taai3t?sort_by=Nº&sort_order=asc&offset=389`,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Basic " + btoa(`mwbsb7wt:qbmw29mkeh557kybdnf2`),
+        },
+      }
+    )
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  let i = 0;
+  partnersSheet.map((partner) => {
+    partnerAcademicNumber = partner["Numero"].toLowerCase();
+    partners.push({
+      uniqueId: i,
+      partnerNumber: parseInt(partner["Nº"]),
+      number: partnerAcademicNumber,
+      name: partner["Nome"],
+      email: partnerAcademicNumber + "@alunos.uminho.pt",
+      partner: true,
+      role: Role.OUTSIDER,
+    });
+    i++;
+  });
+
+  return partners;
+  //console.log(partners);
 }
 
 async function populate_student_class() {
@@ -170,10 +212,13 @@ async function populate_student_class() {
 const prisma = new PrismaClient();
 
 async function main() {
+  /*
   const ucs = await populate_ucs();
   const classes = await populate_classes();
-  const students = await populate_students();
+  const users = await populate_users();
   const students_classes = await populate_student_class();
+  */
+  const partners = await populate_partners();
 
   console.log("A apagar tudo!");
   await nuclear_bomb();
@@ -185,6 +230,15 @@ async function main() {
     },
   });
 
+  await Promise.all(
+    partners.map(async (partner) => {
+      console.log(partner);
+      await prisma.user.create({
+        data: partner,
+      });
+    }));
+
+  /*
   console.log("A introduzir courses");
   ucs.map(async (uc) => {
     await prisma.course.create({
@@ -194,13 +248,13 @@ async function main() {
 
   console.log("A introduzir users");
   await Promise.all(
-    students.map(async (student) => {
+    users.map(async (user) => {
       await prisma.user.create({
-        data: student,
+        data: user,
       });
     })
   );
-
+  
   console.log("A introduzir lessons");
   await Promise.all(
     classes.map(async (class_add) => {
@@ -218,6 +272,7 @@ async function main() {
       });
     })
   );
+  */
 }
 
 main()
