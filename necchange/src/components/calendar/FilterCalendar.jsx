@@ -8,7 +8,7 @@ import CustomCheckbox from "./CustomCheckbox";
 export default function FilterCalendar(props) {
   const { setFinalArray, finalArray } = props;
   const [events, setEvents] = useState({ avaliacoes: [], eventos: [] });
-  const [actualFilter, setActualFilter] = useState({ UcsFilter: [] });
+  const [actualFilter, setActualFilter] = useState({ UcsFilter: [], eventsFilter: ['Evento'] });
   const [isOpened, setIsOpened] = useState({ avaliacoes: true, eventos: false, year: 1 });
 
   useEffect(() => {
@@ -46,12 +46,19 @@ export default function FilterCalendar(props) {
         return actualFilter.UcsFilter.includes(elem.UC);
       })
 
-      setFinalArray([ ...newTests ]);
+      if (actualFilter.eventsFilter.length > 0) {
+        const newEvents = events.eventos.filter((elem) => {
+          return actualFilter.eventsFilter.includes(elem.type);
+        });
+
+        setFinalArray([ ...newEvents, ...newTests ]);
+      } else setFinalArray([ ...newTests ]);
+
     } else {
       setFinalArray([ ...events.eventos ]);
     }
     
-  }, [actualFilter.UcsFilter]);
+  }, [actualFilter.UcsFilter, actualFilter.eventsFilter]);
 
   const handleYear = (id) => {
     const year = Number(id.charAt(0));
@@ -70,9 +77,9 @@ export default function FilterCalendar(props) {
     // If weren't, all UCs from the given year will be selected
     if (res) {
       const newArray = actualFilter.UcsFilter.filter((uc) => !newUcs.includes(uc));
-      setActualFilter({ UcsFilter: newArray });
+      setActualFilter({ ...actualFilter, UcsFilter: newArray });
     } else {
-      setActualFilter({ UcsFilter: finalArrayUcs });
+      setActualFilter({ ...actualFilter, UcsFilter: finalArrayUcs });
     }
   }
   
@@ -95,9 +102,9 @@ export default function FilterCalendar(props) {
     // If weren't, all UCs from the given year will be selected
     if (res) {
       const newArray = actualFilter.UcsFilter.filter((uc) => !newUcs.includes(uc));
-      setActualFilter({ UcsFilter: newArray });
+      setActualFilter({ ...actualFilter, UcsFilter: newArray });
     } else {
-      setActualFilter({ UcsFilter: finalArrayUcs });
+      setActualFilter({ ...actualFilter, UcsFilter: finalArrayUcs });
     }
 
   }
@@ -112,11 +119,11 @@ export default function FilterCalendar(props) {
 
     if (type == 'avaliacoes') {
       if (actualFilter.UcsFilter.length == 0) {
-        setActualFilter({ UcsFilter: [ ...allUcsArray ]});
+        setActualFilter({ ...actualFilter, UcsFilter: [ ...allUcsArray ]});
       } else if (actualFilter.UcsFilter.length == allUcsLength) {
-        setActualFilter({ UcsFilter: []});
+        setActualFilter({ ...actualFilter, UcsFilter: []});
       } else {
-        setActualFilter({ UcsFilter: []});        
+        setActualFilter({ ...actualFilter, UcsFilter: []});        
       }
     }
   }
@@ -126,11 +133,22 @@ export default function FilterCalendar(props) {
 
     if (actualFilter.UcsFilter.includes(uc)) {
       const newArray = actualFilter.UcsFilter.filter((t) => t != uc);
-      setActualFilter({ UcsFilter: newArray, });
+      setActualFilter({ ...actualFilter, UcsFilter: newArray });
     } else {
       const newArray = [...actualFilter.UcsFilter, uc];
-      setActualFilter({ UcsFilter: newArray });
+      setActualFilter({ ...actualFilter, UcsFilter: newArray });
     }
+
+  }
+
+  const handleEvents = () => {
+    if (actualFilter.eventsFilter.includes('Evento')) {
+      setActualFilter({ ...actualFilter, eventsFilter: [] });
+    } else {
+      setActualFilter({ ...actualFilter, eventsFilter: ['Evento'] });
+    }
+
+    console.log(actualFilter);
   }
 
   const getYearAndTypeByEvent = (event) => {
@@ -174,6 +192,10 @@ export default function FilterCalendar(props) {
     return result;
   };
 
+  const handleOpenedYear = (year) => {
+    if (isOpened.year == year) setIsOpened({...isOpened, year: 0 });
+    else setIsOpened({...isOpened, year });
+  }
 
   return (
     <div className="p-6 border-r w-3/12 flex flex-col items-center">
@@ -197,7 +219,7 @@ export default function FilterCalendar(props) {
                 <CustomCheckbox style="w-[18px] h-[18px]" id="1ano" array={actualFilter.UcsFilter} handle={handleYear} scope="year"/>
                 <label onClick={() => handleYear('1ano')} className="text-md pl-2 mt-[2px]" htmlFor="1ano">1° ano</label>
               </div>
-            <FiChevronDown onClick={() => setIsOpened({ avaliacoes: true, year: 1 })} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 1 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
+            <FiChevronDown onClick={() => handleOpenedYear(1)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 1 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
 
             <div className="w-full pl-2 border-b m-2 text-lg flex items-center">              
@@ -245,7 +267,7 @@ export default function FilterCalendar(props) {
                 <CustomCheckbox style="w-[18px] h-[18px]" id="2ano" array={actualFilter.UcsFilter} handle={handleYear} scope="year"/>
                 <label onClick={() => handleYear('2ano')} className="text-md pl-2 mt-[2px]" htmlFor="2ano">2° ano</label>
               </div>
-              <FiChevronDown onClick={() => setIsOpened({ avaliacoes: true, year: 2 })} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 2 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
+              <FiChevronDown onClick={() => handleOpenedYear(2)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 2 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
 
             <div className="w-full pl-2 border-b m-2 text-lg flex items-center">              
@@ -292,7 +314,7 @@ export default function FilterCalendar(props) {
                 <CustomCheckbox style="w-[18px] h-[18px]" id="3ano" array={actualFilter.UcsFilter} handle={handleYear} scope="year"/>
                 <label onClick={() => handleYear('3ano')} className="text-md pl-2 mt-[2px]" htmlFor="3ano">3° ano</label>
               </div>
-              <FiChevronDown onClick={() => setIsOpened({ avaliacoes: true, year: 3 })} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 3 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
+              <FiChevronDown onClick={() => handleOpenedYear(3)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 3 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
 
             <div className="w-full pl-2 border-b m-2 text-lg flex items-center">              
@@ -340,7 +362,7 @@ export default function FilterCalendar(props) {
         {/* Eventos Container */}
         <div className="p-[6px] border rounded-lg w-full flex flex-row items-center justify-between mt-2">
           <div className="flex flex-row items-center">
-            <input onChange={handleType} className="h-5 w-5 ml-1" type="checkbox" name="eventos" id="eventos"/>
+            <CustomCheckbox style="w-[16px] h-[16px]" id="Evento" array={actualFilter.eventsFilter} handle={handleEvents} scope="uc"/>
             <label className="text-xl pl-2 mt-[2px]" htmlFor="eventos">Eventos</label>
           </div>
           <div onClick={() => setIsOpened({ eventos: !isOpened.eventos })} className="h-full w-8 flex justify-center items-center bg-black rounded-md">
