@@ -11,7 +11,21 @@ export default function CustomCheckbox(props) {
     useEffect(() => {
         const checkIfInArray = () => {
 
-            if (scope == 'uc') {
+            if (scope == 'semester') {
+                // XanoYsemestre
+                const year = Number(id.charAt(0));
+                const semester = Number(id.charAt(4));
+
+                const yearUcs = UCsObj.filter((elem) => {
+                    return elem.year == year && elem.semester == semester;
+                }).map((elem) => elem.calendar);
+                
+                const res = yearUcs.every((elem) => array.includes(elem));
+                const res2 = yearUcs.some((elem) => array.includes(elem));
+                
+                handleCheckBoxes(res, res2);
+
+            } else if (scope == 'uc') {
 
                 const res = array.includes(id);
                 
@@ -33,17 +47,7 @@ export default function CustomCheckbox(props) {
                 const res = yearUcs.every((elem) => array.includes(elem));
                 const res2 = yearUcs.some((elem) => array.includes(elem));
                 
-                if (res) {
-                    setIsChecked(true);
-                    setIsSomeChecked(false);
-                } 
-                else if (res2) {
-                    setIsChecked(false);
-                    setIsSomeChecked(true)
-                } else {
-                    setIsChecked(false);
-                    setIsSomeChecked(false);
-                }
+                handleCheckBoxes(res, res2);
 
             } else if (scope == 'type') {
 
@@ -51,21 +55,25 @@ export default function CustomCheckbox(props) {
                 const res = yearUcs.every((elem) => array.includes(elem));
                 const res2 = yearUcs.some((elem) => array.includes(elem));
                 
-                if (res) {
-                    setIsChecked(true);
-                    setIsSomeChecked(false);
-                } 
-                else if (res2) {
-                    setIsChecked(false);
-                    setIsSomeChecked(true)
-                } else {
-                    setIsChecked(false);
-                    setIsSomeChecked(false);
-                }
+                handleCheckBoxes(res, res2);
             }
         }
         checkIfInArray();
     }, [array])
+
+    const handleCheckBoxes = (res, res2) => {
+        if (res) {
+            setIsChecked(true);
+            setIsSomeChecked(false);
+        } 
+        else if (res2) {
+            setIsChecked(false);
+            setIsSomeChecked(true)
+        } else {
+            setIsChecked(false);
+            setIsSomeChecked(false);
+        }
+    }
 
     return (
         <div onClick={() => handle(id)} className={`${style} ml-1 border rounded-sm cursor-pointer flex justify-center items-center ${isChecked || isSomeChecked ? 'bg-blue-100 border-blue-600' : 'bg-none border-gray-400'}`} id={id}>

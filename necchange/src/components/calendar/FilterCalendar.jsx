@@ -59,13 +59,13 @@ export default function FilterCalendar(props) {
     const newUcs = UCsObj.filter((elem) => {
       return elem.year == year;
     }).map((elem) => elem.calendar);
-
+    
     const finalArrayUcs = [...new Set([...actualFilter.UcsFilter, ...newUcs])];
-
+    
     // true - Every uc is selected
     // false - There are UCs that aren't selected
     const res = finalArrayUcs.every((elem) => actualFilter.UcsFilter.includes(elem));
-
+    
     // This condition will filter the array if all UCs from a year were selected before
     // If weren't, all UCs from the given year will be selected
     if (res) {
@@ -75,14 +75,40 @@ export default function FilterCalendar(props) {
       setActualFilter({ UcsFilter: finalArrayUcs });
     }
   }
+  
+  const handleSemester = (id) => {
+    // XanoYsemestre
+    const semester = Number(id.charAt(4));
+    const year = Number(id.charAt(0));
+    
+    const newUcs = UCsObj.filter((elem) => {
+      return elem.year == year && elem.semester == semester;
+    }).map((elem) => elem.calendar);
+
+    const finalArrayUcs = [...new Set([...actualFilter.UcsFilter, ...newUcs])];
+
+    // true - Every uc is selected
+    // false - There are UCs that aren't selected
+    const res = finalArrayUcs.every((elem) => actualFilter.UcsFilter.includes(elem));
+    
+    // This condition will filter the array if all UCs from a year were selected before
+    // If weren't, all UCs from the given year will be selected
+    if (res) {
+      const newArray = actualFilter.UcsFilter.filter((uc) => !newUcs.includes(uc));
+      setActualFilter({ UcsFilter: newArray });
+    } else {
+      setActualFilter({ UcsFilter: finalArrayUcs });
+    }
+
+  }
 
   const handleType = (id) => {
     const type = id;
     const allUcsLength = (UCsObj.map((elem) => elem.calendar)).length;
     const allUcsArray = UCsObj.map((elem) => elem.calendar)
-    console.log("All ucs length: ", allUcsLength);
-    console.log("Actual filter length: ", actualFilter.UcsFilter.length)
-    console.log(actualFilter.UcsFilter)
+    // console.log("All ucs length: ", allUcsLength);
+    // console.log("Actual filter length: ", actualFilter.UcsFilter.length)
+    // console.log(actualFilter.UcsFilter)
 
     if (type == 'avaliacoes') {
       if (actualFilter.UcsFilter.length == 0) {
@@ -174,8 +200,8 @@ export default function FilterCalendar(props) {
             <FiChevronDown onClick={() => setIsOpened({ avaliacoes: true, year: 1 })} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 1 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
 
-            <div className="w-full pl-2 border-b m-2 text-lg flex">              
-              <input type="checkbox" name="11semester" id="11semester" />
+            <div className="w-full pl-2 border-b m-2 text-lg flex items-center">              
+              <CustomCheckbox style="w-[16px] h-[16px]" id="1ano1semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
               <h1 className="pl-2"><strong>1° Semestre</strong></h1>
             </div>
 
@@ -192,8 +218,8 @@ export default function FilterCalendar(props) {
             })}
             </div>            
 
-            <div className="w-full pl-2 border-b m-2 text-lg flex">              
-              <input type="checkbox" name="12semester" id="12semester" />
+            <div className="w-full pl-2 border-b m-2 text-lg flex items-center">              
+              <CustomCheckbox style="w-[16px] h-[16px]" id="1ano2semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
               <h1 className="pl-2"><strong>2° Semestre</strong></h1>
             </div>
 
@@ -222,7 +248,10 @@ export default function FilterCalendar(props) {
               <FiChevronDown onClick={() => setIsOpened({ avaliacoes: true, year: 2 })} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 2 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
 
-            <h1 className="w-full pl-2 border-b m-2 text-lg"><strong>1° Semestre</strong></h1>
+            <div className="w-full pl-2 border-b m-2 text-lg flex items-center">              
+              <CustomCheckbox style="w-[16px] h-[16px]" id="2ano1semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
+              <h1 className="pl-2"><strong>1° Semestre</strong></h1>
+            </div>
 
             <div className="w-11/12">
               {UCsObj.map((uc) => {
@@ -237,7 +266,10 @@ export default function FilterCalendar(props) {
             })}
             </div>            
 
-            <h1 className="w-full pl-2 border-b m-2 text-lg"><strong>2° Semestre</strong></h1>
+            <div className="w-full pl-2 border-b m-2 text-lg flex items-center">              
+              <CustomCheckbox style="w-[16px] h-[16px]" id="2ano2semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
+              <h1 className="pl-2"><strong>2° Semestre</strong></h1>
+            </div>
 
             <div className="w-11/12">
               {UCsObj.map((uc) => {
@@ -263,7 +295,10 @@ export default function FilterCalendar(props) {
               <FiChevronDown onClick={() => setIsOpened({ avaliacoes: true, year: 3 })} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 3 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
 
-            <h1 className="w-full pl-2 border-b m-2 text-lg"><strong>1° Semestre</strong></h1>
+            <div className="w-full pl-2 border-b m-2 text-lg flex items-center">              
+              <CustomCheckbox style="w-[16px] h-[16px]" id="3ano1semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
+              <h1 className="pl-2"><strong>1° Semestre</strong></h1>
+            </div>
 
             <div className="w-11/12">
               {UCsObj.map((uc) => {
@@ -278,7 +313,10 @@ export default function FilterCalendar(props) {
             })}
             </div>            
 
-            <h1 className="w-full pl-2 border-b m-2 text-lg"><strong>2° Semestre</strong></h1>
+            <div className="w-full pl-2 border-b m-2 text-lg flex items-center">              
+              <CustomCheckbox style="w-[16px] h-[16px]" id="3ano2semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
+              <h1 className="pl-2"><strong>2° Semestre</strong></h1>
+            </div>
 
             <div className="w-11/12">
               {UCsObj.map((uc) => {
