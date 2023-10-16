@@ -125,12 +125,12 @@ async function populate_partners() {
 
   const partnersSheet = await axios
     .get(
-      `https://sheetdb.io/api/v1/5339063taai3t?sort_by=Nº&sort_order=asc&offset=389`,
+      `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHHETDB_ID}?sort_by=Nº&sort_order=asc&offset=389`,
       {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: "Basic " + btoa(`mwbsb7wt:qbmw29mkeh557kybdnf2`),
+          Authorization: "Basic " + btoa(`${process.env.NEXT_PUBLIC_SHEETDB_LOGIN}:${process.env.NEXT_PUBLIC_SHEETDB_PASSWORD}`),
         },
       }
     )
