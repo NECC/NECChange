@@ -8,6 +8,7 @@ export default function CustomCheckbox(props) {
     const [isChecked, setIsChecked] = useState(true);
     const [isSomeChecked, setIsSomeChecked] = useState(false);
 
+    // TODO: Delete the const checkIfInArray function
     useEffect(() => {
         const checkIfInArray = () => {
 
