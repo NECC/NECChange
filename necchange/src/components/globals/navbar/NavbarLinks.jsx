@@ -13,6 +13,7 @@ function NavbarLinks(props) {
 
             </li>
             {
+                /*
                 (session) ?
                     <>
                         <li>
@@ -31,7 +32,23 @@ function NavbarLinks(props) {
                             <button className={linkStyle + " text-left"} onClick={() => signIn()}>Login</button>
                         </li>
                     </>
+                    */
                 
+                (session) ? 
+                    <>
+                        <li>
+                            <Link className={linkStyle} href="/profile">Perfil</Link>
+                        </li>
+                        <li>
+                            <button className={linkStyle + " text-left"} onClick={() => signOut()}>Logout</button>
+                        </li>
+                    </>
+                    :
+                    <>
+                        <li>
+                            <button className={linkStyle + " text-left"} onClick={() => signIn()}>Login</button>
+                        </li>
+                    </>
             }
             {
             (session?.user.role == 'SUPER_USER') 

@@ -10,9 +10,9 @@ export async function GET(req, context) {
       uniqueId: uniqueId
     },
     select:{
-      firstname: true,
-      lastname: true,
+      name: true,
       role: true,
+      phone: true,
       partner: true,
       email: true
     }

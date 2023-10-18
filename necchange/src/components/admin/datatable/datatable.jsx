@@ -6,12 +6,8 @@ export const DataTableContext = React.createContext(null);
 export default function DataTable(props) {
   const router = useRouter();
   const usersArray = props.data;
-  const [editedUsers, setEditedUser] = React.useState(new Map());
-  const updateEditedUsers = (key, value) => {
-    setEditedUser((map) => new Map(map.set(key, value)));
-  };
 
-  
+  console.log(usersArray);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -19,16 +15,16 @@ export default function DataTable(props) {
         <thead className="text-xs text-gray-700 uppercase bg-gray-400 dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3">
-              Numero
+              Número
             </th>
             <th scope="col" className="px-6 py-3">
-              Nome
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Apelido
+              Nome Completo
             </th>
             <th scope="col" className="px-6 py-3">
               Email
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Telemóvel
             </th>
             <th scope="col" className="px-6 py-3">
               Sócio
@@ -48,9 +44,9 @@ export default function DataTable(props) {
                     >
                         {user.number}
                     </th>
-                    <td className="px-6 py-6">{user.firstname}</td>
-                    <td className="px-6 py-6">{user.lastname}</td>
+                    <td className="px-6 py-6">{user.name}</td>
                     <td className="px-6 py-6">{user.email}</td>
+                    <td className="px-6 py-6">{user.phone}</td>
                     <td className="px-6 py-6">
                         <input type="checkbox" defaultChecked={user.partner} />
                     </td>

@@ -106,6 +106,7 @@ model User {
   number        String?   @unique @db.VarChar(20)
   name          String?   @db.VarChar(100)
   email         String?   @unique
+  phone         String?   @db.VarChar(20)
   emailVerified DateTime?
   partner       Boolean?
   role          Role?

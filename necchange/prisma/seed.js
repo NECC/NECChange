@@ -143,6 +143,7 @@ async function populate_partners() {
 
   let i = 0;
   partnersSheet.map((partner) => {
+    //console.log(partner);
     partnerAcademicNumber = partner["Numero"].toLowerCase();
     partners.push({
       uniqueId: i,
@@ -150,14 +151,23 @@ async function populate_partners() {
       number: partnerAcademicNumber,
       name: partner["Nome"],
       email: partnerAcademicNumber + "@alunos.uminho.pt",
+      phone: partner["Telefone"],
       partner: true,
       role: Role.OUTSIDER,
     });
     i++;
   });
 
+  partners.push({
+    uniqueId: i,
+    name: "Devs",
+    email: "dev@necc.di.uminho.pt",
+    partner: true,
+    role: Role.SUPER_USER
+  })
+  i++;
+
   return partners;
-  //console.log(partners);
 }
 
 async function populate_student_class() {
@@ -232,7 +242,7 @@ async function main() {
 
   await Promise.all(
     partners.map(async (partner) => {
-      console.log(partner);
+      //console.log(partner);
       await prisma.user.create({
         data: partner,
       });
