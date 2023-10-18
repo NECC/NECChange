@@ -5,7 +5,7 @@ import UCsObj from '../../data/filters.json'
 
 export default function CustomCheckbox(props) {
     const { id, array, handle, scope, style } = props;
-    const [isChecked, setIsChecked] = useState(true);
+    const [isChecked, setIsChecked] = useState(false);
     const [isSomeChecked, setIsSomeChecked] = useState(false);
 
     // TODO: Delete the const checkIfInArray function

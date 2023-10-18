@@ -5,44 +5,36 @@ import { FiChevronDown } from "react-icons/fi";
 import UCsObj from '../../data/filters.json'
 import CustomCheckbox from "./CustomCheckbox";
 
-// TODO: Acho que o default deve ser nada selecionado e ele mostrar tudo
-// TODO: Ao abrir um ano os semestres deviam estar fechados e tu abres o semestre que queres para filtrar as cadeiras
 // TODO: acho que tb podíamos tentar meter os filtros um bocado mais bonitos em termos de cor e assim
 // TODO: Code clean up
 
 export default function FilterCalendar(props) {
-  const { setFinalArray, finalArray } = props;
+  const { setFinalArray, rawEvents } = props;
   const [events, setEvents] = useState({ avaliacoes: [], eventos: [] });
-  const [actualFilter, setActualFilter] = useState({ UcsFilter: [], eventsFilter: ['Evento'] });
-  const [isOpened, setIsOpened] = useState({ avaliacoes: true, eventos: false, year: 1, semester: 0 });
+  const [actualFilter, setActualFilter] = useState({ UcsFilter: [], eventsFilter: [] });
+  const [isOpened, setIsOpened] = useState({ avaliacoes: true, eventos: false, year: 0, semester: 0 });
 
   useEffect(() => {
-    axios.get("/api/calendar/getCalendar").then((res) => {
+    const divideByType = rawEvents.reduce((acc, uc) => {
+      const { year, type, UC, semester } = getYearAndTypeByEvent(uc);
 
-      const divideByType = res.data.response.reduce((acc, uc) => {
-        const { year, type, UC, semester } = getYearAndTypeByEvent(uc);
+      if (year != 0) { 
 
-        if (year != 0) { 
+        acc.avaliacoes.push({ ...uc, year, type, UC, semester });
+        return acc;
 
-          acc.avaliacoes.push({ ...uc, year, type, UC, semester });
-          return acc;
+      } else {
 
-        } else {
+        acc.eventos.push({ ...uc, year, type, UC, semester });
+        return acc;
 
-          acc.eventos.push({ ...uc, year, type, UC, semester });
-          return acc;
+      }
+    }, { eventos: [], avaliacoes: [] });
+    
+    // console.log(divideByType);
+    setEvents(divideByType);
+  }, [rawEvents])
 
-        }
-      }, { eventos: [], avaliacoes: [] });
-      
-      console.log(divideByType);
-      setEvents(divideByType);
-      setFinalArray([...divideByType.eventos, ...divideByType.avaliacoes]);
-    });
-
-    handleType('avaliacoes');
-  }, []);
-  
   // This useEffect is the most important, it has all the logic to filter the events in calendar
   useEffect(() => {
 
@@ -59,8 +51,12 @@ export default function FilterCalendar(props) {
         setFinalArray([ ...newEvents, ...newTests ]);
       } else setFinalArray([ ...newTests ]);
 
-    } else {
+    } else if (actualFilter.eventsFilter.length > 0) {
       setFinalArray([ ...events.eventos ]);
+    }
+    else {
+      // no filtering
+      setFinalArray([...events.eventos, ...events.avaliacoes]);
     }
     
   }, [actualFilter.UcsFilter, actualFilter.eventsFilter]);
@@ -114,8 +110,7 @@ export default function FilterCalendar(props) {
 
   }
 
-  const handleType = (id) => {
-    const type = id;
+  const handleType = (type) => {
     const allUcsLength = (UCsObj.map((elem) => elem.calendar)).length;
     const allUcsArray = UCsObj.map((elem) => elem.calendar)
     // console.log("All ucs length: ", allUcsLength);
