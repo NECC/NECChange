@@ -103,8 +103,7 @@ export default function UserPage() {
               }}
             >
               <option value={Role.STUDENT}>{Role.STUDENT}</option>
-              <option value={Role.SUPER_USER}>{Role.SUPER_USER}</option>
-              <option value={Role.PROFESSOR}>{Role.PROFESSOR}</option>
+              <option value={Role.PARTNERSHIP}>{Role.PARTNERSHIP}</option>
             </select>
           </div>
           <div>

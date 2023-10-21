@@ -1,13 +1,11 @@
-import { Router, useRouter } from "next/navigation";
+
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export const DataTableContext = React.createContext(null);
 
-export default function DataTable(props) {
+export default function DataTable({users}) {
   const router = useRouter();
-  const usersArray = props.data;
-
-  console.log(usersArray);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -35,7 +33,7 @@ export default function DataTable(props) {
           </tr>
         </thead>
         <tbody className="w-full">
-          {usersArray.map((user, index) => (
+          {users.map((user, index) => (
               <tr key={index} onClick={()=>{router.push(`/super_user/users/${user.uniqueId}`)}} 
                               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 hover:cursor-pointer">
                     <th

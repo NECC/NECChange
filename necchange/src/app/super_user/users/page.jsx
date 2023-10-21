@@ -170,7 +170,8 @@ const AddUserForm = ({ showModal, setShowModal }) => {
 export default function ManageUsers() {
   const { data: session } = useSession();
   const [users, setUsers] = useState([]);
-  const [search, setSearch] = useState("");
+  const [filterUsers, setFilterUsers] = useState([])
+
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -178,6 +179,7 @@ export default function ManageUsers() {
       try {
         const response = await axios.get(`/api/users`);
         setUsers(response.data.users);
+        setFilterUsers(response.data.users);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -185,6 +187,15 @@ export default function ManageUsers() {
 
     getEvents();
   }, []);
+
+  /* Future upgrade: Add a delay so that we don't make calls every time a key is pressed*/
+  const handleSearch = (value) => {
+    if(value != "") {
+      setFilterUsers(users.filter(user => user.number == value))
+    } else {
+      setFilterUsers(users)
+    }
+  }
 
   if (!session) return <Loader />;
 
@@ -196,8 +207,8 @@ export default function ManageUsers() {
           <div className="basis-1/2">
             <input
               type="text"
-              onChange={(e) => setSearch(e.target.value)}
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900"
+              onChange={(e) => handleSearch(e.target.value.toLowerCase())}
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-1/2 p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900"
               placeholder="Procura..."
             />
           </div>
@@ -218,7 +229,7 @@ export default function ManageUsers() {
         </div>
         {session ? (
           <>
-            <DataTable data={users} />
+            <DataTable users={filterUsers} />
           </>
         ) : (
           <></>

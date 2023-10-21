@@ -10,9 +10,7 @@ export default function Perfil() {
     const { data: session, status } = useSession()
 
     if (status !== "authenticated") return <Loader />
-    console.log(session);
 
-    
     return (
         <section className="min-h-screen grow flex flex-col justify-center items-center bg-zinc-50">
             <article className="grid grid-cols-1 md:grid-cols-2 gap-8 place-items-center px-12">
