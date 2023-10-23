@@ -2,6 +2,7 @@
     {
         "calendar": "AL",
         "name": "Álgebra Linear",
+        "sigla": "AL",
         "year": 1,
         "semester": 1,
         "shifts": ["TP1", "TP2"]
@@ -9,6 +10,7 @@
     {
         "calendar": "Cálculo",
         "name": "Cálculo",
+        "sigla": "Cálculo",
         "year": 1,
         "semester": 1,
         "shifts": ["TP1", "TP2"]        
@@ -16,6 +18,7 @@
     {
         "calendar": "PF",
         "name": "Programação Funcional",
+        "sigla": "PF",
         "year": 1,
         "semester": 1,
         "shifts": ["TP1", "TP2", "TP3"]
@@ -23,6 +26,7 @@
     {
         "calendar": "TM",
         "name": "Tópicos de Matemática",
+        "sigla": "TM",
         "year": 1,
         "semester": 1,
         "shifts": ["TP1", "TP2"]
@@ -30,6 +34,7 @@
     {
         "calendar": "Opção UM",
         "name": "Opção Uminho",
+        "sigla": "OPUM",
         "year": 1,
         "semester": 1,
         "shifts": []
@@ -37,6 +42,7 @@
     {
         "calendar": "Análise",
         "name": "Análise",
+        "sigla": "Análise",
         "year": 1,
         "semester": 2,
         "shifts": ["TP1", "TP2"]
@@ -44,6 +50,7 @@
     {
         "calendar": "Geometria",
         "name": "Geometria",
+        "sigla": "Geometria",
         "year": 1,
         "semester": 2,
         "shifts": []
@@ -51,6 +58,7 @@
     {
         "calendar": "LA I",
         "name": "Laboratório de Algoritmia I",
+        "sigla": "LA I",
         "year": 1,
         "semester": 2,
         "shifts": []
@@ -58,6 +66,7 @@
     {
         "calendar": "MD",
         "name": "Matemática Discreta",
+        "sigla": "MD",
         "year": 1,
         "semester": 2,
         "shifts": []
@@ -65,6 +74,7 @@
     {
         "calendar": "PI",
         "name": "Programação Imperativa",
+        "sigla": "PI",
         "year": 1,
         "semester": 2,
         "shifts": []
@@ -72,6 +82,7 @@
     {
         "calendar": "SC",
         "name": "Sistemas de Computação",
+        "sigla": "SC",
         "year": 1,
         "semester": 2,
         "shifts": []
@@ -79,6 +90,7 @@
     {
         "calendar": "Álgebra",
         "name": "Álgebra",
+        "sigla": "Álgebra",
         "year": 2,
         "semester": 1,
         "shifts": []
@@ -86,6 +98,7 @@
     {
         "calendar": "AC",
         "name": "Algoritmos e Complexidade",
+        "sigla": "AC",
         "year": 2,
         "semester": 1,
         "shifts": []
@@ -93,6 +106,7 @@
     {
         "calendar": "AN",
         "name": "Análise Numérica",
+        "sigla": "AN",
         "year": 2,
         "semester": 1,
         "shifts": []
@@ -100,6 +114,7 @@
     {
         "calendar": "Lógica",
         "name": "Lógica",
+        "sigla": "Lógica",
         "year": 2,
         "semester": 1,
         "shifts": []
@@ -107,13 +122,15 @@
     {
         "calendar": "SCR",
         "name": "Redes e Comunicações",
+        "sigla": "SCR",
         "year": 2,
         "semester": 1,
         "shifts": []
     },
     {
         "calendar": "AUC",
-        "name": "Álgebra Universal e Categorias",
+        "name": "AUC",
+        "sigla": "AUC",
         "year": 2,
         "semester": 2,
         "shifts": []
@@ -121,6 +138,7 @@
     {
         "calendar": "ALF",
         "name": "Autómatos",
+        "sigla": "ALF",
         "year": 2,
         "semester": 2,
         "shifts": []
@@ -128,6 +146,7 @@
     {
         "calendar": "CP",
         "name": "Cálculo de Programas",
+        "sigla": "CP",
         "year": 2,
         "semester": 2,
         "shifts": []
@@ -135,6 +154,7 @@
     {
         "calendar": "LA II",
         "name": "Laboratório de Algoritmia II",
+        "sigla": "LA II",
         "year": 2,
         "semester": 2,
         "shifts": []
@@ -142,6 +162,7 @@
     {
         "calendar": "POO",
         "name": "POO",
+        "sigla": "POO",
         "year": 2,
         "semester": 2,
         "shifts": []
@@ -149,6 +170,7 @@
     {
         "calendar": "SO",
         "name": "Sistemas Operativos",
+        "sigla": "SO",
         "year": 2,
         "semester": 2,
         "shifts": []
@@ -156,6 +178,7 @@
     {
         "calendar": "BD",
         "name": "Bases de Dados",
+        "sigla": "BD",
         "year": 3,
         "semester": 1,
         "shifts": []
@@ -163,6 +186,7 @@
     {
         "calendar": "CC",
         "name": "CC",
+        "sigla": "CC",
         "year": 3,
         "semester": 1,
         "shifts": []
@@ -170,6 +194,7 @@
     {
         "calendar": "LC",
         "name": "Lógica Computacional",
+        "sigla": "LC",
         "year": 3,
         "semester": 1,
         "shifts": []
@@ -177,6 +202,7 @@
     {
         "calendar": "PA",
         "name": "Probabilidades e Aplicações",
+        "sigla": "PA",
         "year": 3,
         "semester": 1,
         "shifts": []
@@ -184,6 +210,7 @@
     {
         "calendar": "PLC",
         "name": "PLC",
+        "sigla": "PLC",
         "year": 3,
         "semester": 1,
         "shifts": []
@@ -191,6 +218,7 @@
     {
         "calendar": "CG",
         "name": "Computação Gráfica",
+        "sigla": "CG",
         "year": 3,
         "semester": 2,
         "shifts": []
@@ -198,6 +226,7 @@
     {
         "calendar": "IC",
         "name": "Interação e Concorrência",
+        "sigla": "IC",
         "year": 3,
         "semester": 2,
         "shifts": []
@@ -205,6 +234,7 @@
     {
         "calendar": "PC",
         "name": "Programação Concorrente",
+        "sigla": "PC",
         "year": 3,
         "semester": 2,
         "shifts": []
@@ -212,6 +242,7 @@
     {
         "calendar": "Projeto",
         "name": "Projeto",
+        "sigla": "Projeto",
         "year": 3,
         "semester": 2,
         "shifts": []
@@ -219,6 +250,7 @@
     {
         "calendar": "SLP",
         "name": "SLP",
+        "sigla": "SLP",
         "year": 3,
         "semester": 2,
         "shifts": []
@@ -226,6 +258,7 @@
     {
         "calendar": "TNC",
         "name": "TNC",
+        "sigla": "TNC",
         "year": 3,
         "semester": 2,
         "shifts": []

@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import UCsObj from '../../data/filters.json'
 import CustomCheckbox from "./CustomCheckbox";
+import useWindowSize from "@rooks/use-window-size";
+
+// 1784
 
 // TODO: acho que tb podíamos tentar meter os filtros um bocado mais bonitos em termos de cor e assim
 // TODO: Code clean up
 
 export default function FilterCalendar(props) {
+  const { innerWidth } = useWindowSize();
   const { setFinalArray, rawEvents } = props;
   const [events, setEvents] = useState({ avaliacoes: [], eventos: [] });
   const [actualFilter, setActualFilter] = useState({ UcsFilter: [], eventsFilter: [] });
@@ -113,9 +117,6 @@ export default function FilterCalendar(props) {
   const handleType = (type) => {
     const allUcsLength = (UCsObj.map((elem) => elem.calendar)).length;
     const allUcsArray = UCsObj.map((elem) => elem.calendar)
-    // console.log("All ucs length: ", allUcsLength);
-    // console.log("Actual filter length: ", actualFilter.UcsFilter.length)
-    // console.log(actualFilter.UcsFilter)
 
     if (type == 'avaliacoes') {
       if (actualFilter.UcsFilter.length == 0) {
@@ -203,12 +204,12 @@ export default function FilterCalendar(props) {
   }
 
   return (
-    <div className="p-6 border-r w-3/12 flex flex-col items-center">
+    <div className="p-2 xl:p-6 hidden xl:flex border-r w-[380px] flex-col items-center">
 
         <div className="p-[6px] border rounded-lg w-full flex flex-row items-center justify-between mb-2">
           <div className="flex flex-row items-center">
             <CustomCheckbox id="avaliacoes" array={actualFilter.UcsFilter} handle={handleType} scope="type" style="w-[20px] h-[20px]"/>
-            <label onClick={() => handleType('avaliacoes')} className="text-xl pl-2 mt-[2px]" htmlFor="avaliacoes">Avaliações</label>
+            <span onClick={() => handleType('avaliacoes')} className="text-xl pl-2 mt-[2px]">Avaliações</span>
           </div>
           <div onClick={() => setIsOpened({ avaliacoes: !isOpened.avaliacoes })} className="h-full w-8 flex justify-center items-center bg-black rounded-md">
             <FiChevronDown className={`cursor-pointer transition duration-500 text-3xl text-white ${isOpened.avaliacoes ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
@@ -222,7 +223,7 @@ export default function FilterCalendar(props) {
             <div className="flex flex-row justify-between items-center w-full">
               <div className="flex flex-row items-center">
                 <CustomCheckbox style="w-[18px] h-[18px]" id="1ano" array={actualFilter.UcsFilter} handle={handleYear} scope="year"/>
-                <label onClick={() => handleYear('1ano')} className="text-md pl-2 mt-[2px]" htmlFor="1ano">1° ano</label>
+                <span onClick={() => handleYear('1ano')} className="text-md pl-2 mt-[2px]" htmlFor="1ano">1° ano</span>
               </div>
             <FiChevronDown onClick={() => handleOpenedYear(1)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 1 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
@@ -230,7 +231,7 @@ export default function FilterCalendar(props) {
             <div className="flex flex-row justify-between items-center w-full">
               <div className="w-full pl-1 mt-2 text-lg flex items-center">              
                 <CustomCheckbox style="w-[16px] h-[16px]" id="1ano1semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
-                <h1 className="pl-2"><strong>1° Semestre</strong></h1>
+                <h1 className="pl-2 xl:text-xl text-base"><strong>1° Semestre</strong></h1>
               </div>
             <FiChevronDown onClick={() => handleOpenedSemester(1)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.semester == 1 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
@@ -242,7 +243,7 @@ export default function FilterCalendar(props) {
                   return (
                   <div key={uc.calendar} className="flex flex-row items-center">
                     <CustomCheckbox style="w-[16px] h-[16px]" id={uc.calendar} array={actualFilter.UcsFilter} handle={handleUc} scope="uc"/>
-                    <label className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{uc.name}</label>
+                    <span className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{innerWidth < 1784 ? uc.sigla : uc.name}</span>
                   </div>  
                 )
                 }
@@ -252,7 +253,7 @@ export default function FilterCalendar(props) {
             <div className="flex flex-row justify-between items-center w-full">
               <div className="w-full pl-1 mt-2 text-lg flex items-center">              
                 <CustomCheckbox style="w-[16px] h-[16px]" id="1ano2semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
-                <h1 className="pl-2"><strong>2° Semestre</strong></h1>
+                <h1 className="pl-2 xl:text-xl text-base"><strong>2° Semestre</strong></h1>
               </div>
             <FiChevronDown onClick={() => handleOpenedSemester(2)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.semester == 2 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
@@ -263,7 +264,7 @@ export default function FilterCalendar(props) {
                   return (
                   <div key={uc.calendar} className="flex flex-row items-center">
                     <CustomCheckbox style="w-[16px] h-[16px]" id={uc.calendar} array={actualFilter.UcsFilter} handle={handleUc} scope="uc"/>
-                    <label className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{uc.name}</label>
+                    <span className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{innerWidth < 1784 ? uc.sigla : uc.name}</span>
                   </div>  
                 )
                 }
@@ -277,7 +278,7 @@ export default function FilterCalendar(props) {
             <div className="flex flex-row justify-between items-center w-full">
               <div className="flex justify-center items-center">
                 <CustomCheckbox style="w-[18px] h-[18px]" id="2ano" array={actualFilter.UcsFilter} handle={handleYear} scope="year"/>
-                <label onClick={() => handleYear('2ano')} className="text-md pl-2 mt-[2px]" htmlFor="2ano">2° ano</label>
+                <span onClick={() => handleYear('2ano')} className="text-md pl-2 mt-[2px]" htmlFor="2ano">2° ano</span>
               </div>
               <FiChevronDown onClick={() => handleOpenedYear(2)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 2 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
@@ -285,7 +286,7 @@ export default function FilterCalendar(props) {
             <div className="flex flex-row justify-between items-center w-full">
               <div className="w-full pl-1 mt-2 text-lg flex items-center">              
                 <CustomCheckbox style="w-[16px] h-[16px]" id="2ano1semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
-                <h1 className="pl-2"><strong>1° Semestre</strong></h1>
+                <h1 className="pl-2 xl:text-xl text-base"><strong>1° Semestre</strong></h1>
               </div>
             <FiChevronDown onClick={() => handleOpenedSemester(1)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.semester == 1 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
@@ -296,7 +297,7 @@ export default function FilterCalendar(props) {
                   return (
                   <div key={uc.calendar} className="flex flex-row items-center">
                     <CustomCheckbox style="w-[16px] h-[16px]" id={uc.calendar} array={actualFilter.UcsFilter} handle={handleUc} scope="uc"/>
-                    <label className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{uc.name}</label>
+                    <span className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{innerWidth < 1784 ? uc.sigla : uc.name}</span>
                   </div>  
                 )
                 }
@@ -306,7 +307,7 @@ export default function FilterCalendar(props) {
             <div className="flex flex-row justify-between items-center w-full">
               <div className="w-full pl-1 mt-2 text-lg flex items-center">              
                 <CustomCheckbox style="w-[16px] h-[16px]" id="2ano2semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
-                <h1 className="pl-2"><strong>2° Semestre</strong></h1>
+                <h1 className="pl-2 xl:text-xl text-base"><strong>2° Semestre</strong></h1>
               </div>
             <FiChevronDown onClick={() => handleOpenedSemester(2)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.semester == 2 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
@@ -317,7 +318,7 @@ export default function FilterCalendar(props) {
                   return (
                   <div key={uc.calendar} className="flex flex-row items-center">
                     <CustomCheckbox style="w-[16px] h-[16px]" id={uc.calendar} array={actualFilter.UcsFilter} handle={handleUc} scope="uc"/>
-                    <label className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{uc.name}</label>
+                    <span className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{innerWidth < 1784 ? uc.sigla : uc.name}</span>
                   </div>  
                 )
                 }
@@ -330,7 +331,7 @@ export default function FilterCalendar(props) {
             <div className="flex flex-row justify-between items-center w-full">
               <div className="flex justify-center items-center">
                 <CustomCheckbox style="w-[18px] h-[18px]" id="3ano" array={actualFilter.UcsFilter} handle={handleYear} scope="year"/>
-                <label onClick={() => handleYear('3ano')} className="text-md pl-2 mt-[2px]" htmlFor="3ano">3° ano</label>
+                <span onClick={() => handleYear('3ano')} className="text-md pl-2 mt-[2px]" htmlFor="3ano">3° ano</span>
               </div>
               <FiChevronDown onClick={() => handleOpenedYear(3)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.year == 3 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
@@ -338,7 +339,7 @@ export default function FilterCalendar(props) {
             <div className="flex flex-row justify-between items-center w-full">
               <div className="w-full pl-1 mt-2 text-lg flex items-center">              
                 <CustomCheckbox style="w-[16px] h-[16px]" id="3ano1semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
-                <h1 className="pl-2"><strong>1° Semestre</strong></h1>
+                <h1 className="pl-2 xl:text-xl text-base"><strong>1° Semestre</strong></h1>
               </div>
             <FiChevronDown onClick={() => handleOpenedSemester(1)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.semester == 1 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
@@ -349,7 +350,7 @@ export default function FilterCalendar(props) {
                   return (
                   <div key={uc.calendar} className="flex flex-row items-center">
                     <CustomCheckbox style="w-[16px] h-[16px]" id={uc.calendar} array={actualFilter.UcsFilter} handle={handleUc} scope="uc"/>
-                    <label className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{uc.name}</label>
+                    <span className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{innerWidth < 1784 ? uc.sigla : uc.name}</span>
                   </div>  
                 )
                 }
@@ -359,7 +360,7 @@ export default function FilterCalendar(props) {
             <div className="flex flex-row justify-between items-center w-full">
               <div className="w-full pl-1 mt-2 text-lg flex items-center">              
                 <CustomCheckbox style="w-[16px] h-[16px]" id="3ano2semestre" array={actualFilter.UcsFilter} handle={handleSemester} scope="semester"/>
-                <h1 className="pl-2"><strong>2° Semestre</strong></h1>
+                <h1 className="pl-2 xl:text-xl text-base"><strong>2° Semestre</strong></h1>
               </div>
             <FiChevronDown onClick={() => handleOpenedSemester(2)} className={`cursor-pointer transition duration-300 text-xl text-black ${isOpened.semester == 2 ? 'rotate-180' : 'rotate-0'}`}></FiChevronDown>
             </div>
@@ -370,7 +371,7 @@ export default function FilterCalendar(props) {
                   return (
                   <div key={uc.calendar} className="flex flex-row items-center">
                     <CustomCheckbox style="w-[16px] h-[16px]" id={uc.calendar} array={actualFilter.UcsFilter} handle={handleUc} scope="uc"/>
-                    <label className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{uc.name}</label>
+                    <span className="text-md pl-2 mt-[2px]" htmlFor={uc.calendar}>{innerWidth < 1784 ? uc.sigla : uc.name}</span>
                   </div>  
                 )
                 }
@@ -387,7 +388,7 @@ export default function FilterCalendar(props) {
         <div className="p-[6px] border rounded-lg w-full flex flex-row items-center justify-between mt-2">
           <div className="flex flex-row items-center">
             <CustomCheckbox style="w-[16px] h-[16px]" id="Evento" array={actualFilter.eventsFilter} handle={handleEvents} scope="uc"/>
-            <label className="text-xl pl-2 mt-[2px]" htmlFor="eventos">Eventos</label>
+            <span className="text-xl pl-2 mt-[2px]" htmlFor="eventos">Eventos</span>
           </div>
 
         </div>

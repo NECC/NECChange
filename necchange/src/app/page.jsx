@@ -10,6 +10,7 @@ import axios from "axios";
 export default function CalendarPage() {
   const [finalArray, setFinalArray] = useState([]);
   const [rawEvents, setRawEvents] = useState([]);
+  const [mobileSideMenuIsOpen, setMobileSideMenuIsOpen] = useState(false);
   const [isCalendarLoading, setIsCalendarLoading] = useState(true);
 
   useEffect(() => {
@@ -21,14 +22,15 @@ export default function CalendarPage() {
   }, []);
 
   return (
-    <div className="bg-white min-h-screen pt-24 flex">
+    <div className="bg-white min-h-screen pt-24 flex w-full">
       
       <FilterCalendar setFinalArray={setFinalArray} rawEvents={rawEvents}/>
+
 
       <div className="pt-8 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
         {isCalendarLoading ?  (
           <div className="flex justify-center items-center h-full bg-white">
-            <div className="border-t-4 border-blue-500 border-solid rounded-full w-12 h-12 animate-spin" />
+            <div className="border-t-4 border-blue-500 border-solid rounded-full w-12 h-12 animate-spin"> </div>
           </div>
         ) : (
         <FullCalendar
