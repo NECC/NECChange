@@ -29,6 +29,7 @@ export default function CalendarPage() {
 
       <MobileFilter className="block lg:hidden"/>
 
+
       <div className="pt-8 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
         {isCalendarLoading ?  (
           <div className="flex justify-center items-center h-full bg-white">
