@@ -6,6 +6,7 @@ import ptLocale from "@fullcalendar/core/locales/pt";
 import { useState, useEffect } from "react";
 import FilterCalendar from "@/components/calendar/FilterCalendar";
 import axios from "axios";
+import MobileFilter from "@/components/calendar/MobileFilter";
 
 export default function CalendarPage() {
   const [finalArray, setFinalArray] = useState([]);
@@ -24,8 +25,9 @@ export default function CalendarPage() {
   return (
     <div className="bg-white min-h-screen pt-24 flex w-full">
       
-      <FilterCalendar setFinalArray={setFinalArray} rawEvents={rawEvents}/>
+      <FilterCalendar setFinalArray={setFinalArray} rawEvents={rawEvents} className="lg:block hidden"/>
 
+      <MobileFilter className="block lg:hidden"/>
 
       <div className="pt-8 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
         {isCalendarLoading ?  (

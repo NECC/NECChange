@@ -154,7 +154,7 @@ export default function FilterCalendar(props) {
   return (
     <>
       <CheckboxTree
-        className="w-[440px] ml-5 mt-5"
+        className={`w-[440px] ml-5 mt-5 ${className}`}
         nodes={nodes}
         checked={checked}
         onCheck={(checked) => setChecked(checked)}
