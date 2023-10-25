@@ -11,7 +11,6 @@ import MobileFilter from "@/components/calendar/MobileFilter";
 export default function CalendarPage() {
   const [finalArray, setFinalArray] = useState([]);
   const [rawEvents, setRawEvents] = useState([]);
-  const [mobileSideMenuIsOpen, setMobileSideMenuIsOpen] = useState(false);
   const [isCalendarLoading, setIsCalendarLoading] = useState(true);
 
   useEffect(() => {
@@ -23,7 +22,7 @@ export default function CalendarPage() {
   }, []);
 
   return (
-    <div className="bg-white min-h-screen pt-24 flex w-full">
+    <div className="bg-white min-h-screen pt-24 flex w-full overflow-hidden relative">
       
       <FilterCalendar setFinalArray={setFinalArray} rawEvents={rawEvents} className="lg:block hidden"/>
 
