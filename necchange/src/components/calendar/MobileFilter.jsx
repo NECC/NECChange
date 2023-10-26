@@ -3,7 +3,6 @@
 import { FaFilter } from 'react-icons/fa'
 import { LuListFilter } from 'react-icons/lu'
 import { useState } from "react";
-import FilterCalendar from './FilterCalendar';
 
 export default function MobileFilter(props) {
     const { className } = props;
@@ -21,7 +20,9 @@ export default function MobileFilter(props) {
                 </div>
 
             </div>
-            <div className={`absolute w-full h-full transition-all duration-500 ${isOpened ? 'left-0' : '-left-[100%]'} top-0 z-10 bg-white/75`}>   
+            <div className={`absolute w-full h-full transition-all duration-500 ${isOpened ? 'left-0' : '-left-[100%]'} top-0 z-10 bg-white/75 flex justify-center items-center`}>   
+
+                
 
             </div>
         </>
