@@ -3,9 +3,10 @@
 import { FaFilter } from 'react-icons/fa'
 import { LuListFilter } from 'react-icons/lu'
 import { useState } from "react";
+import CheckboxTree from './CheckboxTree/CheckboxTree';
 
 export default function MobileFilter(props) {
-    const { className } = props;
+    const { className, nodes, checked, onCheck } = props;
     const [isOpened, setIsOpened] = useState(false);
 
 
@@ -20,9 +21,15 @@ export default function MobileFilter(props) {
                 </div>
 
             </div>
-            <div className={`absolute w-full h-full transition-all duration-500 ${isOpened ? 'left-0' : '-left-[100%]'} top-0 z-10 bg-white/75 flex justify-center items-center`}>   
+            <div className={`absolute w-full h-full transition-all duration-500 ${isOpened ? 'left-0' : '-left-[100%]'} top-0 z-10 bg-white/90 flex justify-center items-start mt-16 mb-24 overflow-auto`}>   
 
-                
+            <CheckboxTree
+                className={`md:w-[440px] w-[350px] ml-5 mt-5 mb-14`}
+                nodes={nodes}
+                checked={checked}
+                onCheck={onCheck}
+            />
+
 
             </div>
         </>
