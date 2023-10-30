@@ -361,16 +361,16 @@ class TreeNode extends React.PureComponent {
             headerClassName = `flex-1 ${!isLeaf ? 'rounded-r' : 'rounded'} p-[8px] h-[45px] bg-white justify-between flex items-center`
         }
 
-        let triggerClassName = "group rounded-l px-4 h-[45px] inline-flex items-center justify-center outline-none data-[state=closed]:bg-[#f9fafb] data-[state=closed]:border-[#f3f4f6] data-[state=open]:bg-[#3b82f6] data-[state=open]:border-[#3b82f6] hover:bg-violet3 border border-[#f3f4f6]"
+        let triggerClassName = "group rounded-l px-4 h-[45px] inline-flex items-center justify-center outline-none data-[state=closed]:bg-[#383838] data-[state=closed]:border-[#f3f4f6] data-[state=open]:bg-[#3b82f6] data-[state=open]:border-[#3b82f6] hover:bg-violet3 border border-[#f3f4f6]"
         if (depth > 0)
         {
-            triggerClassName = "group rounded-l px-4 h-[45px] inline-flex items-center justify-center outline-none data-[state=closed]:bg-white data-[state=closed]:border-[#f3f4f6] data-[state=open]:border-[#3b82f6] hover:bg-violet3";
+            triggerClassName = "group rounded-l px-4 h-[45px] inline-flex items-center justify-center outline-none data-[state=closed]:bg-[#383838] data-[state=closed]:border-[#f3f4f6] data-[state=open]:border-[#3b82f6] data-[state=open]:bg-[#85ace9] hover:bg-violet3";
         }
 
-        let chevronClassName = "text-black w-6 h-6 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-90 group-data-[state=open]:text-white"
+        let chevronClassName = "text-white w-6 h-6 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-90 group-data-[state=open]:text-white"
         if (depth > 0)
         {
-            chevronClassName = "text-black w-6 h-6 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-90 group-data-[state=open]:text-[#3b82f6]"
+            chevronClassName = "text-white w-6 h-6 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-90 group-data-[state=open]:text-white"
         }
 
         return (
