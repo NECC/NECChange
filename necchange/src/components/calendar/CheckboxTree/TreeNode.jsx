@@ -352,7 +352,12 @@ class TreeNode extends React.PureComponent {
             rootClassName = "[&:not(:last-child)]:border-b first:mt-5"
         }
         else if (depth > 1) {
-            rootClassName = "my-1";
+            if (isLeaf) {
+                rootClassName = "my-1 mx-14";
+            }
+            else {
+                rootClassName = "my-1";
+            }
         }
 
         let headerClassName = `flex-1 ${!isLeaf ? 'rounded-r' : 'rounded border-l'} p-[8px] h-[45px] border-r border-y border-[#f3f4f6] bg-[#f9fafb] justify-between flex items-center`
@@ -361,16 +366,16 @@ class TreeNode extends React.PureComponent {
             headerClassName = `flex-1 ${!isLeaf ? 'rounded-r' : 'rounded'} p-[8px] h-[45px] bg-white justify-between flex items-center`
         }
 
-        let triggerClassName = "group rounded-l px-4 h-[45px] inline-flex items-center justify-center outline-none data-[state=closed]:bg-[#383838] data-[state=closed]:border-[#f3f4f6] data-[state=open]:bg-[#3b82f6] data-[state=open]:border-[#3b82f6] hover:bg-violet3 border border-[#f3f4f6]"
+        let triggerClassName = "bg-[#f9fafb] group rounded-l px-4 h-[45px] inline-flex items-center justify-center outline-none data-[state=closed]:border-[#f3f4f6] data-[state=open]:border-[#3b82f6] hover:bg-blue-50 border"
         if (depth > 0)
         {
-            triggerClassName = "group rounded-l px-4 h-[45px] inline-flex items-center justify-center outline-none data-[state=closed]:bg-[#383838] data-[state=closed]:border-[#f3f4f6] data-[state=open]:border-[#3b82f6] data-[state=open]:bg-[#85ace9] hover:bg-violet3";
+            triggerClassName = "group rounded-l px-4 h-[45px] inline-flex items-center justify-center outline-none data-[state=closed]:border-[#f3f4f6] data-[state=open]:border-[#3b82f6] data-[state=closed]:border-white hover:bg-blue-50 border";
         }
 
-        let chevronClassName = "text-white w-6 h-6 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-90 group-data-[state=open]:text-white"
+        let chevronClassName = "text-black w-6 h-6 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-90"
         if (depth > 0)
         {
-            chevronClassName = "text-white w-6 h-6 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-90 group-data-[state=open]:text-white"
+            chevronClassName = "text-black w-6 h-6 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-90"
         }
 
         return (
@@ -391,9 +396,9 @@ class TreeNode extends React.PureComponent {
                     </Collapsible.Trigger>
                     )}
                     <div className={headerClassName}>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 items-center">
                             <Checkbox.Root
-                                className="shadow-blackA4 hover:bg-violet3 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_4px_0px_rgba(0,0,0,0.1)] outline-none focus:shadow-[0_0_0_2px_black]"
+                                className="flex-shrink-0 shadow-blackA4 hover:bg-blue-50 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_4px_0px_rgba(0,0,0,0.1)] outline-none focus:shadow-[0_0_0_2px_black]"
                                 id={inputId}
                                 checked={checked === 1 ? true : (checked === 2 ? 'indeterminate' : false)}
                                 onCheckedChange={this.onCheck}
@@ -418,7 +423,7 @@ class TreeNode extends React.PureComponent {
                     ["--radix-accordion-content-width"]:
                         "var(--radix-collapsible-content-width)",
                     }}
-                    className={`data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden ml-5`}
+                    className={`data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden ml-3`}
                 >
                     {this.renderChildren()}
                 </Collapsible.Content>
