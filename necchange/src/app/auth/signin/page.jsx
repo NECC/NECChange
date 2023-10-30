@@ -22,7 +22,7 @@ export default function Home() {
       const result = await email_validator();
       if (result == true) {
         setErrorMessage(false);
-        await signIn("email", { email: inputEmail, callbackUrl: "/horario" });
+        await signIn("email", { email: inputEmail, callbackUrl: "/profile" });
       } else {
         setErrorMessage(true);
         console.log("Invalid email");

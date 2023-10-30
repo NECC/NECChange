@@ -78,6 +78,7 @@ async function sendVerificationRequest(params) {
   }
 }
 
+
 /**
  * Email HTML body
  * Insert invisible space into domains from being turned into a hyperlink by email
@@ -100,7 +101,7 @@ function html(params) {
     buttonText: theme.buttonText || "#fff",
   };
 
-  const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url;
+  const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url;;
   return `
 <body>
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
@@ -114,6 +115,7 @@ function html(params) {
     <tr>
       <td align="center"
         style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
+        style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
         Sign in to <strong>${escapedHost}</strong>
       </td>
     </tr>
@@ -122,7 +124,9 @@ function html(params) {
         <table border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground}"><a href="${redirect}"
+            <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground}"><a href="${redirect}"
                 target="_blank"
+                style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${color.buttonBorder}; display: inline-block; font-weight: bold;">Sign
                 style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${color.buttonBorder}; display: inline-block; font-weight: bold;">Sign
                 in</a></td>
           </tr>
@@ -145,3 +149,4 @@ function html(params) {
 function text({ url, host }) {
   return `Sign in to ${host}\n${url}\n\n`;
 }
+

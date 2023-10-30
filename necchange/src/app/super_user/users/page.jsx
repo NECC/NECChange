@@ -1,153 +1,239 @@
 "use client";
+import { Role } from "prisma/prisma-client";
+
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import Modal from "@/components/globals/Modal";
 
-function filterUsers(user, loweredCasedSearch) {
-  const searchIsEmpty = loweredCasedSearch === "";
-  const checkNumber = user.number.toLowerCase().includes(loweredCasedSearch);
-  const checkFirstName = user.firstname
-    .toLowerCase()
-    .includes(loweredCasedSearch);
-  const checkLastName = user.lastname
-    .toLowerCase()
-    .includes(loweredCasedSearch);
-  const checkEmail = user.email.toLowerCase().includes(loweredCasedSearch);
+import DataTable from "@/components/admin/datatable/datatable";
+import Modal from "@/components/globals/Modal";
+import Loader from "@/components/globals/Loader";
+import axios from "axios";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const AddUserForm = ({ showModal, setShowModal }) => {
+  const [newUser, setNewUser] = useState({
+    name: "",
+    email: "",
+    number: "",
+    phone: "",
+    role: Role.STUDENT,
+    partner: true,
+  });
+  const [loader, setLoader] = useState(false);
+
+  /* Adicionar as variáveis de ambiente*/
+  async function addUser() {
+    setLoader(true);
+    axios
+      .post("/api/users", {
+        params: newUser,
+      })
+      .then((res) => {
+        toast.success("User adicionado à base de dados.");
+        res.data.sheet_error == true
+          ? toast.error("Erro a adicionar o user à folha de sócios.")
+          : toast.success("User adicionado à folha de sócios.");
+
+        setLoader(false);
+      })
+      .catch((err) => {
+        toast.error("Erro a adicionar o user à base de dados.");
+        toast.error("Erro a adicionar o user à folha de sócios.");
+        setLoader(false);
+      });
+  }
 
   return (
-    searchIsEmpty ||
-    checkFirstName ||
-    checkLastName ||
-    checkEmail ||
-    checkNumber
+    <Modal
+      showModal={showModal}
+      setShowModal={setShowModal}
+      title="Adicionar utilizador"
+    >
+      <form action={null} onSubmit={(e) => e.preventDefault()}>
+        <div className="grid gap-2 mb-6 md:grid-cols-4">
+          <div className="col-span-2">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Nome Completo
+            </label>
+            <input
+              type="text"
+              id="first_name"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              placeholder="John Doe"
+              onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+              required
+            />
+          </div>
+          <div className="mb-6 col-span-2">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              placeholder="john.doe@company.com"
+              onChange={(e) =>
+                setNewUser({ ...newUser, email: e.target.value.toLowerCase() })
+              }
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Número de Aluno
+            </label>
+            <input
+              type="text"
+              id="first_name"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              placeholder="John Doe"
+              onChange={(e) =>
+                setNewUser({ ...newUser, number: e.target.value.toLowerCase() })
+              }
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Telemóvel
+            </label>
+            <input
+              type="text"
+              id="first_name"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              placeholder="John Doe"
+              onChange={(e) =>
+                setNewUser({ ...newUser, phone: e.target.value })
+              }
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Role
+            </label>
+            <select
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+            >
+              <option value={Role.STUDENT}>STUDENT</option>
+            </select>
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900">
+              Sócio
+            </label>
+            <select
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              onChange={(e) =>
+                setNewUser({ ...newUser, partner: e.target.value })
+              }
+            >
+              <option value={true}>SIM</option>
+              <option value={false}>NÃO</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
+            onClick={() => {
+              addUser();
+            }}
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {loader && <Loader />}
+    </Modal>
   );
-}
+};
 
 export default function ManageUsers() {
   const { data: session } = useSession();
   const [users, setUsers] = useState([]);
-  const [search, setSearch] = useState("");
+  const [filterUsers, setFilterUsers] = useState([])
+
   const [showModal, setShowModal] = useState(false);
-  const [editedUsersMap, setEditedUsersMap] = useState(new Map());
 
   useEffect(() => {
-    if (session) {
-      const getEvents = async () => {
-        try {
-          const response = await axios.get(`../api/users`);
-          setUsers(response.data.users);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
+    const getEvents = async () => {
+      try {
+        const response = await axios.get(`/api/users`);
+        setUsers(response.data.users);
+        setFilterUsers(response.data.users);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-      getEvents();
+    getEvents();
+  }, []);
+
+  /* Future upgrade: Add a delay so that we don't make calls every time a key is pressed*/
+  const handleSearch = (value) => {
+    if(value != "") {
+      setFilterUsers(users.filter(user => user.number == value))
+    } else {
+      setFilterUsers(users)
     }
-  }, [session]);
+  }
+
+  if (!session) return <Loader />;
 
   return (
     <div className="bg-white h-screen pt-24">
       <div className="ml-auto mr-auto px-8 md:px-16">
-        <Modal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          title="Adicionar utilizador"
-        >
-          <form>
-            <div className="grid gap-6 mb-6 md:grid-cols-3">
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Nome
-                </label>
-                <input
-                  type="text"
-                  id="first_name"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="John"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Apelido
-                </label>
-                <input
-                  type="text"
-                  id="last_name"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Doe"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Role
-                </label>
-                <select className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                  <option>STUDENT</option>
-                  <option>SUPER_USER</option>
-                  <option>PROFESSOR</option>
-                </select>
-              </div>
-            </div>
-            <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="john.doe@company.com"
-                required
-              />
-            </div>
-            <div>
-              <button
-                type="submit"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
-        </Modal>
-
+        <AddUserForm showModal={showModal} setShowModal={setShowModal} />
         <div className="flex flex-row pb-4">
           <div className="basis-1/2">
             <input
               type="text"
-              onChange={(e) => setSearch(e.target.value)}
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              onChange={(e) => handleSearch(e.target.value.toLowerCase())}
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-1/2 p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900"
               placeholder="Procura..."
             />
           </div>
           <div className="basis-1/4"></div>
           <div className="basis-1/4">
             <div className="flex flex-row-reverse">
-              <div className="flex-none w-42">
+              <div className="flex-none w-auto">
                 <button
                   type="submit"
                   onClick={() => setShowModal(true)}
-                  className="w-full h-full float-right justify-end rounded-full bg-blue-500  px-3 py-1.5 text-xl font-semibold leading-6 text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="w-full h-full px-3 py-1.5 float-right justify-end rounded-full leading-6 text-base text-white shadow-sm bg-blue-500 hover:bg-blue-600"
                 >
-                  +
-                </button>
-              </div>
-              <div className="flex-auto px-6 invisible">
-                <button
-                  type="submit"
-                  className="w-full h-full justify-center rounded-md bg-green-600  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Save
+                  Adicionar User
                 </button>
               </div>
             </div>
           </div>
         </div>
-        {
-          //<DataTable data={users.filter((user) => {return filterUsers(user, search.toLowerCase()) })}/>
-        }
+        {session ? (
+          <>
+            <DataTable users={filterUsers} />
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

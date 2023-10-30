@@ -18,7 +18,7 @@ model lesson {
   type       Int?
   shift      Int?
 
-  course         course?          @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  course         course?          @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   student_lesson student_lesson[]
   fromSwitch     lesson_trade[]   @relation("lesson_from_id")
   toSwitch       lesson_trade[]   @relation("lesson_to_id")
@@ -32,8 +32,8 @@ model student_lesson {
   student_id Int?
   lesson_id  Int?
 
-  lesson lesson? @relation(fields: [lesson_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  User   User?   @relation(fields: [student_id], references: [uniqueId], onDelete: NoAction, onUpdate: NoAction)
+  lesson lesson? @relation(fields: [lesson_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  User   User?   @relation(fields: [student_id], references: [uniqueId], onDelete: Cascade, onUpdate: NoAction)
 }
 
 // OLD: class_switch 
@@ -43,9 +43,9 @@ model lesson_trade {
   lesson_to_id   Int
   trade_id       Int
 
-  tradeId    trade  @relation("trade_id", fields: [trade_id], references: [id])
-  lessonFrom lesson @relation("lesson_from_id", fields: [lesson_from_id], references: [id])
-  lessonTo   lesson @relation("lesson_to_id", fields: [lesson_to_id], references: [id])
+  tradeId    trade  @relation("trade_id", fields: [trade_id], references: [id], onDelete: Cascade)
+  lessonFrom lesson @relation("lesson_from_id", fields: [lesson_from_id], references: [id], onDelete: Cascade)
+  lessonTo   lesson @relation("lesson_to_id", fields: [lesson_to_id], references: [id], onDelete: Cascade)
 
   @@map("switch")
 }
@@ -59,8 +59,8 @@ model trade {
   close_time      DateTime?
 
   trade_id     lesson_trade[] @relation("trade_id")
-  from_student User           @relation("from_student_id", fields: [from_student_id], references: [uniqueId])
-  to_student   User?          @relation("to_student_id", fields: [to_student_id], references: [uniqueId])
+  from_student User           @relation("from_student_id", fields: [from_student_id], references: [uniqueId], onDelete: Cascade)
+  to_student   User?          @relation("to_student_id", fields: [to_student_id], references: [uniqueId], onDelete: Cascade)
 }
 
 //Old name: uc
@@ -102,10 +102,11 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   uniqueId      Int       @unique @default(autoincrement())
+  partnerNumber Int?      @unique
   number        String?   @unique @db.VarChar(20)
-  firstname     String?   @db.VarChar(100)
-  lastname      String?   @db.VarChar(100)
+  name          String?   @db.VarChar(100)
   email         String?   @unique
+  phone         String?   @db.VarChar(20)
   emailVerified DateTime?
   partner       Boolean?
   role          Role?
