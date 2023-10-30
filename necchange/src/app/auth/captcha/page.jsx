@@ -11,6 +11,7 @@ export default function Home() {
   const token = searchParams.get("token");
   const email = searchParams.get("email");
   const newUrl = new URL(`${redirect_url}&token=${token}&email=${email}`);
+  console.log(newUrl.href);
   redirect(newUrl.href)
 
   return (
