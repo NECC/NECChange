@@ -13,11 +13,11 @@ export default function MobileFilter(props) {
 
     return (
         <>
-            <div onClick={() => setIsOpened(!isOpened)} className={`absolute bg-white border shadow-md bottom-12 z-50 left-6 w-20 h-20 rounded-full flex justify-center items-center ${className}`}>
+            <div onClick={() => setIsOpened(!isOpened)} className={`group transition-all duration-300 absolute border shadow-md bottom-12 z-50 left-6 w-14 h-14 rounded-full flex justify-center items-center ${className} ${isOpened ? 'bg-black' : 'bg-white'}`}>
                 <div className='flex flex-col justify-center items-center'>
                     {/* <FaFilter className='text-black text-xl'/> */}
-                    <LuListFilter className='text-black text-xl'/>
-                    <span className='text-sm pt-1'>Filter</span>
+                    <LuListFilter className={`text-xl ${isOpened ? 'text-white' : 'text-black'}`}/>
+                    <span className={`text-xs pt-1 ${isOpened ? 'text-white' : 'text-black'}`}>Filter</span>
                 </div>
 
             </div>

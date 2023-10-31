@@ -182,7 +182,7 @@ export default function CalendarPage() {
 
       <MobileFilter nodes={nodes} checked={checked} onCheck={(checked) => setChecked(checked)} className="block lg:hidden"/>
 
-      <div className="pt-8 px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
+      <div className="pt-8 px-2 md:px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
         {isCalendarLoading ?  (
           <div className="flex justify-center items-center h-full bg-white">
             <div className="border-t-4 border-blue-500 border-solid rounded-full w-12 h-12 animate-spin"> </div>
