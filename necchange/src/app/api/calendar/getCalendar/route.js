@@ -9,9 +9,9 @@ function getColor(title) {
   // green : #22C55E
   // red : #EF4444
 
-  if (title.search("1[ º]*ano") != -1) return "#06b5d4";
-  if (title.search("2[ º]*ano") != -1) return "#14b8a5";
-  if (title.search("3[ º]*ano") != -1) return "#8a5cf6";
+  if (title.search("1[ º]*ano") != -1) return "#407cde";
+  if (title.search("2[ º]*ano") != -1) return "#10b981";
+  if (title.search("3[ º]*ano") != -1) return "#8b5cf6";
   return "#0ea4e9";
 }
 

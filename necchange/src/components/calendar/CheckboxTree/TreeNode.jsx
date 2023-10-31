@@ -333,7 +333,7 @@ class TreeNode extends React.PureComponent {
             checked,
             treeId,
             value,
-            depth
+            depth,
         } = this.props;
         const nodeClass = classNames({
             'rct-node': true,
@@ -344,6 +344,9 @@ class TreeNode extends React.PureComponent {
             'rct-disabled': disabled,
         }, className);
 
+        const classTextColor = `${value.charAt(0) == '1' ? 'text-blue-500' : value.charAt(0) == '2' ? 'text-emerald-500': value.charAt(0) == '3' ? 'text-violet-500' : 'text-black'}`;
+        console.log(classTextColor);
+
         const inputId = `${treeId}-${String(value).split(' ').join('_')}`;
 
         let rootClassName = "my-5";
@@ -353,7 +356,7 @@ class TreeNode extends React.PureComponent {
         }
         else if (depth > 1) {
             if (isLeaf) {
-                rootClassName = "my-1 mx-14";
+                rootClassName = "my-1 ml-14";
             }
             else {
                 rootClassName = "my-1";
@@ -409,7 +412,7 @@ class TreeNode extends React.PureComponent {
                                 </Checkbox.Indicator>
                             </Checkbox.Root>
 
-                            <span className="text-black text-[15px] leading-[25px]">
+                            <span className={`${classTextColor} text-[15px] leading-[25px]`}>
                                 {label}
                             </span>
                         </div>
