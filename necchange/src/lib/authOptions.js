@@ -41,8 +41,11 @@ export const authOptions = {
 import { createTransport } from "nodemailer";
 
 async function sendVerificationRequest(params) {
+  const file = process.cwd() + "/neccSticker.png";
+
   const { identifier, url, provider, theme } = params;
   const { host } = new URL(url);
+
   // NOTE: You are not required to use `nodemailer`, use whatever you want.
   const transport = createTransport(provider.server);
   const result = await transport.sendMail({
@@ -50,13 +53,31 @@ async function sendVerificationRequest(params) {
     from: provider.from,
     subject: `Sign in to ${host}`,
     text: text({ url, host }),
-    html: html({ url, host, theme }),
+    html: `
+<div style="background-color:#f9f9f9;display:flex;justify-content:center;flex-direction:column;align-items:center">
+  <div style="background-color:#fff ;width:70%;display:flex;justify-content:center">
+    <img style="height:150px; width:150px" src="cid:unique@nodemailer.com"/> 
+  </div>
+  <div style="width:70% ;background-color:#fff">
+    ${html({ url, host, theme })}
+  </div>
+</div>
+    `,
+    attachments: [
+      {
+        filename: "image.png",
+        path: file,
+        cid: "unique@nodemailer.com", //same cid value as in the html img src
+        contentDisposition: "inline",
+      },
+    ],
   });
   const failed = result.rejected.concat(result.pending).filter(Boolean);
   if (failed.length) {
     throw new Error(`Email(s) (${failed.join(", ")}) could not be sent`);
   }
 }
+
 
 /**
  * Email HTML body
@@ -73,7 +94,6 @@ function html(params) {
 
   const brandColor = theme.brandColor || "#346df1";
   const color = {
-    background: "#f9f9f9",
     text: "#444",
     mainBackground: "#fff",
     buttonBackground: brandColor,
@@ -81,35 +101,33 @@ function html(params) {
     buttonText: theme.buttonText || "#fff",
   };
 
-  const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url
-
+  const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url;;
   return `
-<body style="background: ${color.background};">
+<body>
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
-    style="background: ${
-      color.mainBackground
-    }; max-width: 600px; margin: auto; border-radius: 10px;">
+    style="background: ${color.mainBackground}; max-width: 600px; margin: auto; border-radius: 10px;">
     <tr>
-      <td align="center"
-        style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${
-          color.text
-        };">
-        Sign in to <strong>${escapedHost}</strong>
+      <td style="font-size: 18px; font-family: Helvetica, Arial, sans-serif">
+        <h5>Dear [@username],</h5>
+        To enhance your account security, we require a quick verification process.Please click the button below to proceed:
       </td>
     </tr>
     <tr>
-      <td align="center" style="padding: 20px 0;">
+      <td align="center"
+        style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
+        style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
+        Sign in to <strong>${escapedHost}</strong>
+      </td>
+    </tr>
+    <tr>  
+      <td align="center" style="padding: 10px 0;">
         <table border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td align="center" style="border-radius: 5px;" bgcolor="${
-              color.buttonBackground
-            }"><a href="${redirect}"
+            <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground}"><a href="${redirect}"
+            <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground}"><a href="${redirect}"
                 target="_blank"
-                style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${
-                  color.buttonText
-                }; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${
-                  color.buttonBorder
-                }; display: inline-block; font-weight: bold;">Sign
+                style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${color.buttonBorder}; display: inline-block; font-weight: bold;">Sign
+                style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${color.buttonBorder}; display: inline-block; font-weight: bold;">Sign
                 in</a></td>
           </tr>
         </table>
@@ -117,19 +135,18 @@ function html(params) {
     </tr>
     <tr>
       <td align="center"
-        style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: ${
-          color.text
-        };">
+        style="padding: 30px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
         If you did not request this email you can safely ignore it.
         <br>
       </td>
     </tr>
   </table>
 </body>
-`;
+  `;
 }
 
 /** Email Text body (fallback for email clients that don't render HTML, e.g. feature phones) */
 function text({ url, host }) {
   return `Sign in to ${host}\n${url}\n\n`;
 }
+
