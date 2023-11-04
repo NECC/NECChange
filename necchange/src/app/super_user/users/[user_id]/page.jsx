@@ -69,13 +69,13 @@ export default function UserPage() {
 
   return (
     <div className="flex justify-center items-center h-screen text-black dark:bg-slate-600">
-      <div className="w-2/5 h-1/2 rounded-lg font-semibold  text-black dark:bg-gray-800 dark:text-white">
-        <div className="w-full p-3 rounded-t-lg text-white bg-gray-400 dark:bg-gray-700">
+      <div className="w-2/5 h-1/2 rounded-lg  text-black dark:bg-gray-800 dark:text-white">
+        <div className="w-full p-3 rounded-t-lg font-semibold text-white bg-gray-400 dark:bg-gray-700">
           User Profile
         </div>
         <div className="grid gap-6 p-6 md:grid-cols-4">
           <div className="col-span-2">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
               Nome
             </label>
             <input
@@ -90,7 +90,7 @@ export default function UserPage() {
             />
           </div>
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
               Role
             </label>
             {console.log("profile", userProfile.role)}
@@ -107,7 +107,7 @@ export default function UserPage() {
             </select>
           </div>
           <div>
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
               Sócio
             </label>
             <select
@@ -122,7 +122,7 @@ export default function UserPage() {
             </select>
           </div>
           <div className="col-span-2">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
               Email
             </label>
             <input
@@ -139,7 +139,7 @@ export default function UserPage() {
             />
           </div>
           <div className="col-span-2">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
               Telemóvel
             </label>
             <input
@@ -159,21 +159,25 @@ export default function UserPage() {
 
         <div className="pt-10 pl-6 pr-6">
           <button
-            className="px-5 py-2.5 w-full rounded-lg text-sm text-white font-medium text-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
+            className="px-5 py-2.5 w-full rounded-lg text-sm text-white font-semibold text-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
             onClick={() => {
               updateUser();
             }}
           >
             Update
           </button>
+          {
+            /*
           <button
-            className="mt-2 px-5 py-2.5 w-full rounded-lg text-sm text-white font-medium text-center bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"
+            className="mt-2 px-5 py-2.5 w-full rounded-lg text-sm text-white font-semibold text-center bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"
             onClick={() => {
               deleteUser();
             }}
           >
             Delete User
           </button>
+          */
+          }
         </div>
       </div>
       <ToastContainer

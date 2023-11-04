@@ -11,13 +11,14 @@ export default function SuperUser() {
   const buttonStyles =
     "p-2 mt-2 w-full text-base border-2 border-sky-500 shadow-md rounded-md bg-white hover:bg-slate-50";
 
-  const [ucs, setUcs] = useState < any > [];
-  const [ucSelected, setUcSelected] = useState < string > "";
+  const [ucs, setUcs] = useState([]);
+  const [ucSelected, setUcSelected] = useState("");
 
   useEffect(() => {
     axios
       .get("/api/calendar/getUCS")
       .then((res) => {
+        console.log(res);
         setUcs(res.data.response.map((uc) => uc.name));
       })
       .catch((err) => console.log(err));
