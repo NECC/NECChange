@@ -12,7 +12,7 @@ import { getToken } from "next-auth/jwt";
  */
 const publicRoutes = ["/"];
 const authRoutes = ["/auth"];
-const adminRoutes = ["/super_user"];
+const adminRoutes = ["/super_user", "partner"];
 const protectedRoutes = ["/horario", "/feed", "/partner", "/profile"];
 
 export async function middleware(request) {
