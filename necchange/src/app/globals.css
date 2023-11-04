@@ -19,7 +19,6 @@
   background-color: rgba(248, 248, 248, 0.774); /* Background color of the scrollbar track on hover */
 }
 
-
 /***
   * FullCalendar
 ***/
@@ -105,48 +104,4 @@
   td.fc-day-today {
     color: #1d4ed8;
   }
-}
-
-/***
-  * React CheckBox
-***/
-.react-checkbox-tree>ol {
-  li.rct-node.rct-node-parent>.rct-text {
-    @apply px-2 py-2 border rounded-md font-bold;
-  }
-
-  li.rct-node.rct-node-parent>ol>li.rct-node.rct-node-parent>ol {
-    @apply border-b pb-3;
-  }
-
-  li.rct-node.rct-node-parent>.rct-text {
-    @apply px-2 py-2 border rounded-md font-bold;
-    border-radius: 8px;
-  }
-
-  li.rct-node.rct-node-parent>span>button {
-    @apply text-slate-700 rounded mr-3 bg-white;
-    font-size: 16px;
-  }
-
-  li.rct-node.rct-node-parent:not(:first-child) {
-    @apply mt-5;
-  }
-
-  li.rct-node.rct-node-parent>ol>li.rct-node.rct-node-parent>span>label>span.rct-title {
-    @apply text-sm font-semibold;
-  }
-}
-
-.rct-node>.rct-text,
-.rct-node-parent>.rct-text {
-  @apply py-2;
-}
-
-.rct-node-icon {
-  @apply hidden;
-}
-
-.fc-event-title-container {
-  @apply font-semibold;
 }
