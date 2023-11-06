@@ -124,7 +124,7 @@ function html(params) {
         <table border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground}">
-              <a href="${redirect}"
+              <a href="${url}"
                  target="_blank"
                  style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${color.buttonBorder}; display: inline-block; font-weight: bold;">
                 Sign in

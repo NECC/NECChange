@@ -125,7 +125,7 @@ async function populate_partners() {
 
   const partnersSheet = await axios
     .get(
-      `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHHETDB_ID}?sort_by=Nº&sort_order=asc&offset=389`,
+      `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}?sort_by=Nº&sort_order=asc&offset=389`,
       {
         headers: {
           Accept: "application/json",
