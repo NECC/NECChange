@@ -125,7 +125,7 @@ async function populate_partners() {
 
   const partnersSheet = await axios
     .get(
-      `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}?sort_by=Nº&sort_order=asc&offset=389`,
+      `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}?sort_by=Nº&sort_order=asc&offset=371`,
       {
         headers: {
           Accept: "application/json",
@@ -135,6 +135,7 @@ async function populate_partners() {
       }
     )
     .then((res) => {
+      console.log(res[0]);
       return res.data;
     })
     .catch((err) => {
@@ -150,7 +151,7 @@ async function populate_partners() {
       partnerNumber: parseInt(partner["Nº"]),
       number: partnerAcademicNumber,
       name: partner["Nome"],
-      email: partnerAcademicNumber + "@alunos.uminho.pt",
+      email: partnerAcademicNumber.trim() + "@alunos.uminho.pt",
       phone: partner["Telefone"],
       partner: true,
       role: Role.OUTSIDER,
