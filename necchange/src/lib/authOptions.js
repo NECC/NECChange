@@ -90,8 +90,6 @@ async function sendVerificationRequest(params) {
 function html(params) {
   const { url, host, theme } = params;
 
-  const escapedHost = host.replace(/\./g, "&#8203;.");
-
   const brandColor = theme.brandColor || "#346df1";
   const color = {
     text: "#444",
@@ -101,10 +99,8 @@ function html(params) {
     buttonText: theme.buttonText || "#fff",
   };
 
-
-
   const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url;
-  console.log("Redirect", redirect);
+  // console.log("Redirect", redirect);
   return `
 <body>
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
@@ -118,7 +114,7 @@ function html(params) {
     <tr>
       <td align="center"
         style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
-        Sign in to <strong>${escapedHost}</strong>
+        Sign in to <strong>necchange.necc.di.uminho.pt</strong>
       </td>
     </tr>
     <tr>  
