@@ -21,6 +21,9 @@ export default async function RootLayout({ children }) {
   console.log("Session", session);
   return (
     <html lang="en">
+      <head>
+        <meta name="google-site-verification" content="HVpThFBdJ8PUXGD6k2itDm7qtdQvd9U0d4g3Is9qhr0" />
+      </head>
       <body className={inter.className}>
         <Provider>
           <Theme appearance="light" accentColor="blue">
