@@ -169,6 +169,10 @@ export default function CalendarPage() {
     ]);
   }, []);
 
+  const eventClickCallback = (info) => {
+    console.log(info.event.extendedProps);
+    alert(`Event: ${info.event.title} \nTime: ${info.event.extendedProps.time} \nLocal: ${info.event.extendedProps.local}`);
+  }
 
   return (
     <div className="bg-white min-h-screen pt-24 flex w-full overflow-hidden relative">
@@ -192,6 +196,7 @@ export default function CalendarPage() {
           plugins={[dayGridPlugin, googleCalendarPlugin]}
           locale={ptLocale}
           firstDay={0}
+          eventClick={eventClickCallback}
           headerToolbar={{
             left: "prev,today,next",
             center: "title",
