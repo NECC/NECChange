@@ -8,8 +8,11 @@ import axios from "axios";
 import MobileFilter from "@/components/calendar/MobileFilter";
 import UCsObj from "../data/filters.json";
 import CheckboxTree from "@/components/calendar/CheckboxTree/CheckboxTree";
+import PopUpOnClick from "@/components/calendar/PopUpOnClick";
 
 export default function CalendarPage() {
+  const [isPopUpOpened, setIsPopUpOpened] = useState(false);
+  const [popUpData, setPopUpData] = useState();
   const [finalArray, setFinalArray] = useState([]);
   const [rawEvents, setRawEvents] = useState([]);
   const [isCalendarLoading, setIsCalendarLoading] = useState(true);
@@ -170,8 +173,9 @@ export default function CalendarPage() {
   }, []);
 
   const eventClickCallback = (info) => {
-    console.log(info.event.extendedProps);
-    alert(`Event: ${info.event.title} \nTime: ${info.event.extendedProps.time} \nLocal: ${info.event.extendedProps.local}`);
+    setIsPopUpOpened(!isPopUpOpened);
+    // console.log(info.event.extendedProps);
+    setPopUpData(info.event.extendedProps);
   }
 
   return (
@@ -184,7 +188,10 @@ export default function CalendarPage() {
         onCheck={(checked) => setChecked(checked)}
       />
 
+      <PopUpOnClick isOpened={isPopUpOpened} setIsOpened={setIsPopUpOpened} data={popUpData}/>
+
       <MobileFilter nodes={nodes} checked={checked} onCheck={(checked) => setChecked(checked)} className="block lg:hidden"/>
+
 
       <div className="pt-8 px-2 md:px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
         {isCalendarLoading ?  (

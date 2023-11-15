@@ -129,7 +129,7 @@
     },
     {
         "calendar": "AUC",
-        "name": "AUC",
+        "name": "Álgebra Universal e Categorias",
         "sigla": "AUC",
         "year": 2,
         "semester": 2,
@@ -137,7 +137,7 @@
     },
     {
         "calendar": "ALF",
-        "name": "Autómatos",
+        "name": "Autómatos e Linguagens Formais",
         "sigla": "ALF",
         "year": 2,
         "semester": 2,
@@ -161,7 +161,7 @@
     },
     {
         "calendar": "POO",
-        "name": "POO",
+        "name": "Programação Orientada aos Objetos",
         "sigla": "POO",
         "year": 2,
         "semester": 2,
@@ -185,7 +185,7 @@
     },
     {
         "calendar": "CC",
-        "name": "CC",
+        "name": "Computabilidade e Complexidade",
         "sigla": "CC",
         "year": 3,
         "semester": 1,
@@ -209,7 +209,7 @@
     },
     {
         "calendar": "PLC",
-        "name": "PLC",
+        "name": "Processamento de Linguagens e Compiladores",
         "sigla": "PLC",
         "year": 3,
         "semester": 1,
@@ -249,7 +249,7 @@
     },
     {
         "calendar": "SLP",
-        "name": "SLP",
+        "name": "Semântica das Linguagens de Programação",
         "sigla": "SLP",
         "year": 3,
         "semester": 2,
@@ -257,7 +257,7 @@
     },
     {
         "calendar": "TNC",
-        "name": "TNC",
+        "name": "Teoria de Números Computacional",
         "sigla": "TNC",
         "year": 3,
         "semester": 2,
