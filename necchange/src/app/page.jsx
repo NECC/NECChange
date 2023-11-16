@@ -13,6 +13,7 @@ import PopUpOnClick from "@/components/calendar/PopUpOnClick";
 export default function CalendarPage() {
   const [isPopUpOpened, setIsPopUpOpened] = useState(false);
   const [popUpData, setPopUpData] = useState();
+  const [popUpCalendarTime, setPopUpCalendarTime] = useState();
   const [finalArray, setFinalArray] = useState([]);
   const [rawEvents, setRawEvents] = useState([]);
   const [isCalendarLoading, setIsCalendarLoading] = useState(true);
@@ -64,11 +65,9 @@ export default function CalendarPage() {
     return result;
   };
 
-
-
   useEffect(() => {
     axios.get("/api/calendar/getCalendar").then((res) => {
-      setRawEvents(res.data.response)
+      setRawEvents(res.data.response);
       setFinalArray(res.data.response);
       setIsCalendarLoading(false);
     });
@@ -131,7 +130,6 @@ export default function CalendarPage() {
       const years = [...new Set(UCsObj.map((elem) => elem.year))];
 
       const yearsArray = years.map((year) => {
-
         // same as semesters = [1, 2]
         const semesters = [
           ...new Set(
@@ -174,13 +172,12 @@ export default function CalendarPage() {
 
   const eventClickCallback = (info) => {
     setIsPopUpOpened(!isPopUpOpened);
-    // console.log(info.event.extendedProps);
+    setPopUpCalendarTime(info.event.startStr);
     setPopUpData(info.event.extendedProps);
-  }
+  };
 
   return (
     <div className="bg-white min-h-screen pt-24 flex w-full overflow-hidden relative">
-      
       <CheckboxTree
         className={`w-[440px] ml-5 mt-5 lg:block hidden`}
         nodes={nodes}
@@ -188,33 +185,44 @@ export default function CalendarPage() {
         onCheck={(checked) => setChecked(checked)}
       />
 
-      <PopUpOnClick isOpened={isPopUpOpened} setIsOpened={setIsPopUpOpened} data={popUpData}/>
+      <PopUpOnClick
+        isOpened={isPopUpOpened}
+        setIsOpened={setIsPopUpOpened}
+        data={popUpData}
+        calendarData={popUpCalendarTime}
+      />
 
-      <MobileFilter nodes={nodes} checked={checked} onCheck={(checked) => setChecked(checked)} className="block lg:hidden"/>
-
+      <MobileFilter
+        nodes={nodes}
+        checked={checked}
+        onCheck={(checked) => setChecked(checked)}
+        className="block lg:hidden"
+      />
 
       <div className="pt-8 px-2 md:px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
-        {isCalendarLoading ?  (
+        {isCalendarLoading ? (
           <div className="flex justify-center items-center h-full bg-white">
-            <div className="border-t-4 border-blue-500 border-solid rounded-full w-12 h-12 animate-spin"> </div>
+            <div className="border-t-4 border-blue-500 border-solid rounded-full w-12 h-12 animate-spin">
+              {" "}
+            </div>
           </div>
         ) : (
-        <FullCalendar
-          plugins={[dayGridPlugin, googleCalendarPlugin]}
-          locale={ptLocale}
-          firstDay={0}
-          eventClick={eventClickCallback}
-          headerToolbar={{
-            left: "prev,today,next",
-            center: "title",
-            right: "dayGridWeek,dayGridMonth",
-          }}
-          initialView="dayGridMonth"
-          displayEventTime={false}
-          events={finalArray}
-          eventColor="blue-sky-500"
-          height="80vh"
-        />
+          <FullCalendar
+            plugins={[dayGridPlugin, googleCalendarPlugin]}
+            locale={ptLocale}
+            firstDay={0}
+            eventClick={eventClickCallback}
+            headerToolbar={{
+              left: "prev,today,next",
+              center: "title",
+              right: "dayGridWeek,dayGridMonth",
+            }}
+            initialView="dayGridMonth"
+            displayEventTime={false}
+            events={finalArray}
+            eventColor="blue-sky-500"
+            height="80vh"
+          />
         )}
       </div>
     </div>
