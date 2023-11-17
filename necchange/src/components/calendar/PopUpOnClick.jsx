@@ -49,14 +49,14 @@ export default function PopUpOnClick(props) {
             )}
             {UC.time && (
               <div className="flex justify-center mb-2">
-                <FaClock className="mt-1 mr-1 text-black" /> {UC.time}
+                <FaClock className="mt-1 mr-1" /> {UC.time}
               </div>
             )}
             <div className={`flex justify-center text-black mb-2`}>
               <FaCalendarAlt className="mt-1 mr-1" /> {transformedDate}
             </div>
-            <div className={`flex justify-center ${colorClass} font-bold`}>
-              <IoIosBookmarks className="mt-1 mr-1" /> {UC?.year}° Ano -{" "}
+            <div className={`flex justify-center ${colorClass}`}>
+              <IoIosBookmarks className={`mt-1 mr-1`} /> {UC?.year}° Ano -{" "}
               {data?.type}
             </div>
           </AlertDialog.Description>

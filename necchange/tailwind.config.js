@@ -1,4 +1,4 @@
-const { mauve, violet, red, blackA } = require("@radix-ui/colors");
+const { mauve, violet, red, blackA, indigo } = require("@radix-ui/colors");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -14,6 +14,7 @@ module.exports = {
         ...violet,
         ...red,
         ...blackA,
+        ...indigo
       },
       keyframes: {
         slideDown: {
