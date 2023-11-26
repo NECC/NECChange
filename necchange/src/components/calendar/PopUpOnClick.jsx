@@ -64,14 +64,14 @@ export default function PopUpOnClick(props) {
               <FcCalendar className="mt-[3px] mr-1 text-xl" /> {transformedDate}
             </div>
             {UC?.year != 0 && (
-              <div className={`flex justify-center ${colorClass}`}>
-                <IoIosBookmarks className={`mt-1 mr-1`} /> {UC?.year}° Ano -{" "}
+              <div className={`flex justify-center`}>
+                <IoIosBookmarks className={`mt-1 mr-1 ${colorClass}`} /> {UC?.year}° Ano -{" "}
                 {data?.type}
               </div>
             )}
             { UC.eventTime != "" && (
-              <div className={`flex justify-center ${colorClass}`}>
-                <FaClock className={`mt-1 mr-1`} /> {UC.eventTime}h
+              <div className={`flex justify-center`}>
+                <FcClock className={`mt-[3px] mr-1 text-xl`} /> {UC.eventTime}h
               </div>
             )}
           </AlertDialog.Description>
