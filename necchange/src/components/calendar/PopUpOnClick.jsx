@@ -9,10 +9,13 @@ export default function PopUpOnClick(props) {
   // console.log(UCsObj)
   // console.log(data)
 
-  const calendarDataSplitted = calendarData?.split("-");
+  const calendarDataSplitted = calendarData?.split("T");
+
+  const calendarTime = calendarDataSplitted?.length > 1 ? calendarDataSplitted[1] : "";
+  const calendarDataSplittedFinal = calendarDataSplitted ? calendarDataSplitted[0].split("-") : "";
   const transformedDate = calendarData
-    ? `${calendarDataSplitted[2]}/${calendarDataSplitted[1]}/${calendarDataSplitted[0]}`
-    : "";
+  ? `${calendarDataSplittedFinal[2]}/${calendarDataSplittedFinal[1]}/${calendarDataSplittedFinal[0]}`
+  : "";
 
   const colorClass =
     data?.year == 1
@@ -28,9 +31,11 @@ export default function PopUpOnClick(props) {
     local: data?.local != "" ? data?.local : null,
     time: data?.time != "" ? data?.time : null,
     year: data?.year,
+    data: calendarData,
+    eventTime: calendarTime.slice(0, -4),
   };
 
-  // console.log(UC);
+  console.log(UC);
 
   return (
     <AlertDialog.Root open={isOpened}>
@@ -55,10 +60,17 @@ export default function PopUpOnClick(props) {
             <div className={`flex justify-center text-black mb-2`}>
               <FaCalendarAlt className="mt-1 mr-1" /> {transformedDate}
             </div>
-            <div className={`flex justify-center ${colorClass}`}>
-              <IoIosBookmarks className={`mt-1 mr-1`} /> {UC?.year}° Ano -{" "}
-              {data?.type}
-            </div>
+            {UC?.year != 0 && (
+              <div className={`flex justify-center ${colorClass}`}>
+                <IoIosBookmarks className={`mt-1 mr-1`} /> {UC?.year}° Ano -{" "}
+                {data?.type}
+              </div>
+            )}
+            { UC.eventTime != "" && (
+              <div className={`flex justify-center ${colorClass}`}>
+                <FaClock className={`mt-1 mr-1`} /> {UC.eventTime}h
+              </div>
+            )}
           </AlertDialog.Description>
 
           <div className="flex justify-center gap-[25px]">
