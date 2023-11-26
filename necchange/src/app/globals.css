@@ -105,3 +105,11 @@
     color: #1d4ed8;
   }
 }
+
+.fc-h-event .fc-event-main {
+  @apply hover:backdrop-brightness-75 hover:cursor-pointer
+}
+
+.fc-daygrid-dot-event .fc-event-title {
+  @apply hover:cursor-pointer;
+}

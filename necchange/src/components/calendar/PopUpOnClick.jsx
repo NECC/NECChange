@@ -3,6 +3,9 @@ import UCsObj from "../../data/filters.json";
 import { FaMapPin, FaCalendarAlt } from "react-icons/fa";
 import { IoIosBookmarks } from "react-icons/io";
 import { FaClock } from "react-icons/fa6";
+import { CiClock2, CiCalendarDate, CiCalendar } from "react-icons/ci";
+import { FcClock, FcCalendar } from "react-icons/fc";
+
 
 export default function PopUpOnClick(props) {
   const { isOpened, setIsOpened, data, calendarData } = props;
@@ -40,7 +43,7 @@ export default function PopUpOnClick(props) {
   return (
     <AlertDialog.Root open={isOpened}>
       <AlertDialog.Portal>
-        <AlertDialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0" />
+        <AlertDialog.Overlay className="bg-blackA6 data-[state=open]:animate-overlayShow fixed inset-0" onClick={() => setIsOpened(false)}/>
         <AlertDialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[400px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
           <AlertDialog.Title className="text-mauve12 m-0 pb-3 border-b-2 text-[17px] text-center font-bold">
             {UC.name}
@@ -54,11 +57,11 @@ export default function PopUpOnClick(props) {
             )}
             {UC.time && (
               <div className="flex justify-center mb-2">
-                <FaClock className="mt-1 mr-1" /> {UC.time}
+                <FcClock className="mt-[3px] mr-1 text-xl" /> {UC.time}
               </div>
             )}
             <div className={`flex justify-center text-black mb-2`}>
-              <FaCalendarAlt className="mt-1 mr-1" /> {transformedDate}
+              <FcCalendar className="mt-[3px] mr-1 text-xl" /> {transformedDate}
             </div>
             {UC?.year != 0 && (
               <div className={`flex justify-center ${colorClass}`}>
