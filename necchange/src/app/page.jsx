@@ -221,6 +221,7 @@ export default function CalendarPage() {
             displayEventTime={false}
             events={finalArray}
             eventColor="blue-sky-500"
+            event
             height="80vh"
           />
         )}
