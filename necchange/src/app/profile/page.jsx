@@ -4,16 +4,13 @@ import { useSession } from "next-auth/react"
 import { useEffect, useRef } from "react";
 import QRCode from 'easyqrcodejs';
 import colors from "tailwindcss/colors";
-import Loader from "@/components/globals/Loader";
 import { redirect } from "next/navigation";
 
 export default function Perfil() {
     const { data: session, status } = useSession()
 
 
-    if (status !== "authenticated") {
-        
-    }
+    if (status !== "authenticated") return
 
     /* We do this because at login the callback sends every user to this page, but a super_user don't want to be redirected to profile */
     if (session?.user.role == "SUPER_USER") return redirect("/super_user")
