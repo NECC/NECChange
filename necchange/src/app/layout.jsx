@@ -19,11 +19,12 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   const session = await getServerSession(authOptions);
 
-  console.log("Session", session);
   return (
     <html lang="en">
       <head>
         <meta name="google-site-verification" content="HVpThFBdJ8PUXGD6k2itDm7qtdQvd9U0d4g3Is9qhr0" />
+        <meta name="robots" content="index,follow" />
+        <meta name="keywords" content="necchange, NECChange, Universidade do Minho, University of Minho, Departamento de Informática, NECC, necc"/>
       </head>
       <body className={inter.className}>
         <Provider>

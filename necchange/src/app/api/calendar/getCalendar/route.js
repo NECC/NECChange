@@ -24,11 +24,21 @@ export async function GET(req, res) {
 
   const events = data.items.map((event) => {
     const color = getColor(event.summary);
+    let local = '';
+    let time = '';
+
+    if (event.description) {
+      const description = event.description.split('\n')
+      local = description[0];
+      time = description[1];
+    }
 
     return {
       title: event.summary,
       start: event.start.date || event.start.dateTime,
       color: color,
+      local,
+      time,
     };
   });
 

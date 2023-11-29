@@ -345,7 +345,6 @@ class TreeNode extends React.PureComponent {
         }, className);
 
         const classTextColor = `${value.charAt(0) == '1' ? 'text-blue-500' : value.charAt(0) == '2' ? 'text-emerald-500': value.charAt(0) == '3' ? 'text-violet-500' : 'text-black'}`;
-        console.log(classTextColor);
 
         const inputId = `${treeId}-${String(value).split(' ').join('_')}`;
 
