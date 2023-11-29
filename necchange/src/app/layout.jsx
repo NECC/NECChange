@@ -10,7 +10,7 @@ import { Theme, ThemePanel } from "@radix-ui/themes";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "necchange",
+  title: "NECChange",
   description: "necchange is a website where students can see their test calendar and where they can access their membership card.",
   content: "necchange, NECChange, Universidade do Minho, University of Minho, Departamento de Informática, NECC, necc",
 };
