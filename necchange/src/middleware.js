@@ -12,8 +12,9 @@ import { getToken } from "next-auth/jwt";
  */
 const publicRoutes = ["/"];
 const authRoutes = ["/auth"];
-const adminRoutes = ["/super_user", "partner"];
-const protectedRoutes = ["/horario", "/feed", "/partner", "/profile"];
+// for now, horario and feed are protected routes. When necchange is full released, change that routes to protected 
+const adminRoutes = ["/super_user", "partner", "/horario", "/feed"];
+const protectedRoutes = ["/profile"];
 
 export async function middleware(request) {
   const token = await getToken({
