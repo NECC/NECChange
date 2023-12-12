@@ -125,7 +125,7 @@ async function populate_partners() {
 
   const partnersSheet = await axios
     .get(
-      `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}?sort_by=Nº&sort_order=asc&offset=371`,
+      `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}?sort_by=Nº&sort_order=asc&offset=369`,
       {
         headers: {
           Accept: "application/json",
@@ -143,6 +143,7 @@ async function populate_partners() {
     });
 
   let i = 0;
+  console.log(partnersSheet[0]);
   partnersSheet.map((partner) => {
     //console.log(partner);
     partnerAcademicNumber = partner["Numero"].toLowerCase();
@@ -159,15 +160,31 @@ async function populate_partners() {
     i++;
   });
 
+  email_super_users = ["neccuminho06@gmail.com", "recreativo@necc.di.uminho.pt", "pedagogico@necc.di.uminho.pt", "comunicacao@necc.di.uminho.pt", "dev@necc.di.uminho.pt"]
+  email_super_users.map((email_super_user) => {
+    partners.push({
+      uniqueId: i,
+      name: email_super_user.split('@')[0],
+      email: email_super_user,
+      phone: null,
+      partner: true,
+      role: Role.SUPER_USER
+    })
+    i++;
+  })
+  
+ /*
   partners.push({
     uniqueId: i,
     name: "Devs",
-    email: "dev@necc.di.uminho.pt",
+  //  number: i.toString(),
+    email: "dev@necc.uminho.pt",
+    phone: null,
     partner: true,
     role: Role.SUPER_USER
   })
   i++;
-
+  */
   return partners;
 }
 
