@@ -102,8 +102,8 @@ export default function UserPage() {
                 console.log(userProfile);
               }}
             >
-              <option value={Role.STUDENT}>{Role.STUDENT}</option>
-              <option value={Role.PARTNERSHIP}>{Role.PARTNERSHIP}</option>
+              <option value={Role.CS_STUDENT}>{Role.CS_STUDENT}</option>
+              <option value={Role.OUTSIDER}>{Role.OUTSIDER}</option>
             </select>
           </div>
           <div>
