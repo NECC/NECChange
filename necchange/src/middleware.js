@@ -13,8 +13,8 @@ import { getToken } from "next-auth/jwt";
 const publicRoutes = ["/"];
 const authRoutes = ["/auth"];
 // for now, horario and feed are protected routes. When necchange is full released, change that routes to protected 
-const adminRoutes = ["/super_user", "partner", "/horario", "/feed"];
-const protectedRoutes = ["/profile"];
+const adminRoutes = ["/super_user", "/partner", ];
+const protectedRoutes = ["/profile", "/horario", "/feed"];
 
 export async function middleware(request) {
   const token = await getToken({
@@ -25,7 +25,7 @@ export async function middleware(request) {
 
   //console.log('Request', request);
   //console.log("My token middleware:", token);
-
+  //console.log("path", request.nextUrl.pathname);
   // Admin paths
   // if signed in and doesn't have role SUPER_USER, can't access /super_user/**
   if (adminRoutes.some((path) => request.nextUrl.pathname.startsWith(path))) {
@@ -35,6 +35,7 @@ export async function middleware(request) {
 
   // Protected paths
   // if not signed in, user can't access /horario and /feed
+  
   if (
     protectedRoutes.some((path) => request.nextUrl.pathname.startsWith(path))
   ) {

@@ -80,10 +80,10 @@ function encrypt(number) {
 
   return number_decoded.join("");
 }
-
+*/
 let users = [];
-async function populate_users() {
-  let i = 1;
+let i = 0;
+async function populate_students() {
   const portugueseFaker = new Faker({ locale: [pt_PT] });
 
   Promise.all(
@@ -92,37 +92,23 @@ async function populate_users() {
         let user = {
           uniqueId: i,
           number: student_nr,
-          firstname: portugueseFaker.person.firstName(),
-          lastname: portugueseFaker.person.lastName(),
-          email: encrypt(student_nr).toLowerCase() + "@alunos.uminho.pt",
+          partnerNumber: null,
+          name: portugueseFaker.person.firstName(),
+          email: student_nr.toLowerCase() + "@alunos.uminho.pt",
           partner: false,
-          role: Role.STUDENT,
+          role: Role.CS_STUDENT,
         };
         users.push(user);
         i++;
       }
     })
   );
-
-  const super_user = {
-    uniqueId: i,
-    firstname: "NECC",
-    lastname: "Dev",
-    email: "dev@necc.di.uminho.pt",
-    //password: null
-    partner: false,
-    role: Role.SUPER_USER,
-  };
-
-  students.push(super_user);
-
-  return students;
 }
-*/
 
 async function populate_partners() {
   let partners = [];
 
+  // api call to get NECC partners from a partner sheet
   const partnersSheet = await axios
     .get(
       `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}?sort_by=Nº&sort_order=asc&offset=369`,
@@ -130,7 +116,11 @@ async function populate_partners() {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: "Basic " + btoa(`${process.env.NEXT_PUBLIC_SHEETDB_LOGIN}:${process.env.NEXT_PUBLIC_SHEETDB_PASSWORD}`),
+          Authorization:
+            "Basic " +
+            btoa(
+              `${process.env.NEXT_PUBLIC_SHEETDB_LOGIN}:${process.env.NEXT_PUBLIC_SHEETDB_PASSWORD}`
+            ),
         },
       }
     )
@@ -142,49 +132,62 @@ async function populate_partners() {
       console.log(err);
     });
 
-  let i = 0;
-  console.log(partnersSheet[0]);
   partnersSheet.map((partner) => {
-    //console.log(partner);
-    partnerAcademicNumber = partner["Numero"].toLowerCase();
+    partnerAcademicNumber = partner["Numero"].trim().toLowerCase();
+    partnerNumber = parseInt(partner["Nº"]);
+    partnerName = partner["Nome"];
+    partnerPhone = partner["Telefone"];
+
+    // check whether the student is from computer science or not 
+    const role =
+      users.filter((user) => user.number.toLowerCase() == partnerAcademicNumber)
+        .length !== 0
+        ? Role.CS_STUDENT
+        : Role.OUTSIDER;
+    
+    // in case he is, change partner flag to true
+    if(role == Role.CS_STUDENT){
+      const cs_student_partner = users.filter((user) => user.number.toLowerCase() == partnerAcademicNumber)
+      cs_student_partner[0].partner = true;
+      cs_student_partner[0].partnerNumber = partnerNumber;
+      cs_student_partner[0].name = partnerName;
+      cs_student_partner[0].phone = partnerPhone;
+    } else {
+    // in case he isn't, add him to the database
+      partners.push({
+        uniqueId: i,
+        partnerNumber: partnerNumber,
+        number: partnerAcademicNumber,
+        name: partnerName,
+        email: partnerAcademicNumber.trim() + "@alunos.uminho.pt",
+        phone: partnerPhone,
+        partner: true,
+        role: role,
+      });
+    }
+    i++;
+  });
+
+  // add super users
+  email_super_users = [
+    "neccuminho06@gmail.com",
+    "recreativo@necc.di.uminho.pt",
+    "pedagogico@necc.di.uminho.pt",
+    "comunicacao@necc.di.uminho.pt",
+    "dev@necc.di.uminho.pt",
+  ];
+  email_super_users.map((email_super_user) => {
     partners.push({
       uniqueId: i,
-      partnerNumber: parseInt(partner["Nº"]),
-      number: partnerAcademicNumber,
-      name: partner["Nome"],
-      email: partnerAcademicNumber.trim() + "@alunos.uminho.pt",
-      phone: partner["Telefone"],
+      name: email_super_user.split("@")[0],
+      email: email_super_user,
+      phone: null,
       partner: true,
-      role: Role.OUTSIDER,
+      role: Role.SUPER_USER,
     });
     i++;
   });
 
-  email_super_users = ["neccuminho06@gmail.com", "recreativo@necc.di.uminho.pt", "pedagogico@necc.di.uminho.pt", "comunicacao@necc.di.uminho.pt", "dev@necc.di.uminho.pt"]
-  email_super_users.map((email_super_user) => {
-    partners.push({
-      uniqueId: i,
-      name: email_super_user.split('@')[0],
-      email: email_super_user,
-      phone: null,
-      partner: true,
-      role: Role.SUPER_USER
-    })
-    i++;
-  })
-  
- /*
-  partners.push({
-    uniqueId: i,
-    name: "Devs",
-  //  number: i.toString(),
-    email: "dev@necc.uminho.pt",
-    phone: null,
-    partner: true,
-    role: Role.SUPER_USER
-  })
-  i++;
-  */
   return partners;
 }
 
@@ -197,7 +200,7 @@ async function populate_student_class() {
     if (Array.isArray(entries)) {
       Promise.all(
         entries.map((student_class) => {
-          let student_id = students
+          let student_id = users
             .filter((student) => student.number == studentNr)
             .at(0)?.uniqueId;
 
@@ -240,12 +243,11 @@ async function populate_student_class() {
 const prisma = new PrismaClient();
 
 async function main() {
-  /*
   const ucs = await populate_ucs();
   const classes = await populate_classes();
-  const users = await populate_users();
+  await populate_students();
   const students_classes = await populate_student_class();
-  */
+
   const partners = await populate_partners();
 
   console.log("A apagar tudo!");
@@ -264,9 +266,10 @@ async function main() {
       await prisma.user.create({
         data: partner,
       });
-    }));
+    })
+  );
 
-  /*
+  
   console.log("A introduzir courses");
   ucs.map(async (uc) => {
     await prisma.course.create({
@@ -300,7 +303,7 @@ async function main() {
       });
     })
   );
-  */
+  
 }
 
 main()

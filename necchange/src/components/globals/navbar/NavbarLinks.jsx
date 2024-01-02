@@ -37,6 +37,12 @@ function NavbarLinks(props) {
                 (session) ? 
                     <>
                         <li>
+                            <Link className={linkStyle} href="/horario">Horário</Link>
+                        </li>
+                        <li>
+                            <Link className={linkStyle} href="/feed">Feed</Link>
+                        </li>
+                        <li>
                             <Link className={linkStyle} href="/profile">Perfil</Link>
                         </li>
                         <li>

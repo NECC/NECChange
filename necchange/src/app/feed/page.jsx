@@ -76,7 +76,30 @@ export default function Feed() {
     };
 
     checkTradePeriod();
-  }, [tradesOpen]);
+  }, [])
+
+  // This effect is responsible to get the first posts that show on feed
+  useEffect(() => {
+    const startingFeed = async () => {
+      try {
+        axios
+          .get(
+            `/api/feed/feed_post/${5}/landing/${
+              myTrades ? `/${session?.user?.number}` : "/undefined"
+            }`
+          )
+          .then((res) => {
+            setDbCursor(res.data.cursor);
+            setFeedData(res.data.response);
+          });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (tradesOpen) startingFeed();
+  }, [session, tradesOpen]);
+
 
   // This effect gets the courses that the student is taking
   useEffect(() => {
@@ -91,38 +114,14 @@ export default function Feed() {
           console.error("Error fetching data:", error);
         }
       };
-      uc_names();
+      if (tradesOpen) uc_names();
     }
   }, [session]);
 
-  // This effect is responsible to get the first posts that show on feed
-  useEffect(() => {
-    const startingFeed = async () => {
-      try {
-        let query_filtered_ucs = ucsFilter.join("&");
-        query_filtered_ucs = encodeURIComponent(query_filtered_ucs);
-        console.log(query_filtered_ucs);
-
-        axios
-          .get(
-            `/api/feed/feed_post/${5}/landing/${
-              myTrades ? `/${session?.user?.number}` : "/undefined"
-            }/${query_filtered_ucs}`
-          )
-          .then((res) => {
-            setDbCursor(res.data.cursor);
-            setFeedData(res.data.response);
-          });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    if (tradesOpen) startingFeed();
-  }, [session, ucsFilter, myTrades]);
 
   // This effect filters the posts already taken
   useEffect(() => {
+    console.log(dbCursor);
     if (ucsFilter.length == 0) {
       setFilteredPosts(feedPosts);
     } else {
@@ -141,7 +140,6 @@ export default function Feed() {
     try {
       let query_filtered_ucs = ucsFilter.join("&");
       query_filtered_ucs = encodeURIComponent(query_filtered_ucs);
-      console.log("dbCursor", dbCursor);
       axios
         .get(
           `/api/feed/feed_post/${5}/${dbCursor}${
