@@ -11,8 +11,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "NECChange",
-  description: "necchange is a website where students can see their test calendar and where they can access their membership card.",
-  content: "necchange, NECChange, Universidade do Minho, University of Minho, Departamento de Informática, NECC, necc",
+  keyworks: ["NECC", "Ciências da Computação", "UMinho", "UM", "Universidade do Minho", "Calendario", "NECChange", "Testes", "Teste", "Socio"],
+  description: "NECChange is a website where students can see their test calendar and where they can access their membership card.",
+  content: "NECChange is a website where students can see their test calendar and where they can access their membership card."
 };
 
 export default async function RootLayout({ children }) {
