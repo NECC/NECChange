@@ -63,6 +63,8 @@ export default function Feed() {
     setLoader(value);
   };
 
+  console.log("session", session);
+
   // This effect checks if trade period is open
   useEffect(() => {
     const checkTradePeriod = () => {

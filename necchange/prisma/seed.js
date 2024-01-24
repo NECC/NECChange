@@ -133,21 +133,21 @@ async function populate_partners() {
     });
 
   partnersSheet.map((partner) => {
-    partnerAcademicNumber = partner["Numero"].trim().toLowerCase();
+    partnerAcademicNumber = partner["Numero"].trim().toUpperCase();
     partnerNumber = parseInt(partner["Nº"]);
     partnerName = partner["Nome"];
     partnerPhone = partner["Telefone"];
 
     // check whether the student is from computer science or not 
     const role =
-      users.filter((user) => user.number.toLowerCase() == partnerAcademicNumber)
+      users.filter((user) => user.number.toUpperCase() == partnerAcademicNumber)
         .length !== 0
         ? Role.CS_STUDENT
         : Role.OUTSIDER;
     
     // in case he is, change partner flag to true
     if(role == Role.CS_STUDENT){
-      const cs_student_partner = users.filter((user) => user.number.toLowerCase() == partnerAcademicNumber)
+      const cs_student_partner = users.filter((user) => user.number.toUpperCase() == partnerAcademicNumber)
       cs_student_partner[0].partner = true;
       cs_student_partner[0].partnerNumber = partnerNumber;
       cs_student_partner[0].name = partnerName;
@@ -159,7 +159,7 @@ async function populate_partners() {
         partnerNumber: partnerNumber,
         number: partnerAcademicNumber,
         name: partnerName,
-        email: partnerAcademicNumber.trim() + "@alunos.uminho.pt",
+        email: partnerAcademicNumber.trim().toLowerCase() + "@alunos.uminho.pt",
         phone: partnerPhone,
         partner: true,
         role: role,
