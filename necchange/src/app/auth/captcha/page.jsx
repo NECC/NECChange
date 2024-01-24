@@ -18,8 +18,8 @@ console.log(newUrl);
       <aside className="h-screen border-r dark:border-gray-200 dark:bg-darker focus:outline-none sm:w-1/2 w-full tall:w-full">
         <div className="flex flex-col   min-h-full  justify-center items-center ">
           <div>
-            <a href={newUrl.href} className="rounded-md bg-[#018ccb] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-              Continuar para o perfil
+            <a href={newUrl.href} className="rounded-md bg-[#018ccb] px-5 py-2.5 text-l font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              Concluir Login
             </a>
           </div>
         </div>

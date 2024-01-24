@@ -53,12 +53,12 @@ export default function StudentSchedule(props) {
         weekends={false}
         locale={ptLocale}
         firstDay={0}
-        initialView={isPhone ? "timeGridDay" : "timeGridWeek"}
+        initialView={"timeGridWeek"}
         titleFormat={(info) => `Horário ${info.date.year}`}
         headerToolbar={{
-          start: isPhone ? "prev" : "",
+          start: isPhone ? "timeGridWeek,timeGridDay" : "",
           center: "title",
-          end: isPhone ? "next" : "",
+          end: isPhone ? "prev,next" : "",
         }}
         dayHeaderFormat={{
           weekday: isTablet ? "short" : "long",
