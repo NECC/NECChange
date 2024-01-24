@@ -18,6 +18,7 @@ const Posts = ({ filteredPosts, toggleLoader, getMorePosts }) => {
     <div>
       <div className="w-full grid gap-6 mb-8">
         {filteredPosts.map((feedPost, i) => {
+          console.log("feedPost", feedPost);
           return (
             <FeedPost key={i} post={feedPost} toggleLoader={toggleLoader} />
           );
@@ -63,8 +64,6 @@ export default function Feed() {
     setLoader(value);
   };
 
-  console.log("session", session);
-
   // This effect checks if trade period is open
   useEffect(() => {
     const checkTradePeriod = () => {
@@ -72,21 +71,21 @@ export default function Feed() {
         .get("/api/feed/feed_post/trade_period_info")
         .then((res) => {
           setTradesOpen(res.data.open);
-          console.log(res);
         })
         .catch((err) => console.log(err));
     };
 
     checkTradePeriod();
-  }, [])
+  }, []);
 
+  /*
   // This effect is responsible to get the first posts that show on feed
   useEffect(() => {
     const startingFeed = async () => {
       try {
         axios
           .get(
-            `/api/feed/feed_post/${5}/landing/${
+            `/api/feed/feed_post/${2}/landing/${
               myTrades ? `/${session?.user?.number}` : "/undefined"
             }`
           )
@@ -101,41 +100,33 @@ export default function Feed() {
 
     if (tradesOpen) startingFeed();
   }, [session, tradesOpen]);
-
-
-  // This effect gets the courses that the student is taking
-  useEffect(() => {
-    if (session) {
-      const uc_names = async () => {
-        try {
-          axios.get(`/api/users/user_ucs/${session?.user?.number}`).then((res) => {
-            setUcsArray(res.data.student_classes);
-            console.log(res.data.student_classes);
-          });
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-      if (tradesOpen) uc_names();
-    }
-  }, [session]);
-
+*/
 
   // This effect filters the posts already taken
   useEffect(() => {
-    console.log(dbCursor);
-    if (ucsFilter.length == 0) {
-      setFilteredPosts(feedPosts);
-    } else {
-      setFilteredPosts(
-        feedPosts.filter((feedPost) =>
-          feedPost.trade_id.some((tradeId) =>
-            ucsFilter.includes(tradeId.lessonFrom.course.name)
-          )
-        )
+    // No filters, choose between personal or everything
+    if (ucsFilter.length == 0) { 
+      const posts = feedPosts.filter((feedPost) =>
+        myTrades
+          ? feedPost.from_student.number == session.user.number
+          : true
       );
+      setFilteredPosts(posts);
+    // With filters (this body can be optimized)
+    } else {
+      const posts = feedPosts.filter((feedPost) =>
+        ucsFilter.every((uc) =>
+          feedPost.trade_id
+            .map((trade) => trade.lessonFrom.course.name)
+            .includes(uc)
+        ) && (myTrades
+          ? feedPost.from_student.number == session.user.number
+          : feedPost.from_student.number != session.user.number)
+      );
+      setFilteredPosts(posts);
     }
-  }, [ucsFilter, feedPosts]);
+
+  }, [myTrades, ucsFilter, feedPosts]);
 
   // This function gets more posts from the database
   const getMorePosts = async () => {
@@ -144,7 +135,7 @@ export default function Feed() {
       query_filtered_ucs = encodeURIComponent(query_filtered_ucs);
       axios
         .get(
-          `/api/feed/feed_post/${5}/${dbCursor}${
+          `/api/feed/feed_post/${2}/${dbCursor}${
             myTrades ? `/${session?.user?.number}` : "/undefined"
           }/${query_filtered_ucs}`
         )
@@ -188,7 +179,9 @@ export default function Feed() {
 
           <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
             <UCFilter
+              session={session}
               setUcsFilter={setUcsFilter}
+              setUcsArray={setUcsArray}
               ucsArray={ucsArray}
               ucsFilter={ucsFilter}
             />

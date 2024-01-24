@@ -47,7 +47,8 @@ export default function NewTrade({ toggleLoader }) {
 
   useEffect(() => {
     axios
-      .get(`/api/users/user_courses/${session?.user.number}`)
+      //.get(`/api/users/user_courses/${session?.user.number}`)
+      .get(`/api/users/user_courses/A91699`)
       .then((response) => {
         const data = response.data.student_ucs;
         const parsed = data.reduce((acc, { lesson }) => {
@@ -138,7 +139,7 @@ export default function NewTrade({ toggleLoader }) {
     if (format_validator(trades) == true) {
       axios
         .post("/api/feed/feed_post/add_trade", {
-          params: { trades: trades, student_nr: session?.user.number },
+          params: { trades: trades, student_nr: 'A91699'/*session?.user.number*/ },
         })
         .then((response) => {
           console.log(response);
