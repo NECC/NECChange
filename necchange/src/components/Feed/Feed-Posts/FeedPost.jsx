@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import Badge from "../../globals/Badge";
 // há x tempo atrás
 import moment from "moment";
 import "moment/locale/pt";
-
+import Status from '@prisma/client'
 
 const statusMap = {
   ACCEPTED: ["Aceite", "green"],
   PENDING: ["Pendente", "yellow"],
   REMOVED: ["Removido", "red"],
+  ERROR: ["Não é possível", "red"]
 };
 
 const type_class = {
@@ -24,10 +26,13 @@ const type_class = {
 
 export default function FeedPost({ post, toggleLoader }) {
   const { data: session } = useSession();
-  const isViewingOwnPost = session?.user.number === post.from_student.number;
+  const isWatchingOwnPost = session.user.number === post.from_student.number;
   const fromStudentNr = post.from_student.number;
   const tradeId = post.id;
-  const [status, badgeVariant] = statusMap[post.status];
+
+  /* variable status is an array */
+  const [status, setStatus] = useState(statusMap[post.status])
+  const [clicked, setClicked] = useState(false)
 
   const acceptTrade = () => {
     toggleLoader(true);
@@ -35,16 +40,22 @@ export default function FeedPost({ post, toggleLoader }) {
       .post(`/api/feed/feed_post/accept_trade`, {
         params: {
           fromStudentNr: fromStudentNr,
-          studentAcceptedNr: session?.user.number,
+          studentAcceptedNr: session?.user.number ,
           tradeId: tradeId,
         },
       })
       .then((res) => {
         if (res.data.response == true) {
           toast.success("Troca realizada com sucesso!");
+          post.status = "ACCEPTED"
+          setStatus(statusMap["ACCEPTED"])
+
         } else {
-          toast.error("Não é possível realizar a troca!");
+          toast.error("Não é possível realizar a troca! Turnos incompatíveis.");
+          post.status = "ERROR"
+          setStatus(statusMap["ERROR"])
         }
+        setClicked(!clicked)
         toggleLoader(false);
       })
       .catch((err) => {
@@ -61,14 +72,28 @@ export default function FeedPost({ post, toggleLoader }) {
       .then((res) => {
         toggleLoader(false);
         toast.success("Pedido de troca removido!");
+        post.status = "ACCEPTED"
+        setStatus(statusMap["ACCEPTED"])
       })
       .catch((err) => {
         toggleLoader(false);
         toast.error("Erro ao remover o pedido de troca!");
         console.log(err);
       });
-  };
 
+      setClicked(!clicked)
+  };
+/*
+  useEffect(() => {
+    const cena = () => {
+      console.log("own post:", isWatchingOwnPost);
+      console.log("post_id: ", post.id);
+      console.log("status", status);
+    }
+
+    cena()
+  }, [])
+*/
   return (
     <div className="rounded-md text-base bg-white p-6 border shadow w-full grid gap-8">
       <div className="flex items-center justify-between gap-2">
@@ -78,7 +103,7 @@ export default function FeedPost({ post, toggleLoader }) {
           {moment(post.publish_time).fromNow(true)} atrás
         </p>
 
-        {isViewingOwnPost && <Badge variant={badgeVariant}>{status}</Badge>}
+        { (isWatchingOwnPost || clicked) && <Badge variant={status[1]}>{status[0]}</Badge>}
       </div>
 
       <div className="grid">
@@ -112,7 +137,7 @@ export default function FeedPost({ post, toggleLoader }) {
                   <FaArrowRightArrowLeft className="text-[11px] text-blue-900" />
                   <p className="">
                     <span className="font-semibold">{to}</span>{" "}
-                    {isViewingOwnPost ? "Axxxxx" : session?.user.number}
+                    {isWatchingOwnPost ? "Axxxxx" : session?.user.number}
                   </p>
                 </div>
               </div>
@@ -121,9 +146,9 @@ export default function FeedPost({ post, toggleLoader }) {
         })}
       </div>
 
-      <div className="flex justify-end">
-        {isViewingOwnPost ? (
-          status == "Pendente" && (
+      <div className={`${clicked ? 'hidden': ''} flex justify-end`}>
+        {isWatchingOwnPost ? (
+          status[0] == "Pendente" && (
             <button
               className={`py-2 px-4 bg-red-600 hover:bg-red-500 font-bold text-white rounded-lg`}
               onClick={removeTrade}

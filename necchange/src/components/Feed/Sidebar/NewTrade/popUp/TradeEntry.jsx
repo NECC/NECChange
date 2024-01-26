@@ -26,7 +26,7 @@ export default function TradeEntry(props) {
   const classToText = ({ type, shift }) => `${classMap[type]}${shift}`;
 
   const handleUcSelection = (selected) => {
-    console.log("Uc selected", selected);
+    //console.log("Uc selected", selected);
     setUcSelection(selected);
     updateTrade({
       ucId: enrolledClasses[selected].ucId,
@@ -45,7 +45,7 @@ export default function TradeEntry(props) {
   };
 
   const handleFromSelection = (selected) => {
-    console.log("From selected", selected);
+    //console.log("From selected", selected);
     updateTrade({
       type: selected.type,
       fromShift: selected.shift,
@@ -62,7 +62,7 @@ export default function TradeEntry(props) {
   };
 
   const handleToSelection = (selected) => {
-    console.log("To selected", selected);
+    //console.log("To selected", selected);
     updateTrade({ toShift: selected.shift });
   };
 

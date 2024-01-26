@@ -10,11 +10,11 @@ export default function Home() {
 
   useEffect(() => {
     if (!session) return;
-    console.log(session.user?.number);
+    //console.log(session.user?.number);
     axios
       .get(`/api/schedule/student_schedule/${session.user?.number}`)
       .then((response) => {
-        console.log(response);
+        //console.log(response);
         setClasses(response.data.response);
       })
       .catch((error) => {

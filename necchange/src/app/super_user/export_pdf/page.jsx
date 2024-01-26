@@ -18,7 +18,7 @@ export default function SuperUser() {
     axios
       .get("/api/calendar/getUCS")
       .then((res) => {
-        console.log(res);
+        //console.log(res);
         setUcs(res.data.response.map((uc) => uc.name));
       })
       .catch((err) => console.log(err));

@@ -18,7 +18,7 @@ const Posts = ({ filteredPosts, toggleLoader, getMorePosts }) => {
     <div>
       <div className="w-full grid gap-6 mb-8">
         {filteredPosts.map((feedPost, i) => {
-          console.log("feedPost", feedPost);
+        //  console.log("feedPost", feedPost);
           return (
             <FeedPost key={i} post={feedPost} toggleLoader={toggleLoader} />
           );
@@ -60,6 +60,7 @@ export default function Feed() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [myTrades, setMyTrades] = useState(false);
 
+
   const toggleLoader = (value) => {
     setLoader(value);
   };
@@ -78,14 +79,14 @@ export default function Feed() {
     checkTradePeriod();
   }, []);
 
-  /*
+  
   // This effect is responsible to get the first posts that show on feed
   useEffect(() => {
     const startingFeed = async () => {
       try {
         axios
           .get(
-            `/api/feed/feed_post/${2}/landing/${
+            `/api/feed/feed_post/${5}/landing/${
               myTrades ? `/${session?.user?.number}` : "/undefined"
             }`
           )
@@ -100,31 +101,37 @@ export default function Feed() {
 
     if (tradesOpen) startingFeed();
   }, [session, tradesOpen]);
-*/
+
 
   // This effect filters the posts already taken
   useEffect(() => {
+    let posts = []
     // No filters, choose between personal or everything
     if (ucsFilter.length == 0) { 
-      const posts = feedPosts.filter((feedPost) =>
+      posts = feedPosts.filter((feedPost) =>
         myTrades
           ? feedPost.from_student.number == session.user.number
           : true
       );
-      setFilteredPosts(posts);
+    
     // With filters (this body can be optimized)
     } else {
-      const posts = feedPosts.filter((feedPost) =>
+      posts = feedPosts.filter((feedPost) =>
         ucsFilter.every((uc) =>
           feedPost.trade_id
             .map((trade) => trade.lessonFrom.course.name)
             .includes(uc)
         ) && (myTrades
           ? feedPost.from_student.number == session.user.number
-          : feedPost.from_student.number != session.user.number)
+          : feedPost.from_student.number != session.user.number )
       );
-      setFilteredPosts(posts);
     }
+
+    let new_cursor = 0
+    const post_ids = posts.map(post => post.id)
+    new_cursor = post_ids.length == 0 ? 1 : Math.max(...post_ids)
+    setDbCursor(new_cursor)
+    setFilteredPosts(posts);
 
   }, [myTrades, ucsFilter, feedPosts]);
 
@@ -133,9 +140,10 @@ export default function Feed() {
     try {
       let query_filtered_ucs = ucsFilter.join("&");
       query_filtered_ucs = encodeURIComponent(query_filtered_ucs);
+      //console.log(dbCursor);
       axios
         .get(
-          `/api/feed/feed_post/${2}/${dbCursor}${
+          `/api/feed/feed_post/${5}/${dbCursor}${
             myTrades ? `/${session?.user?.number}` : "/undefined"
           }/${query_filtered_ucs}`
         )

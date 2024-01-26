@@ -42,7 +42,7 @@ export default function ManageTrades() {
           } else {
             setStatus("Fechado");
           }
-          console.log(res);
+          //console.log(res);
         })
         .catch((err) => {
           console.log(err);
@@ -61,7 +61,7 @@ export default function ManageTrades() {
       })
       .then((res) => {
         toast.success("Sucesso!");
-        console.log(res);
+        //console.log(res);
       })
       .catch((err) => {
         toast.error("Erro!");
