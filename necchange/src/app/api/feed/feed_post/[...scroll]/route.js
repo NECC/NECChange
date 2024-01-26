@@ -61,7 +61,7 @@ export async function GET(req, context) {
       from_student: {
         number: studentNr,
       },
-
+      
       trade_id: {
         some: {
           lesson_from_id: { in: lesson_ids },

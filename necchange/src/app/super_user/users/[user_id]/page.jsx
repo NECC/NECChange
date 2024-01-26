@@ -33,7 +33,7 @@ export default function UserPage() {
       .then((res) => {
         setLoader(false);
         toast.success("User atualizado.");
-        console.log(res);
+        //console.log(res);
       })
       .catch((err) => {
         toast.error("Erro ao atualizar user.");
@@ -47,7 +47,7 @@ export default function UserPage() {
     await axios
       .get(`/api/users/delete_user/${user_id}`)
       .then((res) => {
-        console.log(res);
+        //console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -93,13 +93,11 @@ export default function UserPage() {
             <label className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
               Role
             </label>
-            {console.log("profile", userProfile.role)}
             <select
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
               value={userProfile.role}
               onChange={(e) => {
                 setUserProfile({ ...userProfile, role: e.target.value });
-                console.log(userProfile);
               }}
             >
               <option value={Role.CS_STUDENT}>{Role.CS_STUDENT}</option>
