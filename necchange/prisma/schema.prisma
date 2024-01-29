@@ -144,7 +144,6 @@ enum Status {
 enum Role {
   SUPER_USER // Admin - Access to all routes
   PROFESSOR // Professor - Access to professor pages 
-  STUDENT // Student of Computer Science - Access to calendar, schedule, feed, profile
+  CS_STUDENT // Student of Computer Science - Access to calendar, schedule, feed, profile
   OUTSIDER // Person from other course that is NECC partner - Access to profile
-  PARTNERSHIP // NECC partner - Access to partner pages
 }

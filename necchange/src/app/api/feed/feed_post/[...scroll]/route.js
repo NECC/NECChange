@@ -36,6 +36,7 @@ export async function GET(req, context) {
       : undefined;
 
   let lesson_ids = undefined;
+
   if (ucsFilter != undefined) {
     const query_lesson_ids = await prisma.lesson.findMany({
       where: {
@@ -53,13 +54,14 @@ export async function GET(req, context) {
     lesson_ids = query_lesson_ids.map((lesson_id) => lesson_id.id);
   }
 
+  console.log("status", status);
   const trades = await prisma.trade.findMany({
     where: {
       status: status,
       from_student: {
         number: studentNr,
       },
-
+      
       trade_id: {
         some: {
           lesson_from_id: { in: lesson_ids },

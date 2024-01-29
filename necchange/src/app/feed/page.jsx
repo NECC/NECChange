@@ -18,6 +18,7 @@ const Posts = ({ filteredPosts, toggleLoader, getMorePosts }) => {
     <div>
       <div className="w-full grid gap-6 mb-8">
         {filteredPosts.map((feedPost, i) => {
+        //  console.log("feedPost", feedPost);
           return (
             <FeedPost key={i} post={feedPost} toggleLoader={toggleLoader} />
           );
@@ -59,9 +60,12 @@ export default function Feed() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [myTrades, setMyTrades] = useState(false);
 
+
   const toggleLoader = (value) => {
     setLoader(value);
   };
+
+  console.log("session", session);
 
   // This effect checks if trade period is open
   useEffect(() => {
@@ -70,44 +74,23 @@ export default function Feed() {
         .get("/api/feed/feed_post/trade_period_info")
         .then((res) => {
           setTradesOpen(res.data.open);
-          console.log(res);
         })
         .catch((err) => console.log(err));
     };
 
     checkTradePeriod();
-  }, [tradesOpen]);
+  }, []);
 
-  // This effect gets the courses that the student is taking
-  useEffect(() => {
-    if (session) {
-      const uc_names = async () => {
-        try {
-          axios.get(`/api/users/user_ucs/${session?.user?.number}`).then((res) => {
-            setUcsArray(res.data.student_classes);
-            console.log(res.data.student_classes);
-          });
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-      uc_names();
-    }
-  }, [session]);
-
+  
   // This effect is responsible to get the first posts that show on feed
   useEffect(() => {
     const startingFeed = async () => {
       try {
-        let query_filtered_ucs = ucsFilter.join("&");
-        query_filtered_ucs = encodeURIComponent(query_filtered_ucs);
-        console.log(query_filtered_ucs);
-
         axios
           .get(
             `/api/feed/feed_post/${5}/landing/${
               myTrades ? `/${session?.user?.number}` : "/undefined"
-            }/${query_filtered_ucs}`
+            }`
           )
           .then((res) => {
             setDbCursor(res.data.cursor);
@@ -119,29 +102,47 @@ export default function Feed() {
     };
 
     if (tradesOpen) startingFeed();
-  }, [session, ucsFilter, myTrades]);
+  }, [session, tradesOpen]);
+
 
   // This effect filters the posts already taken
   useEffect(() => {
-    if (ucsFilter.length == 0) {
-      setFilteredPosts(feedPosts);
+    let posts = []
+    // No filters, choose between personal or everything
+    if (ucsFilter.length == 0) { 
+      posts = feedPosts.filter((feedPost) =>
+        myTrades
+          ? feedPost.from_student.number == session.user.number
+          : true
+      );
+    
+    // With filters (this body can be optimized)
     } else {
-      setFilteredPosts(
-        feedPosts.filter((feedPost) =>
-          feedPost.trade_id.some((tradeId) =>
-            ucsFilter.includes(tradeId.lessonFrom.course.name)
-          )
-        )
+      posts = feedPosts.filter((feedPost) =>
+        ucsFilter.every((uc) =>
+          feedPost.trade_id
+            .map((trade) => trade.lessonFrom.course.name)
+            .includes(uc)
+        ) && (myTrades
+          ? feedPost.from_student.number == session.user.number
+          : feedPost.from_student.number != session.user.number )
       );
     }
-  }, [ucsFilter, feedPosts]);
+
+    let new_cursor = 0
+    const post_ids = posts.map(post => post.id)
+    new_cursor = post_ids.length == 0 ? 1 : Math.max(...post_ids)
+    setDbCursor(new_cursor)
+    setFilteredPosts(posts);
+
+  }, [myTrades, ucsFilter, feedPosts]);
 
   // This function gets more posts from the database
   const getMorePosts = async () => {
     try {
       let query_filtered_ucs = ucsFilter.join("&");
       query_filtered_ucs = encodeURIComponent(query_filtered_ucs);
-      console.log("dbCursor", dbCursor);
+      //console.log(dbCursor);
       axios
         .get(
           `/api/feed/feed_post/${5}/${dbCursor}${
@@ -188,7 +189,9 @@ export default function Feed() {
 
           <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
             <UCFilter
+              session={session}
               setUcsFilter={setUcsFilter}
+              setUcsArray={setUcsArray}
               ucsArray={ucsArray}
               ucsFilter={ucsFilter}
             />

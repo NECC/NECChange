@@ -33,11 +33,24 @@ function NavbarLinks(props) {
                         </li>
                     </>
                     */
-                
-                (session) ? 
+
+                (session) ?
                     <>
+                    {
+                        session.user?.role == "CS_STUDENT" ?
+                        <>
                         <li>
-                            <Link className={linkStyle} href="/profile">Perfil</Link>
+                            <Link className={linkStyle} href="/horario">Horário</Link>
+                        </li>
+                        <li>
+                            <Link className={linkStyle} href="/feed">Feed</Link>
+                        </li>
+                    </> : ""
+                    }    
+                        <li>
+                            {session.user?.partner ?
+                                <Link className={linkStyle} href="/profile">Perfil</Link> : ""
+                            }
                         </li>
                         <li>
                             <button className={linkStyle + " text-left"} onClick={() => signOut()}>Logout</button>
@@ -51,13 +64,13 @@ function NavbarLinks(props) {
                     </>
             }
             {
-            (session?.user.role == 'SUPER_USER') 
-                ? 
-                <li>
-                   <Link className={linkStyle + " text-left"} href='/super_user'>Back-Office</Link> 
-                </li>
-                :
-                <></>
+                (session?.user.role == 'SUPER_USER')
+                    ?
+                    <li>
+                        <Link className={linkStyle + " text-left"} href='/super_user'>Back-Office</Link>
+                    </li>
+                    :
+                    <></>
             }
         </ul>
     );

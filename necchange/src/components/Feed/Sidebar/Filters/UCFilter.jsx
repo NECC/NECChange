@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiChevronDown } from "react-icons/fi";
+import axios from "axios";
+
 
 export default function UCFilter(props) {
-  const { ucsArray, ucsFilter, setUcsFilter } = props;
+  const { session, ucsArray, ucsFilter, setUcsFilter, setUcsArray} = props;
 
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen(!isOpen);
@@ -17,6 +19,21 @@ export default function UCFilter(props) {
       setUcsFilter(newFilter);
     }
   };
+
+  // This effect gets the courses that the student is taking
+  useEffect(() => {
+    const uc_names = async () => {
+      try {
+        axios.get(`/api/users/user_ucs/${session?.user?.number}`).then((res) => {
+          setUcsArray(res.data.student_classes);
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    uc_names();
+    
+  }, [session]);
 
   return (
     <>

@@ -12,19 +12,19 @@ import { getToken } from "next-auth/jwt";
  */
 const publicRoutes = ["/"];
 const authRoutes = ["/auth"];
-// for now, horario and feed are protected routes. When necchange is full released, change that routes to protected 
-const adminRoutes = ["/super_user", "partner", "/horario", "/feed"];
-const protectedRoutes = ["/profile"];
+// for now, horario and feed are protected routes. When necchange is full released, change that routes to protected
+const adminRoutes = ["/super_user"];
+const protectedRoutes = ["/profile", "/horario", "/feed"];
 
 export async function middleware(request) {
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
-    cookieName: process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token'
+    cookieName:
+      process.env.NODE_ENV === "production"
+        ? "__Secure-next-auth.session-token"
+        : "next-auth.session-token",
   });
-
-  //console.log('Request', request);
-  //console.log("My token middleware:", token);
 
   // Admin paths
   // if signed in and doesn't have role SUPER_USER, can't access /super_user/**
@@ -39,6 +39,10 @@ export async function middleware(request) {
     protectedRoutes.some((path) => request.nextUrl.pathname.startsWith(path))
   ) {
     if (!token) return NextResponse.redirect(new URL("/", request.url));
+
+    /* Some edge cases */
+    if(request.nextUrl.pathname.startsWith("/profile") && token.partner == false) return NextResponse.redirect(new URL("/", request.url));
+    if(request.nextUrl.pathname.startsWith("/feed") && (token.role == "OUTSIDER")) return NextResponse.redirect(new URL("/", request.url));
   }
 
   // Auth paths

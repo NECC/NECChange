@@ -44,10 +44,12 @@ export default function NewTrade({ toggleLoader }) {
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
   const { data: session } = useSession();
+  
+  const madeUpNumber = 'A91699'
 
   useEffect(() => {
     axios
-      .get(`/api/users/user_courses/${session?.user.number}`)
+      .get(`/api/users/user_courses/${session?.user.number/*madeUpNumber*/}`)
       .then((response) => {
         const data = response.data.student_ucs;
         const parsed = data.reduce((acc, { lesson }) => {
@@ -111,7 +113,7 @@ export default function NewTrade({ toggleLoader }) {
   };
 
   const removeTrade = (id) => {
-    console.log("Removing trade", id);
+  //  console.log("Removing trade", id);
     const newTrades = trades.filter((trade) => trade.id != id);
     setTrades(newTrades);
   };
@@ -138,10 +140,10 @@ export default function NewTrade({ toggleLoader }) {
     if (format_validator(trades) == true) {
       axios
         .post("/api/feed/feed_post/add_trade", {
-          params: { trades: trades, student_nr: session?.user.number },
+          params: { trades: trades, student_nr: session?.user.number /* madeUpNumber */ },
         })
         .then((response) => {
-          console.log(response);
+        //  console.log(response);
           toggleLoader(false);
           toast.success("Pedido de troca realizado!");
         })
