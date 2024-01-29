@@ -18,5 +18,7 @@ export async function PUT(req, context) {
     },
   });
 
+  await prisma.$disconnect()
+
   return new NextResponse(JSON.stringify({ response: "Success" }));
 }

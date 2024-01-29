@@ -1,10 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+const prisma = new PrismaClient();
+
 export async function GET(req, context) {
   const student_nr = context.params.student_data[0];
 
-  const prisma = new PrismaClient();
   // const student_nr = student_data[0];
 
   const student_classes_uc = await prisma.student_lesson.findMany({
@@ -30,5 +31,6 @@ export async function GET(req, context) {
     }
   });
 
+  await prisma.$disconnect()
   return new NextResponse(JSON.stringify({ student_classes: student_ucs }));
 }

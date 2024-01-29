@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient, Status } from "@prisma/client";
 
+const prisma = new PrismaClient();
+
 const removeDuplicates = (post) => {
   const filteredArray = [];
   const seenObjects = new Set();
@@ -17,8 +19,6 @@ const removeDuplicates = (post) => {
 };
 
 export async function GET(req, context) {
-  const prisma = new PrismaClient();
-
   const limit = parseInt(context.params.scroll[0]);
   const skip = context.params.scroll[1] === "landing" ? 0 : 1;
   const cursor =
@@ -120,6 +120,7 @@ export async function GET(req, context) {
     if (trade.id > new_cursor) new_cursor = trade.id;
   });
 
+  await prisma.$disconnect()
   return new NextResponse(
     JSON.stringify({ response: trades, cursor: new_cursor })
   );

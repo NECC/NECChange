@@ -20,6 +20,7 @@ export async function GET(req, context) {
     },
   });
 
+  await prisma.$disconnect()
   if (users) {
     return new NextResponse(
       JSON.stringify({ response: "success", users: users })
@@ -114,12 +115,12 @@ export async function POST(req, context) {
       });
   }
 
+  await prisma.$disconnect()
   return new NextResponse(JSON.stringify({ sheet_error: sheet_error }));
 }
 
 /* Update user */
 export async function PUT(req, context) {
-  const prisma = new PrismaClient();
   const data = await req.json();
 
   const userId = parseInt(data.params.userId);
@@ -140,5 +141,6 @@ export async function PUT(req, context) {
     },
   });
 
+  await prisma.$disconnect()
   return new NextResponse(JSON.stringify({ response: "error" }));
 }

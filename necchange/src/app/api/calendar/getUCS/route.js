@@ -13,5 +13,6 @@ export async function GET(req, res) {
     },
   });
 
+  await prisma.$disconnect()
   return NextResponse.json({ response: ucs });
 }

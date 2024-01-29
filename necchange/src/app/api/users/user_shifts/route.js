@@ -25,5 +25,6 @@ export async function GET(req, context) {
     },
   });
 
+  await prisma.$disconnect()
   return new NextResponse(JSON.stringify({ classes }));
 }

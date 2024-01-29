@@ -7,8 +7,9 @@ const type_class = {
   3: "PL",
 };
 
+const prisma = new PrismaClient();
+
 export async function GET(req, context) {
-  const prisma = new PrismaClient();
 
   const uc_name = context.params.uc_name;
   // course name param
@@ -58,5 +59,6 @@ export async function GET(req, context) {
     })
   );
 
+  await prisma.$disconnect()
   return new NextResponse(JSON.stringify({ data: data }));
 }

@@ -107,6 +107,7 @@ export async function POST(req, context) {
     return false;
   });
 
+  await prisma.$disconnect()
   return new NextResponse(JSON.stringify({ response: accept_query }));
 }
 
@@ -188,6 +189,7 @@ async function deleteDeprecatedTrades(fromStudentId, toStudentId, tradeId, tx) {
     },
   });
 
+  
   return new NextResponse(JSON.stringify({ response: true }));
 }
 

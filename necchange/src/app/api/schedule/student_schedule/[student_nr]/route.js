@@ -93,5 +93,6 @@ export async function GET(request, context) {
     });
   });
 
+  await prisma.$disconnect()
   return new NextResponse(JSON.stringify({ response: classes }));
 }

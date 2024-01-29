@@ -17,6 +17,7 @@ export async function GET(req, context) {
 
   console.log(email);
 
+  await prisma.$disconnect()
   if (student) {
     return new NextResponse(
       JSON.stringify({ response: "success", unique_id: student.uniqueId })

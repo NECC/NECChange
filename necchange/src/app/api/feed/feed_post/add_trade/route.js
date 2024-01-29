@@ -1,11 +1,12 @@
 import { PrismaClient, Status } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+const prisma = new PrismaClient();
+
 export async function POST(req, context) {
   const data = await req.json();
   const student_nr = data.params.student_nr;
   const trades = data.params.trades;
-  const prisma = new PrismaClient();
 
   try {
     const student_id = await prisma.user.findFirst({
@@ -80,7 +81,7 @@ export async function POST(req, context) {
         );
       });
     }
-
+    await prisma.$disconnect()
     return new NextResponse(JSON.stringify({ response: "Success" }));
   } catch (error) {
     return new Error("Error");

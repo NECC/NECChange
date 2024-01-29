@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+const prisma = new PrismaClient();
+
 export async function GET(req, context) {
-  const prisma = new PrismaClient();
   const uniqueId = parseInt(context.params.uniqueId)
 
   const user_profile = await prisma.user.findFirst({
@@ -18,6 +19,7 @@ export async function GET(req, context) {
     }
   })
     
+  await prisma.$disconnect()
   return new NextResponse(JSON.stringify({ profile:user_profile }));
 }
   
