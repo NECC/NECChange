@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+const prisma = new PrismaClient();
+
 export async function GET(req, res) {
-  const prisma = new PrismaClient();
   const ucs = await prisma.course.findMany({
     select: {
       id: true,

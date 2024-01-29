@@ -2,9 +2,10 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 import axios from "axios";
 
+const prisma = new PrismaClient();
+
 /* Get all users*/
 export async function GET(req, context) {
-  const prisma = new PrismaClient();
 
   const users = await prisma.user.findMany({
     select: {
@@ -30,7 +31,6 @@ export async function GET(req, context) {
 
 /* Add a user */
 export async function POST(req, context) {
-  const prisma = new PrismaClient();
   const data = await req.json();
   const is_partner = data.params.partner == true ? true : false;
 

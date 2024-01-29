@@ -1,11 +1,12 @@
 import { PrismaClient, Status } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+const prisma = new PrismaClient();
+
 export async function PUT(req, context) {
   const data = await req.json();
 
   const tradeId = parseInt(data.params.tradeId);
-  const prisma = new PrismaClient();
 
   const removeTrade = await prisma.$transaction(async (tx) => {
     await prisma.trade.update({

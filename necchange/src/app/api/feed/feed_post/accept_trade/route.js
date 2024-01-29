@@ -1,6 +1,8 @@
 import { PrismaClient, Status } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+const prisma = new PrismaClient();
+
 export async function POST(req, context) {
   const data = await req.json();
 
@@ -9,7 +11,6 @@ export async function POST(req, context) {
   const studentNrAccepted = data.params.studentAcceptedNr;
   const tradeId = data.params.tradeId;
 
-  const prisma = new PrismaClient();
 
   const accept_query = await prisma.$transaction(async (tx) => {
     const getToStudentId = await tx.user.findFirst({

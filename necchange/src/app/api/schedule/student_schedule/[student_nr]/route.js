@@ -1,10 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
+
+
 export async function GET(request, context) {
   const student_nr = context.params.student_nr;
 
-  const prisma = new PrismaClient();
   const studentClasses = await prisma.user.findUnique({
     where: {
       number: student_nr,

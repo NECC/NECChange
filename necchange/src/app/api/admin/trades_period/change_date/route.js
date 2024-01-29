@@ -1,9 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
+const prisma = new PrismaClient();
+
 export async function PUT(req, context) {
   const params = await req.json();
-  const prisma = new PrismaClient();
 
   const isOpen = params.close ? false : true;
   const openDate = isOpen ? params.openDate : new Date();
