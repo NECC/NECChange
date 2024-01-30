@@ -71,9 +71,17 @@ export default function SuperUser() {
     return;
   };
 
+  const exportCsvProfs = () => {
+    axios
+      .get("/api/admin/export_csvs")
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="flex justify-center h-screen bg-white text-black">
       <div className="m-auto w-56">
+        {/*
         <Select
           options={ucs}
           getOptionLabel={(option) => option}
@@ -81,8 +89,9 @@ export default function SuperUser() {
           selected={"-1"}
           placeholder="Selecionar UC"
         />
-        <button className={buttonStyles} onClick={exportPDF}>
-          Exportar para PDF
+        */}
+        <button className={buttonStyles} onClick={exportCsvProfs}>
+          Exportar CSV's
         </button>
       </div>
     </div>

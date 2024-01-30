@@ -6,8 +6,6 @@ const prisma = new PrismaClient();
 export async function GET(req, context) {
   const student_nr = context.params.student_data[0];
 
-  // const student_nr = student_data[0];
-
   const student_classes_uc = await prisma.student_lesson.findMany({
     where: {
       User: {
