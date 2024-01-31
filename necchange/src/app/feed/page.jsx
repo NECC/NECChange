@@ -84,6 +84,7 @@ export default function Feed() {
   useEffect(() => {
     const startingFeed = async () => {
       try {
+        toggleLoader(true)
         axios
           .get(
             `/api/feed/feed_post/${5}/landing/${
@@ -93,9 +94,11 @@ export default function Feed() {
           .then((res) => {
             setDbCursor(res.data.cursor);
             setFeedData(res.data.response);
+            toggleLoader(false)
           });
       } catch (error) {
         console.error("Error fetching data:", error);
+        toggleLoader(false)
       }
     };
 

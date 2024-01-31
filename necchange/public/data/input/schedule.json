@@ -21,7 +21,7 @@
        "semester" : "1",
        "type_class" : "T",
        "shift" : "1",
-       "slots" : [["Segunda", "10", "00", "11", "00", "Ed1-0.22"],["Terça", "09", "00", "10", "00", "Ed1-0.22"]]
+       "slots" : [["Segunda", "10", "00", "11", "00", "Ed1-0.22"],["Quarta", "09", "00", "10", "00", "Ed2-1.07"]]
    },
    {
        "uc" : "Geometria",
@@ -157,7 +157,7 @@
        "semester" : "1",
        "type_class" : "T",
        "shift" : "1",
-       "slots" : [["Quarta", "09", "00", "10", "00", "Ed1-1.40"],["Segunda", "09", "00", "10", "00", "Ed1-1.40"]]
+       "slots" : [["Terça", "09", "00", "10", "00", "Ed1-0.22"],["Segunda", "09", "00", "10", "00", "Ed1-0.22"]]
    },
    {
        "uc" : "Autómatos e Linguagens Formais",
