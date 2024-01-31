@@ -7,7 +7,7 @@ import FeedPost from "@/components/Feed/Feed-Posts/FeedPost";
 import Loader from "@/components/globals/Loader";
 
 import { FaPlus } from "react-icons/fa6";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import UCFilter from "@/components/Feed/Sidebar/Filters/UCFilter";
@@ -64,8 +64,6 @@ export default function Feed() {
   const toggleLoader = (value) => {
     setLoader(value);
   };
-
-  console.log("session", session);
 
   // This effect checks if trade period is open
   useEffect(() => {
@@ -139,6 +137,7 @@ export default function Feed() {
 
   // This function gets more posts from the database
   const getMorePosts = async () => {
+    toggleLoader(true)
     try {
       let query_filtered_ucs = ucsFilter.join("&");
       query_filtered_ucs = encodeURIComponent(query_filtered_ucs);
@@ -153,9 +152,13 @@ export default function Feed() {
           if (res.data.response.length > 0) {
             setDbCursor(res.data.cursor);
             setFeedData([...feedPosts, ...res.data.response]);
+          } else {
+            toast.warning('Não há mais posts, de momento.');
           }
+          toggleLoader(false)
         });
     } catch (error) {
+      toggleLoader(false)
       console.error("Error fetching data:", error);
     }
   };
