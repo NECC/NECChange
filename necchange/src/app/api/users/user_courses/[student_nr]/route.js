@@ -22,9 +22,13 @@ export async function GET(req, context) {
       },
     });
 
+    const return_student_ucs = student_ucs.filter(student_uc => student_uc.lesson_id != null)
+
+    return_student_ucs.map((bla) =>console.log(bla))
+
     await prisma.$disconnect()
     return new NextResponse(
-      JSON.stringify({ status: "ok", student_ucs: student_ucs })
+      JSON.stringify({ status: "ok", student_ucs: return_student_ucs })
     );
   } catch (error) {
     return new NextResponse(JSON.stringify({ status: "error", error: error }));

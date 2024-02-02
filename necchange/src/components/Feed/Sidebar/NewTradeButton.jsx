@@ -45,13 +45,12 @@ export default function NewTrade({ toggleLoader }) {
   const [availableClasses, setAvailableClasses] = useState({});
   const { data: session } = useSession();
   
-  const madeUpNumber = 'A91699'
-
   useEffect(() => {
     axios
-      .get(`/api/users/user_courses/${session?.user.number/*madeUpNumber*/}`)
+      .get(`/api/users/user_courses/${session?.user.number}`)
       .then((response) => {
         const data = response.data.student_ucs;
+        console.log(data);
         const parsed = data.reduce((acc, { lesson }) => {
           if (!acc[lesson.course.name]) {
             acc[lesson.course.name] = {
@@ -140,7 +139,7 @@ export default function NewTrade({ toggleLoader }) {
     if (format_validator(trades) == true) {
       axios
         .post("/api/feed/feed_post/add_trade", {
-          params: { trades: trades, student_nr: session?.user.number /* madeUpNumber */ },
+          params: { trades: trades, student_nr: session?.user.number},
         })
         .then((response) => {
         //  console.log(response);

@@ -60,7 +60,6 @@ export default function Feed() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [myTrades, setMyTrades] = useState(false);
 
-
   const toggleLoader = (value) => {
     setLoader(value);
   };
@@ -88,7 +87,7 @@ export default function Feed() {
         axios
           .get(
             `/api/feed/feed_post/${5}/landing/${
-              myTrades ? `/${session?.user?.number}` : "/undefined"
+              myTrades ? `/ ${session?.user?.number}` : "/undefined"
             }`
           )
           .then((res) => {

@@ -24,7 +24,7 @@ export async function GET(req, context) {
   let student_ucs = [];
 
   student_classes_uc.map((student_class_uc) => {
-    if (!student_ucs.includes(student_class_uc.lesson?.course?.name)) {
+    if (!student_ucs.includes(student_class_uc.lesson?.course?.name) && student_class_uc.lesson != null ) {
       student_ucs.push(student_class_uc.lesson?.course?.name);
     }
   });
