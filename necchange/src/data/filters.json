@@ -56,9 +56,9 @@
     "shifts": []
   },
   {
-    "calendar": "LA I",
+    "calendar": "LA-I",
     "name": "Laboratório de Algoritmia I",
-    "sigla": "LA I",
+    "sigla": "LA-I",
     "year": 1,
     "semester": 2,
     "shifts": []
@@ -152,9 +152,9 @@
     "shifts": []
   },
   {
-    "calendar": "LA II",
+    "calendar": "LA-II",
     "name": "Laboratório de Algoritmia II",
-    "sigla": "LA II",
+    "sigla": "LA-II",
     "year": 2,
     "semester": 2,
     "shifts": []
