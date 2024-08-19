@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Modal from "@/components/globals/Modal";
 import TradeEntry from "./NewTrade/popUp/TradeEntry";
 import { useSession } from "next-auth/react";
+import { CiCirclePlus } from "react-icons/ci";
 
 const emptyTrade = {
   id: 0,
@@ -44,7 +45,7 @@ export default function NewTrade({ toggleLoader }) {
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
   const { data: session } = useSession();
-  
+
   useEffect(() => {
     axios
       .get(`/api/users/user_courses/${session?.user.number}`)
@@ -112,7 +113,7 @@ export default function NewTrade({ toggleLoader }) {
   };
 
   const removeTrade = (id) => {
-  //  console.log("Removing trade", id);
+    //  console.log("Removing trade", id);
     const newTrades = trades.filter((trade) => trade.id != id);
     setTrades(newTrades);
   };
@@ -139,10 +140,10 @@ export default function NewTrade({ toggleLoader }) {
     if (format_validator(trades) == true) {
       axios
         .post("/api/feed/feed_post/add_trade", {
-          params: { trades: trades, student_nr: session?.user.number},
+          params: { trades: trades, student_nr: session?.user.number },
         })
         .then((response) => {
-        //  console.log(response);
+          //  console.log(response);
           toggleLoader(false);
           toast.success("Pedido de troca realizado!");
         })
@@ -158,12 +159,17 @@ export default function NewTrade({ toggleLoader }) {
 
   return (
     <>
-      <button
-        className="w-full sm:w-auto py-1 px-3 rounded-md text-blue-600 font-semibold border hover:bg-gray-100"
-        onClick={() => setShowModal(true)}
-      >
-        Nova Troca
-      </button>
+      <div className="flex flex-row items-center justify-center  bg-blue-600 hover:bg-blue-500 border rounded-md py-1 px-3 gap-2">
+        <div className="bg-white rounded-full">
+          <CiCirclePlus size={20} color="blue " />
+        </div>
+        <button
+          className="w-full sm:w-auto text-white font-semibold"
+          onClick={() => setShowModal(true)}
+        >
+          Nova Troca
+        </button>
+      </div>
 
       <Modal
         showModal={showModal}

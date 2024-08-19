@@ -165,9 +165,10 @@ export default function Feed() {
   }, [getMorePosts]);
 
   return (
-    <div className="min-h-screen pt-40 pb-20 flex justify-center bg-white text-gray-900">
-      <div className="flex flex-col items-center mx-5 w-full max-w-6xl">
-        <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-2 text-base font-semibold text-gray-900 mb-8">
+    <div className="min-h-screen pt-40 pb-20 flex flex-col gap-4 items-center justify-center bg-white text-gray-900">
+      <div className="flex flex-col items-center mx-5 w-[90%] max-w-6xl gap-8">
+        <p className="text-2xl font-bold text-start w-full ">TROCAS DE TURNO</p>
+        <div className="w-full flex flex-col gap-8 text-base font-semibold text-gray-900 mb-8">
           <div className="border-b w-full sm:w-auto grid grid-cols-2">
             <button
               className={`w-full sm:w-auto py-2 px-3 text-center transition duration-200 border-b-2 ${
@@ -191,28 +192,29 @@ export default function Feed() {
             </button>
           </div>
 
-          <div className="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
-            <UCFilter
-              session={session}
-              setUcsFilter={setUcsFilter}
-              setUcsArray={setUcsArray}
-              ucsArray={ucsArray}
-              ucsFilter={ucsFilter}
-            />
-            {tradesOpen ? (
-              <div className="flex-grow">
-                <NewTradeButton toggleLoader={toggleLoader} />
-              </div>
-            ) : (
-              <></>
-            )}
+          <div className="w-full sm:w-auto flex flex-col justify-between items-center sm:flex-row gap-2">
+            <p>Mais recente</p>
+            <div className="bg-gree-500 flex flex-row gap-4">
+              <UCFilter
+                session={session}
+                setUcsFilter={setUcsFilter}
+                setUcsArray={setUcsArray}
+                ucsArray={ucsArray}
+                ucsFilter={ucsFilter}
+              />
+              {tradesOpen ? (
+                <div className="flex-grow">
+                  <NewTradeButton toggleLoader={toggleLoader} />
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         </div>
+
         {tradesOpen ? (
-          <Posts
-            filteredPosts={filteredPosts}
-            toggleLoader={toggleLoader}
-          />
+          <Posts filteredPosts={filteredPosts} toggleLoader={toggleLoader} />
         ) : tradesOpen == false ? (
           <TradesClosed />
         ) : (
