@@ -6,7 +6,6 @@ import axios from "axios";
 import FeedPost from "@/components/Feed/Feed-Posts/FeedPost";
 import Loader from "@/components/globals/Loader";
 
-import { FaPlus } from "react-icons/fa6";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -15,7 +14,7 @@ import NewTradeButton from "@/components/Feed/Sidebar/NewTradeButton";
 
 const Posts = ({ filteredPosts, toggleLoader }) => {
   return (
-    <div className="w-full grid gap-6 mb-8">
+    <div className="w-full grid lg:grid-cols-2 gap-10">
       {filteredPosts.map((feedPost, i) => {
         //  console.log("feedPost", feedPost);
         return <FeedPost key={i} post={feedPost} toggleLoader={toggleLoader} />;
@@ -72,7 +71,7 @@ export default function Feed() {
         toggleLoader(true);
         axios
           .get(
-            `/api/feed/feed_post/${5}/landing/${
+            `/api/feed/feed_post/${6}/landing/${
               myTrades ? `/ ${session?.user?.number}` : "/undefined"
             }`
           )
@@ -130,7 +129,7 @@ export default function Feed() {
       //console.log(dbCursor);
       axios
         .get(
-          `/api/feed/feed_post/${5}/${dbCursor}${
+          `/api/feed/feed_post/${6}/${dbCursor}${
             myTrades ? `/${session?.user?.number}` : "/undefined"
           }/${query_filtered_ucs}`
         )
@@ -167,7 +166,7 @@ export default function Feed() {
 
   return (
     <div className="min-h-screen pt-40 pb-20 flex justify-center bg-white text-gray-900">
-      <div className="flex flex-col items-center mx-5 w-full max-w-4xl">
+      <div className="flex flex-col items-center mx-5 w-full max-w-6xl">
         <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-2 text-base font-semibold text-gray-900 mb-8">
           <div className="border-b w-full sm:w-auto grid grid-cols-2">
             <button
