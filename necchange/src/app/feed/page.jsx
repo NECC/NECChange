@@ -13,26 +13,13 @@ import "react-toastify/dist/ReactToastify.css";
 import UCFilter from "@/components/Feed/Sidebar/Filters/UCFilter";
 import NewTradeButton from "@/components/Feed/Sidebar/NewTradeButton";
 
-const Posts = ({ filteredPosts, toggleLoader, getMorePosts }) => {
+const Posts = ({ filteredPosts, toggleLoader }) => {
   return (
-    <div>
-      <div className="w-full grid gap-6 mb-8">
-        {filteredPosts.map((feedPost, i) => {
+    <div className="w-full grid gap-6 mb-8">
+      {filteredPosts.map((feedPost, i) => {
         //  console.log("feedPost", feedPost);
-          return (
-            <FeedPost key={i} post={feedPost} toggleLoader={toggleLoader} />
-          );
-        })}
-      </div>
-
-      <div className="flex justify-center">
-        <button
-          className="flex items-center gap-2 rounded-full bg-blue-500 py-2 px-4 text-base capitalize font-semibold text-white"
-          onClick={getMorePosts}
-        >
-          <FaPlus /> carregar mais
-        </button>
-      </div>
+        return <FeedPost key={i} post={feedPost} toggleLoader={toggleLoader} />;
+      })}
     </div>
   );
 };
@@ -78,12 +65,11 @@ export default function Feed() {
     checkTradePeriod();
   }, []);
 
-  
   // This effect is responsible to get the first posts that show on feed
   useEffect(() => {
     const startingFeed = async () => {
       try {
-        toggleLoader(true)
+        toggleLoader(true);
         axios
           .get(
             `/api/feed/feed_post/${5}/landing/${
@@ -93,53 +79,51 @@ export default function Feed() {
           .then((res) => {
             setDbCursor(res.data.cursor);
             setFeedData(res.data.response);
-            toggleLoader(false)
+            toggleLoader(false);
           });
       } catch (error) {
         console.error("Error fetching data:", error);
-        toggleLoader(false)
+        toggleLoader(false);
       }
     };
 
     if (tradesOpen) startingFeed();
   }, [session, tradesOpen]);
 
-
   // This effect filters the posts already taken
   useEffect(() => {
-    let posts = []
+    let posts = [];
     // No filters, choose between personal or everything
-    if (ucsFilter.length == 0) { 
+    if (ucsFilter.length == 0) {
       posts = feedPosts.filter((feedPost) =>
-        myTrades
-          ? feedPost.from_student.number == session.user.number
-          : true
+        myTrades ? feedPost.from_student.number == session.user.number : true
       );
-    
-    // With filters (this body can be optimized)
+
+      // With filters (this body can be optimized)
     } else {
-      posts = feedPosts.filter((feedPost) =>
-        ucsFilter.every((uc) =>
-          feedPost.trade_id
-            .map((trade) => trade.lessonFrom.course.name)
-            .includes(uc)
-        ) && (myTrades
-          ? feedPost.from_student.number == session.user.number
-          : feedPost.from_student.number != session.user.number )
+      posts = feedPosts.filter(
+        (feedPost) =>
+          ucsFilter.every((uc) =>
+            feedPost.trade_id
+              .map((trade) => trade.lessonFrom.course.name)
+              .includes(uc)
+          ) &&
+          (myTrades
+            ? feedPost.from_student.number == session.user.number
+            : feedPost.from_student.number != session.user.number)
       );
     }
 
-    let new_cursor = 0
-    const post_ids = posts.map(post => post.id)
-    new_cursor = post_ids.length == 0 ? 1 : Math.max(...post_ids)
-    setDbCursor(new_cursor)
+    let new_cursor = 0;
+    const post_ids = posts.map((post) => post.id);
+    new_cursor = post_ids.length == 0 ? 1 : Math.max(...post_ids);
+    setDbCursor(new_cursor);
     setFilteredPosts(posts);
-
   }, [myTrades, ucsFilter, feedPosts]);
 
   // This function gets more posts from the database
   const getMorePosts = async () => {
-    toggleLoader(true)
+    toggleLoader(true);
     try {
       let query_filtered_ucs = ucsFilter.join("&");
       query_filtered_ucs = encodeURIComponent(query_filtered_ucs);
@@ -155,15 +139,31 @@ export default function Feed() {
             setDbCursor(res.data.cursor);
             setFeedData([...feedPosts, ...res.data.response]);
           } else {
-            toast.warning('Não há mais posts, de momento.');
+            toast.warning("Não há mais posts, de momento.");
           }
-          toggleLoader(false)
+          toggleLoader(false);
         });
     } catch (error) {
-      toggleLoader(false)
+      toggleLoader(false);
       console.error("Error fetching data:", error);
     }
   };
+
+  useEffect(() => {
+    const handleScroll = (e) => {
+      const scrollHeight = e.target.documentElement.scrollHeight;
+      const currentHeight =
+        e.target.documentElement.scrollTop + window.innerHeight;
+
+      if (currentHeight + 1 >= scrollHeight) {
+        getMorePosts();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [getMorePosts]);
 
   return (
     <div className="min-h-screen pt-40 pb-20 flex justify-center bg-white text-gray-900">
@@ -213,7 +213,6 @@ export default function Feed() {
           <Posts
             filteredPosts={filteredPosts}
             toggleLoader={toggleLoader}
-            getMorePosts={getMorePosts}
           />
         ) : tradesOpen == false ? (
           <TradesClosed />
