@@ -73,7 +73,7 @@ export async function GET(req, context) {
     take: limit,
     skip: skip,
     orderBy: {
-      id: "asc",
+      publish_time: "asc",
     },
 
     include: {
