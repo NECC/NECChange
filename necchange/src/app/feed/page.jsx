@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import UCFilter from "@/components/Feed/Sidebar/Filters/UCFilter";
 import NewTradeButton from "@/components/Feed/Sidebar/NewTradeButton";
+import TimeFilter from "@/components/Feed/Sidebar/Filters/TimeFilter";
 
 const Posts = ({ filteredPosts, toggleLoader }) => {
   return (
@@ -45,6 +46,8 @@ export default function Feed() {
 
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [myTrades, setMyTrades] = useState(false);
+
+  const [timeFilter, setTimeFilter] = useState(false);
 
   const toggleLoader = (value) => {
     setLoader(value);
@@ -94,12 +97,19 @@ export default function Feed() {
     let posts = [];
     // No filters, choose between personal or everything
     if (ucsFilter.length == 0) {
-      posts = feedPosts.filter((feedPost) =>
-        myTrades ? feedPost.from_student.number == session.user.number : true
-      );
+      posts = feedPosts
+        .filter((feedPost) =>
+          myTrades ? feedPost.from_student.number === session.user.number : true
+        )
+        .sort((a, b) =>
+          timeFilter
+            ? new Date(a.publish_time) - new Date(b.publish_time)
+            : new Date(b.publish_time) - new Date(a.publish_time)
+        );
+    }
 
-      // With filters (this body can be optimized)
-    } else {
+    // With filters (this body can be optimized)
+    else {
       posts = feedPosts.filter(
         (feedPost) =>
           ucsFilter.every((uc) =>
@@ -118,7 +128,7 @@ export default function Feed() {
     new_cursor = post_ids.length == 0 ? 1 : Math.max(...post_ids);
     setDbCursor(new_cursor);
     setFilteredPosts(posts);
-  }, [myTrades, ucsFilter, feedPosts]);
+  }, [myTrades, ucsFilter, feedPosts, timeFilter]);
 
   // This function gets more posts from the database
   const getMorePosts = async () => {
@@ -147,6 +157,7 @@ export default function Feed() {
       console.error("Error fetching data:", error);
     }
   };
+  console.log(feedPosts, "feedPosts");
 
   useEffect(() => {
     const handleScroll = (e) => {
@@ -164,8 +175,10 @@ export default function Feed() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [getMorePosts]);
 
+  console.log(timeFilter, "timeFilter");
+
   return (
-    <div className="min-h-screen pt-40 pb-20 flex flex-col gap-4 items-center justify-center bg-white text-gray-900">
+    <div className="min-h-screen pt-40 pb-20 flex flex-col gap-4 items-center bg-white text-gray-900">
       <div className="flex flex-col items-center mx-5 w-[90%] max-w-6xl gap-8">
         <p className="text-2xl font-bold text-start w-full ">TROCAS DE TURNO</p>
         <div className="w-full flex flex-col gap-8 text-base font-semibold text-gray-900 mb-8">
@@ -193,8 +206,8 @@ export default function Feed() {
           </div>
 
           <div className="w-full sm:w-auto flex flex-col justify-between items-center sm:flex-row gap-2">
-            <p>Mais recente</p>
-            <div className="bg-gree-500 flex flex-row gap-4">
+            <TimeFilter setTimeFilter={setTimeFilter} />
+            <div className="flex sm:flex-row flex-col gap-4  w-full sm:w-auto">
               <UCFilter
                 session={session}
                 setUcsFilter={setUcsFilter}
@@ -203,9 +216,7 @@ export default function Feed() {
                 ucsFilter={ucsFilter}
               />
               {tradesOpen ? (
-                <div className="flex-grow">
-                  <NewTradeButton toggleLoader={toggleLoader} />
-                </div>
+                <NewTradeButton toggleLoader={toggleLoader} />
               ) : (
                 <></>
               )}

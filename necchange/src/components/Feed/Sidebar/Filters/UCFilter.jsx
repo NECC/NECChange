@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import axios from "axios";
-
+import { FaFilter } from "react-icons/fa";
 
 export default function UCFilter(props) {
-  const { session, ucsArray, ucsFilter, setUcsFilter, setUcsArray} = props;
+  const { session, ucsArray, ucsFilter, setUcsFilter, setUcsArray } = props;
 
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen(!isOpen);
@@ -24,15 +24,16 @@ export default function UCFilter(props) {
   useEffect(() => {
     const uc_names = async () => {
       try {
-        axios.get(`/api/users/user_ucs/${session?.user?.number}`).then((res) => {
-          setUcsArray(res.data.student_classes);
-        });
+        axios
+          .get(`/api/users/user_ucs/${session?.user?.number}`)
+          .then((res) => {
+            setUcsArray(res.data.student_classes);
+          });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     uc_names();
-    
   }, [session]);
 
   return (
@@ -45,20 +46,16 @@ export default function UCFilter(props) {
       )}
       <div className="flex flex-col w-full sm:w-72 text-base cursor-pointer">
         <div
-          className="flex items-center justify-between bg-gray-50 border px-2 py-1 rounded"
+          className="flex items-center justify-center gap-2 bg-gray-50 border-2 px-3 py-3 font-semibold text-gray-500 rounded-lg"
           onClick={toggleIsOpen}
         >
-          <strong className="font-semibold">Unidade Curricular</strong>
-          <FiChevronDown
-            className={`w-6 h-6 transition-all duration-300 ${
-              isOpen ? "rotate-180" : "rotate-0"
-            }`}
-          />
+          <FaFilter color="gray" size={20} />
+          <p clas>Filtrar</p>
         </div>
 
         {/* escolhida esta approach porque não é guardado o estado das checkboxes */}
         <div className={`relative z-40 ${!isOpen && "hidden"}`}>
-          <form className="w-full sm:w-72 absolute shadow-sm border border-gray-300 rounded py-1 bg-white accent-blue-500 flex flex-col">
+          <form className="w-full sm:w-72 absolute shadow-sm border border-gray-300 rounded-lg py-1 bg-white accent-blue-500 flex flex-col">
             {ucsArray.map((uc, index) => (
               <label
                 key={index}

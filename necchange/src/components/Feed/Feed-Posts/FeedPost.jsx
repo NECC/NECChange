@@ -130,7 +130,7 @@ export default function FeedPost({ post, toggleLoader }) {
         })}
       </div>
 
-      <div className={`${clicked ? "hidden" : ""}`}>
+      <div className={`${clicked ? "hidden" : ""} cursout`}>
         {isWatchingOwnPost ? (
           status[0] == "Pendente" && (
             <button

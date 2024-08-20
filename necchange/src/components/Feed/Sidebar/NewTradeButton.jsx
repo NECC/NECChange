@@ -51,7 +51,6 @@ export default function NewTrade({ toggleLoader }) {
       .get(`/api/users/user_courses/${session?.user.number}`)
       .then((response) => {
         const data = response.data.student_ucs;
-        console.log(data);
         const parsed = data.reduce((acc, { lesson }) => {
           if (!acc[lesson.course.name]) {
             acc[lesson.course.name] = {
@@ -159,18 +158,23 @@ export default function NewTrade({ toggleLoader }) {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-center  bg-blue-600 hover:bg-blue-500 border rounded-md py-1 px-3 gap-2">
+      <div
+        className="flex flex-row items-center justify-center bg-blue-600 hover:bg-blue-500 border py-3 px-3 gap-2 cursor-pointer text-white font-semibold rounded-lg"
+        onClick={() => setShowModal(true)}
+      >
         <div className="bg-white rounded-full">
-          <CiCirclePlus size={20} color="blue " />
+          <CiCirclePlus size={20} color="blue" />
         </div>
-        <button
-          className="w-full sm:w-auto text-white font-semibold"
-          onClick={() => setShowModal(true)}
-        >
-          Nova Troca
-        </button>
+        <p>Nova Troca</p>
       </div>
 
+      {/*    div
+          className="flex items-center justify-center gap-2 bg-gray-50 border-2 px-3 py-3 "
+          onClick={toggleIsOpen}
+        >
+          <FaFilter color="gray" size={20} />
+          <p className="font-semibold text-gray">Filtrar</p>
+ */}
       <Modal
         showModal={showModal}
         setShowModal={setShowModal}
