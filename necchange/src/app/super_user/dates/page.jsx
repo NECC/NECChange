@@ -1,91 +1,60 @@
 "use client";
+import * as React from "react";
 import BasicDatePicker from "@/components/globals/BasicDatePicker";
-import { useEffect, useState } from "react";
+import TableDates from "@/components/admin/datatable/tableDates";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from "@/components/globals/Loader";
 import UcsInput from "@/components/admin/datatable/UcsInput";
-import moment from "moment";
-import "moment/locale/pt";
-
-import * as React from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-function convertToRegularDate(date) {
-  const day = date.date();
-  const month = date.month();
-  /*   const hour = date.hour();       + " às " + hour + ":" + minutes;
-  const minutes = date.minutes(); */
-
-  return day + "/" + month;
-}
+import { colorProp } from "@radix-ui/themes";
 
 export default function ManageTrades() {
-  const currencies = [
+  const types = [
     {
-      value: "USD",
-      label: "$",
+      value: "teste",
+      label: "Teste",
     },
     {
-      value: "EUR",
-      label: "€",
+      value: "entrega",
+      label: "Entrega",
     },
     {
-      value: "BTC",
-      label: "฿",
-    },
-    {
-      value: "JPY",
-      label: "¥",
+      value: "exame",
+      label: "Exame",
     },
   ];
-  const [status, setStatus] = useState("Fechado");
-  const [loader, setLoader] = useState(false);
-  const [startDate, setStartDate] = useState(null);
-
   const buttonStyle = "w-full col-span-2 text-white font-bold";
 
-  useEffect(() => {
-    const get_status = async () => {
-      await axios
-        .get("/api/admin/trades_period/status")
-        .then((res) => {
-          if (res.data.status.isOpen) {
-            const openDate = convertToRegularDate(
-              moment(res.data.status.openDate)
-            );
-            const closingDate = convertToRegularDate(
-              moment(res.data.status.closeDate)
-            );
-            setStatus(`Aberto de ${openDate} até ${closingDate}`);
-          } else {
-            setStatus("Fechado");
-          }
-          //console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    get_status();
-  }, [loader]);
+  const [loader, setLoader] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [uc, setUC] = useState(null);
+  const [type, setType] = useState(null);
+  const [events, setEvents] = useState([]);
 
   const handleTrades = async () => {
-    const date = startDate?.["$d"]; // Assumindo que $d é um objeto Date
+    const date = startDate?.["$d"];
     if (date) {
       const formattedDate = date.toISOString().split("T")[0];
       setLoader(true);
       await axios
         .post("/api/calendar/getCalendar", {
-          title: "PC - Exame (3º ano)",
+          title: `${uc.sigla} - ${type} (${uc.year}º ano)`,
           start: formattedDate,
+          color:
+            type === "Teste"
+              ? "#836FFF"
+              : type === "Entrega" /* estilizar as cores aqui */
+              ? "#40E0D0"
+              : "#3CB371",
         })
         .then((res) => {
           toast.success("Sucesso!");
+          setEvents([...events, res.data.response]);
         })
         .catch((err) => {
           toast.error("Erro!");
@@ -94,28 +63,46 @@ export default function ManageTrades() {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get("/api/calendar/getCalendar")
+      .then((res) => {
+        setEvents(res.data.response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
   return (
-    <div className="flex justify-center items-center bg-white text-black w-screen h-screen">
+    <div className="flex justify-between  items-center bg-white text-black w-screen h-screen p-14">
+      <div className="w-1/2 overflow-hidden h-1/2 bg-gray-400 dark:bg-gray-700 overflow-y-auto shadow-md sm:rounded-lg">
+        <TableDates events={events} setEvents={setEvents} />
+      </div>
       <div className="flex flex-col justify-center items-center gap-4">
-        <div className="text-xl font-bold">Definir datas de eventos</div>
-        <UcsInput />
+        <div className="text-xl font-bold">Definir Datas de Eventos</div>
+        <UcsInput setValue={setUC} />
         <Box
           component="form"
           sx={{
-            "& .MuiTextField-root": { m: 1, width: "25ch" },
+            "& .MuiTextField-root": { m: 1, width: 300 },
           }}
           noValidate
           autoComplete="off"
         >
           <div>
             <TextField
-              id="outlined-select-currency"
               select
-              label="Select"
-              defaultValue="EUR"
-              helperText="Please select your currency"
+              label="Tipo de evento"
+              onChange={(event) => {
+                const selectedValue = event.target.value;
+                const selectedOption = types.find(
+                  (option) => option.value === selectedValue
+                );
+                setType(selectedOption.label);
+              }}
             >
-              {currencies.map((option) => (
+              {types.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>

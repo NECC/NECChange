@@ -18,6 +18,12 @@ export default function SuperUser() {
         </Link>
         <Link
           className={buttonStyles + " col-span-3 text-center"}
+          href="/super_user/dates"
+        >
+          Manage Dates
+        </Link>
+        <Link
+          className={buttonStyles + " col-span-3 text-center"}
           href="/super_user/export_pdf"
         >
           Export UC Shifts

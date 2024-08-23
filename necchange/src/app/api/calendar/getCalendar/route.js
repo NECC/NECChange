@@ -10,18 +10,32 @@ export async function GET(req, res) {
   return NextResponse.json({ response: avaliacoes_eventos });
 }
 
-
 export async function POST(req, res) {
   const data = await req.json();
-  const { title, start } = data;
+  const { title, start, color } = data;
 
   const newDate = await prisma.dates.create({
     data: {
       title: title,
       start: start,
+      color: color,
     },
   });
 
   await prisma.$disconnect();
   return NextResponse.json({ response: newDate });
+}
+
+export async function DELETE(req) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
+  const deletedDate = await prisma.dates.delete({
+    where: {
+      id: parseInt(id),
+    },
+  });
+
+  await prisma.$disconnect();
+  return NextResponse.json({ response: deletedDate });
 }
