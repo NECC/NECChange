@@ -7,9 +7,8 @@ import NativeCheckbox from './NativeCheckbox';
 import iconsShape from './shapes/iconsShape';
 import languageShape from './shapes/languageShape';
 
-import * as Collapsible from "@radix-ui/react-collapsible";
-import { ChevronRightIcon, DividerHorizontalIcon, CheckIcon } from "@radix-ui/react-icons";
-import * as Checkbox from "@radix-ui/react-checkbox";
+import { Checkbox } from "@nextui-org/checkbox";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 
 class TreeNode extends React.PureComponent {
     static propTypes = {
@@ -254,7 +253,7 @@ class TreeNode extends React.PureComponent {
                     disabled={disabled}
                     id={inputId}
                     indeterminate={checked === 2}
-                    onChange={() => {}}
+                    onChange={() => { }}
                     onClick={this.onCheck}
                 />
                 <span
@@ -344,93 +343,45 @@ class TreeNode extends React.PureComponent {
             'rct-disabled': disabled,
         }, className);
 
-        const classTextColor = `${value.charAt(0) == '1' ? 'text-blue-500' : value.charAt(0) == '2' ? 'text-emerald-500': value.charAt(0) == '3' ? 'text-violet-500' : 'text-black'}`;
+        const classBgColor = `${value.charAt(0) == '1' ? 'bg-blue-500' : value.charAt(0) == '2' ? 'bg-emerald-500' : value.charAt(0) == '3' ? 'bg-violet-500' : 'bg-black'}`;
 
         const inputId = `${treeId}-${String(value).split(' ').join('_')}`;
 
-        let rootClassName = "my-5";
-        if (depth == 1)
-        {
-            rootClassName = "[&:not(:last-child)]:border-b first:mt-5"
-        }
-        else if (depth > 1) {
-            if (isLeaf) {
-                rootClassName = "my-1 ml-14";
-            }
-            else {
-                rootClassName = "my-1";
-            }
-        }
+        const itemClasses = {
+            base: "py-0 w-full",
+            title: "font-normal text-medium",
+            trigger: "px-2 py-0 data-[hover=true]:bg-default-100 rounded-lg h-14 flex items-center",
+            indicator: "text-medium",
+            content: "text-small px-2",
+        };
 
-        let headerClassName = `flex-1 ${!isLeaf ? 'rounded-r' : 'rounded border-l'} p-[8px] h-[45px] border-r border-y border-[#f3f4f6] bg-[#f9fafb] justify-between flex items-center`
-        if (depth > 0)
-        {
-            headerClassName = `flex-1 ${!isLeaf ? 'rounded-r' : 'rounded'} p-[8px] h-[45px] bg-white justify-between flex items-center`
+        const dotStyle = `w-2 h-2 rounded-full ml-2 ${classBgColor}`;
+
+        if (!isLeaf) {
+            return (
+                <Accordion showDivider={false} itemClasses={itemClasses}>
+                    <AccordionItem startContent={
+                        <Checkbox id={inputId} isSelected={checked === 1} isIndeterminate={checked === 2} onChange={this.onCheck}>
+                            <div className="w-full flex justify-between gap-2 items-center">
+                                <p>{label}</p>
+                                <div hidden={depth > 0} className={dotStyle}></div>
+                            </div>
+                        </Checkbox>
+                    }>
+                        {this.renderChildren()}
+                    </AccordionItem>
+                </Accordion>
+            )
         }
-
-        let triggerClassName = "bg-[#f9fafb] group rounded-l px-4 h-[45px] inline-flex items-center justify-center outline-none data-[state=closed]:border-[#f3f4f6] data-[state=open]:border-[#3b82f6] hover:bg-blue-50 border"
-        if (depth > 0)
-        {
-            triggerClassName = "group rounded-l px-4 h-[45px] inline-flex items-center justify-center outline-none data-[state=closed]:border-[#f3f4f6] data-[state=open]:border-[#3b82f6] data-[state=closed]:border-white hover:bg-blue-50 border";
-        }
-
-        let chevronClassName = "text-black w-6 h-6 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-90"
-        if (depth > 0)
-        {
-            chevronClassName = "text-black w-6 h-6 ease-[cubic-bezier(0.87,_0,_0.13,_1)] transition-transform duration-300 group-data-[state=open]:rotate-90"
-        }
-
-        return (
-            <Collapsible.Root
-            open={this.state.expanded}
-            onOpenChange={this.setExpanded}
-            className={rootClassName}
-            >
-                <div className={`flex items-center`}>
-                    { !isLeaf && (
-                    <Collapsible.Trigger asChild>
-                        <button className={triggerClassName}>
-                            <ChevronRightIcon
-                            className={chevronClassName}
-                            aria-hidden
-                            />
-                        </button>
-                    </Collapsible.Trigger>
-                    )}
-                    <div className={headerClassName}>
-                        <div className="flex gap-2 items-center">
-                            <Checkbox.Root
-                                className="flex-shrink-0 shadow-blackA4 hover:bg-blue-50 flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-[4px] bg-white shadow-[0_2px_4px_0px_rgba(0,0,0,0.1)] outline-none focus:shadow-[0_0_0_2px_black]"
-                                id={inputId}
-                                checked={checked === 1 ? true : (checked === 2 ? 'indeterminate' : false)}
-                                onCheckedChange={this.onCheck}
-                            >
-                                <Checkbox.Indicator>
-                                {checked === 2 && <DividerHorizontalIcon />}
-                                {checked === 1 && <CheckIcon />}
-                                </Checkbox.Indicator>
-                            </Checkbox.Root>
-
-                            <span className={`${classTextColor} text-[15px] leading-[25px]`}>
-                                {label}
-                            </span>
-                        </div>
+        else {
+            return (
+                <div className={itemClasses.content}>
+                    <div className={itemClasses.trigger}>
+                        <Checkbox isSelected={checked === 1} isIndeterminate={checked === 2} onChange={this.onCheck}>{label}</Checkbox>
                     </div>
                 </div>
-
-                <Collapsible.Content
-                    style={{
-                    ["--radix-accordion-content-height"]:
-                        "var(--radix-collapsible-content-height)",
-                    ["--radix-accordion-content-width"]:
-                        "var(--radix-collapsible-content-width)",
-                    }}
-                    className={`data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden ml-3`}
-                >
-                    {this.renderChildren()}
-                </Collapsible.Content>
-            </Collapsible.Root>
-        );
+            )
+        }
     }
 }
 
