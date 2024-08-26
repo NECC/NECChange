@@ -113,3 +113,6 @@
 .fc-daygrid-dot-event .fc-event-title {
   @apply hover:cursor-pointer;
 }
+.customInput {
+  width: 300px;
+}
