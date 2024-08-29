@@ -166,6 +166,7 @@ export default function CalendarPage() {
     };
     setNodes([
       ...convertToNodeTree(UCsObj),
+      { value: null }, // divider
       { value: `eventos`, label: `Eventos`, children: null },
     ]);
   }, []);
@@ -178,13 +179,6 @@ export default function CalendarPage() {
 
   return (
     <div className="bg-white min-h-screen pt-24 flex w-full overflow-hidden relative">
-      <CheckboxTree
-        className={`w-[440px] ml-5 mt-5 lg:block hidden`}
-        nodes={nodes}
-        checked={checked}
-        onCheck={(checked) => setChecked(checked)}
-      />
-
       <PopUpOnClick
         isOpened={isPopUpOpened}
         setIsOpened={setIsPopUpOpened}
@@ -199,32 +193,43 @@ export default function CalendarPage() {
         className="block lg:hidden"
       />
 
-      <div className="pt-8 px-2 md:px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
-        {isCalendarLoading ? (
-          <div className="flex justify-center items-center h-full bg-white">
-            <div className="border-t-4 border-blue-500 border-solid rounded-full w-12 h-12 animate-spin">
-              {" "}
-            </div>
-          </div>
-        ) : (
-          <FullCalendar
-            plugins={[dayGridPlugin, googleCalendarPlugin]}
-            locale={ptLocale}
-            firstDay={0}
-            eventClick={eventClickCallback}
-            headerToolbar={{
-              left: "prev,today,next",
-              center: "title",
-              right: "dayGridWeek,dayGridMonth",
-            }}
-            initialView="dayGridMonth"
-            displayEventTime={false}
-            events={finalArray}
-            eventColor="blue-sky-500"
-            event
-            height="80vh"
+      <div className="flex flex-row justify-center w-full divide-x divide-gray-200">
+        <div className="w-[440px] mx-10 mt-10 lg:block hidden">
+          <h2 className="text-xl font-bold p-4">Filtros</h2>
+          <CheckboxTree
+            nodes={nodes}
+            checked={checked}
+            onCheck={(checked) => setChecked(checked)}
           />
-        )}
+        </div>
+
+        <div className="pt-8 px-2 md:px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
+          {isCalendarLoading ? (
+            <div className="flex justify-center items-center h-full bg-white">
+              <div className="border-t-4 border-blue-500 border-solid rounded-full w-12 h-12 animate-spin">
+                {" "}
+              </div>
+            </div>
+          ) : (
+            <FullCalendar
+              plugins={[dayGridPlugin, googleCalendarPlugin]}
+              locale={ptLocale}
+              firstDay={0}
+              eventClick={eventClickCallback}
+              headerToolbar={{
+                left: "prev,today,next",
+                center: "title",
+                right: "dayGridWeek,dayGridMonth",
+              }}
+              initialView="dayGridMonth"
+              displayEventTime={false}
+              events={finalArray}
+              eventColor="blue-sky-500"
+              event
+              height="80vh"
+            />
+          )}
+        </div>
       </div>
     </div>
   );

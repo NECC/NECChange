@@ -7,8 +7,7 @@ import NativeCheckbox from './NativeCheckbox';
 import iconsShape from './shapes/iconsShape';
 import languageShape from './shapes/languageShape';
 
-import { Checkbox } from "@nextui-org/checkbox";
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import { Accordion, AccordionItem, Divider, Checkbox } from "@nextui-org/react";
 
 class TreeNode extends React.PureComponent {
     static propTypes = {
@@ -343,6 +342,10 @@ class TreeNode extends React.PureComponent {
             'rct-disabled': disabled,
         }, className);
 
+        if (!value) {
+            return (<Divider className="my-2" />);
+        }
+
         const classBgColor = `${value.charAt(0) == '1' ? 'bg-blue-500' : value.charAt(0) == '2' ? 'bg-emerald-500' : value.charAt(0) == '3' ? 'bg-violet-500' : 'bg-black'}`;
 
         const inputId = `${treeId}-${String(value).split(' ').join('_')}`;
@@ -352,7 +355,7 @@ class TreeNode extends React.PureComponent {
             title: "font-normal text-medium",
             trigger: "px-2 py-0 data-[hover=true]:bg-default-100 rounded-lg h-14 flex items-center",
             indicator: "text-medium",
-            content: "text-small px-2",
+            content: "px-2",
         };
 
         const dotStyle = `w-2 h-2 rounded-full ml-2 ${classBgColor}`;
@@ -363,7 +366,7 @@ class TreeNode extends React.PureComponent {
                     <AccordionItem startContent={
                         <Checkbox id={inputId} isSelected={checked === 1} isIndeterminate={checked === 2} onChange={this.onCheck}>
                             <div className="w-full flex justify-between gap-2 items-center">
-                                <p>{label}</p>
+                                <p className={depth === 1 ? "text-gray-500" : ""}>{label}</p>
                                 <div hidden={depth > 0} className={dotStyle}></div>
                             </div>
                         </Checkbox>
@@ -375,10 +378,10 @@ class TreeNode extends React.PureComponent {
         }
         else {
             return (
-                <div className={itemClasses.content}>
-                    <div className={itemClasses.trigger}>
-                        <Checkbox isSelected={checked === 1} isIndeterminate={checked === 2} onChange={this.onCheck}>{label}</Checkbox>
-                    </div>
+                <div className={depth === 2 ? "px-4 py-1.5" : `${itemClasses.trigger} px-4`}>
+                    <Checkbox isSelected={checked === 1} isIndeterminate={checked === 2} onChange={this.onCheck}>
+                        <p className={depth === 2 ? "text-sm" : ""}>{label}</p>
+                    </Checkbox>
                 </div>
             )
         }
