@@ -9,6 +9,7 @@ import MobileFilter from "@/components/calendar/MobileFilter";
 import UCsObj from "../data/filters.json";
 import CheckboxTree from "@/components/calendar/CheckboxTree/CheckboxTree";
 import PopUpOnClick from "@/components/calendar/PopUpOnClick";
+import { ScrollShadow } from "@nextui-org/react";
 
 export default function CalendarPage() {
   const [isPopUpOpened, setIsPopUpOpened] = useState(false);
@@ -178,7 +179,7 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="bg-white min-h-screen pt-24 flex w-full overflow-hidden relative">
+    <div className="bg-white h-screen pt-24 flex w-full overflow-hidden relative">
       <PopUpOnClick
         isOpened={isPopUpOpened}
         setIsOpened={setIsPopUpOpened}
@@ -193,17 +194,22 @@ export default function CalendarPage() {
         className="block lg:hidden"
       />
 
-      <div className="flex flex-row justify-center w-full divide-x divide-gray-200">
-        <div className="w-[440px] mx-10 mt-10 lg:block hidden">
-          <h2 className="text-xl font-bold p-4">Filtros</h2>
-          <CheckboxTree
-            nodes={nodes}
-            checked={checked}
-            onCheck={(checked) => setChecked(checked)}
-          />
-        </div>
+      <div className="flex flex-row justify-center w-full lg:divide-x divide-gray-200 overflow-hidden">
+        <aside className="w-[440px] hidden lg:block">
+          <ScrollShadow className="h-full">
+            <div className="mx-10 my-4">
+              <h2 className="text-2xl font-bold p-4">Filtros</h2>
+              <CheckboxTree
+                nodes={nodes}
+                checked={checked}
+                onCheck={(checked) => setChecked(checked)}
+              />
+            </div>
+          </ScrollShadow>
+        </aside>
 
-        <div className="pt-8 px-2 md:px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
+        <div className="pt-2 px-2 lg:px-20 lg:pt-8 overflow-auto full-calendar calendar-container container">
+          <h1 className="text-2xl font-bold hidden lg:block">Calendário</h1>
           {isCalendarLoading ? (
             <div className="flex justify-center items-center h-full bg-white">
               <div className="border-t-4 border-blue-500 border-solid rounded-full w-12 h-12 animate-spin">
@@ -217,9 +223,9 @@ export default function CalendarPage() {
               firstDay={0}
               eventClick={eventClickCallback}
               headerToolbar={{
-                left: "prev,today,next",
-                center: "title",
-                right: "dayGridWeek,dayGridMonth",
+                left: "title",
+                center: "dayGridWeek,dayGridMonth",
+                right: "prev,today,next",
               }}
               initialView="dayGridMonth"
               displayEventTime={false}

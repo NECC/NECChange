@@ -7,8 +7,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(84, 160, 190); /* Color of the scrollbar thumb */
+  background-color: #c5cad39c; /* Color of the scrollbar thumb */
   border-radius: 10px; /* Border radius of the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #c5cad3; /* Color of the scrollbar thumb */
 }
 
 ::-webkit-scrollbar-track {
@@ -23,49 +27,103 @@
   * FullCalendar
 ***/
 .full-calendar {
-  --fc-border-color: #e5e7eb;
+  --fc-border-color: transparent;
   --fc-button-text-color: #111827;
-  --fc-button-bg-color: #f9fafb;
-  --fc-button-border-color: #f3f4f6;
+  --fc-button-bg-color: transparent;
+  --fc-button-border-color: transparent;
   --fc-button-hover-bg-color: #f3f4f6;
-  --fc-button-hover-border-color: #e5e7eb;
-  --fc-button-active-bg-color: #3b82f6;
-  --fc-button-active-border-color: #3b82f6;
+  --fc-button-hover-border-color: transparent;
+  --fc-button-active-bg-color: #c5cad3;
+  --fc-button-active-border-color: #c5cad3;
   --fc-event-bg-color: #3b82f6;
   --fc-event-border-color: #3b82f6;
   --fc-event-text-color: #fff;
 
+  .fc-button {
+    box-shadow: none !important;
+  }
 
-  .fc .fc-button-primary:not(:disabled).fc-button-active, .fc .fc-button-primary:not(:disabled):active {
-    color: #fff;
+  .fc-icon-chevron-left::before {
+    content: '';
+    display: inline-block;
+    width: 20px; /* Adjust size */
+    height: 20px;
+    background-image: url('/icons/chevron-left-bold.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .fc-icon-chevron-right::before {
+    content: '';
+    display: inline-block;
+    width: 20px; /* Adjust size */
+    height: 20px;
+    background-image: url('/icons/chevron-right-bold.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .fc-dayGridWeek-button, .fc-dayGridMonth-button {
+    --fc-button-text-color: #111827;
+    --fc-button-bg-color: #f3f4f6;
+    --fc-button-border-color: #e5e7eb;
+    --fc-button-hover-bg-color: #f3f4f6;
+    --fc-button-hover-border-color: #e5e7eb;
+    --fc-button-active-bg-color: #c5cad3;
+    --fc-button-active-border-color: #c5cad3;
+  }
+
+  .fc-dayGridWeek-button {
+    border-top-left-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+  }
+
+  .fc-dayGridMonth-button {
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+  }
+
+  .fc .fc-toolbar-title {
+    @apply text-base text-gray-500;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .fc-icon-chevron-right::before, .fc-icon-chevron-left::before {
+      width: 24px;
+      height: 24px;
+    }
+
+    .fc .fc-toolbar-title {
+      @apply ml-4 text-foreground text-lg;
+    }
   }
 
   @media screen and (max-width: 600px) {
-    .fc .fc-toolbar-title {
-      @apply text-sm;
-    }
-
-    .fc-toolbar.fc-toolbar-ltr {
-      @apply mb-2;
-    }
-
-    .fc .fc-button {
-      @apply px-[0.3em] py-[0.5em] text-[.7em];
+    .fc-dayGridWeek-button, .fc-dayGridMonth-button {
+      display: none;
     }
   }
 
-  table.fc-scrollgrid {
+  table.fc-scrollgrid-sync-table {
     border-radius: 8px !important;
     overflow: hidden;
   }
 
+  tr.fc-scrollgrid-section.fc-scrollgrid-section-body {
+    --fc-border-color: #e5e7eb;
+  }
+
   tr.fc-scrollgrid-section.fc-scrollgrid-section-body > td {
+    border-left-width: 1px;
+    border-top-width: 1px;
     border-bottom-left-radius: 8px !important;
     border-bottom-right-radius: 8px !important;
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
   }
 
   .fc-col-header-cell-cushion {
-    text-transform: capitalize;
+    @apply text-gray-500 text-xs font-normal capitalize;
   }
 }
 
