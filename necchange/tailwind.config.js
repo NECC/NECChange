@@ -1,4 +1,3 @@
-const { mauve, violet, red, blackA, indigo } = require("@radix-ui/colors");
 const { nextui } = require("@nextui-org/react");
 
 /** @type {import('tailwindcss').Config} */
@@ -11,22 +10,7 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        ...mauve,
-        ...violet,
-        ...red,
-        ...blackA,
-        ...indigo
-      },
       keyframes: {
-        slideDown: {
-          from: { height: 0 },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        slideUp: {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
-        },
         overlayShow: {
           from: { opacity: 0 },
           to: { opacity: 1 },

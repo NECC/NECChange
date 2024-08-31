@@ -11,7 +11,6 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { colorProp } from "@radix-ui/themes";
 
 export default function ManageTrades() {
   const types = [
