@@ -12,6 +12,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+
 const AddUserForm = ({ showModal, setShowModal }) => {
   const [newUser, setNewUser] = useState({
     name: "",
@@ -167,12 +169,33 @@ const AddUserForm = ({ showModal, setShowModal }) => {
   );
 };
 
+const usedelayedValue = (inputValue, delay) => {
+  const [delayedValue, setdelayedValue] = useState(inputValue);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setdelayedValue(inputValue);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [inputValue, delay]);
+  
+  return delayedValue;
+};
+
 export default function ManageUsers() {
   const { data: session } = useSession();
   const [users, setUsers] = useState([]);
   const [filterUsers, setFilterUsers] = useState([])
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("Número");
 
   const [showModal, setShowModal] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+
+  const delayedSearchTerm = usedelayedValue(search, 400);
 
   useEffect(() => {
     const getEvents = async () => {
@@ -188,10 +211,26 @@ export default function ManageUsers() {
     getEvents();
   }, []);
 
+  const changeFilter = (filter) => {
+    setFilter(filter);
+    setShowFilter(false);
+  }
+
+  const included = (string1,string2) => {
+    if (string1 == null) return false;
+    else return string1.includes(string2) 
+  }
+
+  useEffect(() => {
+    handleSearch(delayedSearchTerm);
+  }, [delayedSearchTerm]);
+
   /* Future upgrade: Add a delay so that we don't make calls every time a key is pressed*/
   const handleSearch = (value) => {
     if(value != "") {
-      setFilterUsers(users.filter(user => user.number == value))
+      if (filter == "Número") setFilterUsers(users.filter(user => included(user.number,value)));
+      if (filter == "Nome") setFilterUsers(users.filter(user => included(user.name,value)));
+      if (filter == "Email") setFilterUsers(users.filter(user => included(user.email,value)));
     } else {
       setFilterUsers(users)
     }
@@ -204,13 +243,29 @@ export default function ManageUsers() {
       <div className="ml-auto mr-auto px-8 md:px-16">
         <AddUserForm showModal={showModal} setShowModal={setShowModal} />
         <div className="flex flex-row pb-4">
-          <div className="basis-1/2">
+          <div className="basis-1/2 flex flex-row">
             <input
               type="text"
-              onChange={(e) => handleSearch(e.target.value.toLowerCase())}
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg block w-1/2 p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-l-lg block w-1/2 p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900"
               placeholder="Procura..."
             />
+            <div className="flex flex-row rounded-r-lg bg-gray-500 border border-l-0 border-gray-600 divide-x divide-inherit overflow-hidden">
+              <button 
+                onClick={() => setShowFilter(!showFilter)}
+                className="text-gray-900 text-md block p-2.5 gap-2.5 items-center text-white bg-blue-500 dark:border-gray-600 flex flex-row"
+                >
+                {filter} {showFilter && <FaAngleLeft />} {!showFilter && <FaAngleRight />}
+              </button>
+              {showFilter && 
+              <div className="flex flex-row text-white text-md divide-x divide-inherit">
+                <button onClick={() => changeFilter("Número")} className="px-2.5"> Número </button>
+                <button onClick={() => changeFilter("Nome")} className="px-5"> Nome </button>
+                <button onClick={() => changeFilter("Email")} className="px-5"> Email </button>
+              </div>}
+            </div>
+            
           </div>
           <div className="basis-1/4"></div>
           <div className="basis-1/4">
