@@ -3,24 +3,20 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
+  @apply w-2;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #c5cad39c; /* Color of the scrollbar thumb */
-  border-radius: 10px; /* Border radius of the thumb */
+  @apply bg-default-300 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #c5cad3; /* Color of the scrollbar thumb */
+  @apply bg-default-400;
 }
 
-::-webkit-scrollbar-track {
-  background-color: rgba(248, 248, 248, 0.774);
-}
-
+::-webkit-scrollbar-track,
 ::-webkit-scrollbar-track:hover {
-  background-color: rgba(248, 248, 248, 0.774); /* Background color of the scrollbar track on hover */
+  @apply bg-transparent;
 }
 
 /***
@@ -28,13 +24,13 @@
 ***/
 .full-calendar {
   --fc-border-color: transparent;
-  --fc-button-text-color: #111827;
+  --fc-button-text-color: #111111;
   --fc-button-bg-color: transparent;
   --fc-button-border-color: transparent;
-  --fc-button-hover-bg-color: #f3f4f6;
-  --fc-button-hover-border-color: transparent;
-  --fc-button-active-bg-color: #c5cad3;
-  --fc-button-active-border-color: #c5cad3;
+  --fc-button-hover-bg-color: #f3f3f3;
+  --fc-button-hover-border-color: #f3f3f3;
+  --fc-button-active-bg-color: #c5c5c5;
+  --fc-button-active-border-color: #c5c5c5;
   --fc-event-bg-color: #3b82f6;
   --fc-event-border-color: #3b82f6;
   --fc-event-text-color: #fff;
@@ -46,7 +42,7 @@
   .fc-icon-chevron-left::before {
     content: '';
     display: inline-block;
-    width: 20px; /* Adjust size */
+    width: 20px;
     height: 20px;
     background-image: url('/icons/chevron-left-bold.svg');
     background-size: contain;
@@ -56,31 +52,29 @@
   .fc-icon-chevron-right::before {
     content: '';
     display: inline-block;
-    width: 20px; /* Adjust size */
+    width: 20px;
     height: 20px;
     background-image: url('/icons/chevron-right-bold.svg');
     background-size: contain;
     background-repeat: no-repeat;
   }
 
-  .fc-dayGridWeek-button, .fc-dayGridMonth-button {
-    --fc-button-text-color: #111827;
-    --fc-button-bg-color: #f3f4f6;
-    --fc-button-border-color: #e5e7eb;
-    --fc-button-hover-bg-color: #f3f4f6;
-    --fc-button-hover-border-color: #e5e7eb;
-    --fc-button-active-bg-color: #c5cad3;
-    --fc-button-active-border-color: #c5cad3;
+  .fc-button {
+    border-radius: 8px !important;
   }
 
-  .fc-dayGridWeek-button {
-    border-top-left-radius: 8px !important;
-    border-bottom-left-radius: 8px !important;
-  }
-
+  .fc-dayGridWeek-button,
   .fc-dayGridMonth-button {
-    border-top-right-radius: 8px !important;
-    border-bottom-right-radius: 8px !important;
+    --fc-button-hover-bg-color: #e5e7eb;
+    --fc-button-hover-border-color: #e5e7eb;
+    --fc-button-active-bg-color: #fff;
+    --fc-button-active-border-color: #e5e7eb;
+
+    @apply z-0 w-full px-3 py-1 flex relative justify-center items-center cursor-pointer transition-opacity tap-highlight-transparent h-8 text-small rounded-full !important;
+  }
+
+  .fc-button-group:has(.fc-dayGridWeek-button) {
+    @apply flex p-0.5 h-fit gap-1 items-center flex-nowrap overflow-x-scroll scrollbar-hide bg-default-100 rounded-full;
   }
 
   .fc .fc-toolbar-title {
@@ -88,7 +82,9 @@
   }
 
   @media screen and (max-width: 1024px) {
-    .fc-icon-chevron-right::before, .fc-icon-chevron-left::before {
+
+    .fc-icon-chevron-right::before,
+    .fc-icon-chevron-left::before {
       width: 24px;
       height: 24px;
     }
@@ -99,8 +95,10 @@
   }
 
   @media screen and (max-width: 600px) {
-    .fc-dayGridWeek-button, .fc-dayGridMonth-button {
-      display: none;
+
+    .fc-dayGridWeek-button,
+    .fc-dayGridMonth-button {
+      display: none !important;
     }
   }
 
@@ -113,7 +111,7 @@
     --fc-border-color: #e5e7eb;
   }
 
-  tr.fc-scrollgrid-section.fc-scrollgrid-section-body > td {
+  tr.fc-scrollgrid-section.fc-scrollgrid-section-body>td {
     border-left-width: 1px;
     border-top-width: 1px;
     border-bottom-left-radius: 8px !important;
@@ -137,7 +135,7 @@
   th.fc-col-header-cell.fc-day {
     border-bottom: 3px solid #e5e7eb;
   }
-  
+
   .fc-direction-ltr .fc-timegrid-col-events {
     @apply ml-px mr-px;
   }
@@ -171,6 +169,7 @@
 .fc-daygrid-dot-event .fc-event-title {
   @apply hover:cursor-pointer;
 }
+
 .customInput {
   width: 300px;
 }
