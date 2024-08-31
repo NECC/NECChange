@@ -173,7 +173,7 @@ export default function CalendarPage() {
   }, []);
 
   const eventClickCallback = (info) => {
-    setIsPopUpOpened(!isPopUpOpened);
+    setIsPopUpOpened(true);
     setPopUpCalendarTime(info.event.startStr);
     setPopUpData(info.event.extendedProps);
   };
