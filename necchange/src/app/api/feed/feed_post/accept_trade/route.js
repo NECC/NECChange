@@ -7,8 +7,11 @@ export async function POST(req, context) {
   const data = await req.json();
 
   // student that accepted the trade
-  const fromStudentNr = data.fromStudentNr;
+  const fromStudentNr = data.params.fromStudentNr;
   const studentNrAccepted = data.params.studentAcceptedNr;
+
+  console.log("fromStudentNr", fromStudentNr);
+  console.log("studentNrAccepted", studentNrAccepted);
 
   if (fromStudentNr == studentNrAccepted) {
     return new NextResponse(

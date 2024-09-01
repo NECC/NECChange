@@ -11,7 +11,7 @@ import { getToken } from "next-auth/jwt";
  *
  */
 const publicRoutes = ["/"];
-const authRoutes = ["/auth", "/api/feed"];
+const authRoutes = ["/auth"];
 const adminRoutes = ["/super_user", "/api/admin", "/api/users/delete_user", "/api/users/user_profile"];
 const protectedRoutes = ["/profile", "/horario", "/feed"];
 

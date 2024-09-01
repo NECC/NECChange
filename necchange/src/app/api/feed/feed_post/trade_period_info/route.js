@@ -13,7 +13,7 @@ export async function GET(req, context) {
     },
   });
 
-  if (trades_status?.openDate && trades_status?.closeDate) {
+  if (trades_status.openDate && trades_status?.closeDate) {
     const date = new Date();
     const is_open =
       date > trades_status.openDate && date < trades_status.closeDate
