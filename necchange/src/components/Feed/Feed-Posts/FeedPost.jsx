@@ -81,7 +81,7 @@ export default function FeedPost({ post, toggleLoader }) {
     setClicked(!clicked);
   };
   return (
-    <div className="rounded-[20px] text-base bg-white border shadow w-full grid overflow-hidden">
+    <div className="rounded-[20px] text-base bg-white border shadow flex flex-col overflow-hidden">
       <div className="flex items-center justify-between gap-2 p-6">
         <p className="text-lg font-semibold">{fromStudentNr}</p> há{" "}
         {moment(post.publish_time).fromNow(true)} atrás
@@ -103,7 +103,7 @@ export default function FeedPost({ post, toggleLoader }) {
 
           return (
             <div
-              className="grid grid-cols-2 items-center py-1 w-full"
+              className="grid grid-cols-2 py-1"
               key={i}
             >
               <p className="font-semibold">
@@ -130,11 +130,11 @@ export default function FeedPost({ post, toggleLoader }) {
         })}
       </div>
 
-      <div className={`${clicked ? "hidden" : ""} cursout`}>
+      <div className={`${clicked ? "hidden" : ""} h-full flex items-end `}>
         {isWatchingOwnPost ? (
           status[0] == "Pendente" && (
             <button
-              className={`py-2 w-full bg-red-100 hover:bg-red-200 font-bold text-red-700`}
+              className={`py-2 w-full h-auto bg-red-100 hover:bg-red-200 font-bold text-red-700 `}
               onClick={removeTrade}
             >
               Remover Troca
