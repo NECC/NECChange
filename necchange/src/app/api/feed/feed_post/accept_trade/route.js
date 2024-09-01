@@ -7,10 +7,19 @@ export async function POST(req, context) {
   const data = await req.json();
 
   // student that accepted the trade
-  const fromStudentNr = data.fromStudentNr;
+  const fromStudentNr = data.params.fromStudentNr;
   const studentNrAccepted = data.params.studentAcceptedNr;
-  const tradeId = data.params.tradeId;
 
+  console.log("fromStudentNr", fromStudentNr);
+  console.log("studentNrAccepted", studentNrAccepted);
+
+  if (fromStudentNr == studentNrAccepted) {
+    return new NextResponse(
+      JSON.stringify({ response: "Not authorized to accept this trade" })
+    );
+  }
+
+  const tradeId = data.params.tradeId;
 
   const accept_query = await prisma.$transaction(async (tx) => {
     const getToStudentId = await tx.user.findFirst({
@@ -107,7 +116,7 @@ export async function POST(req, context) {
     return false;
   });
 
-  await prisma.$disconnect()
+  await prisma.$disconnect();
   return new NextResponse(JSON.stringify({ response: accept_query }));
 }
 
@@ -189,7 +198,6 @@ async function deleteDeprecatedTrades(fromStudentId, toStudentId, tradeId, tx) {
     },
   });
 
-  
   return new NextResponse(JSON.stringify({ response: true }));
 }
 
