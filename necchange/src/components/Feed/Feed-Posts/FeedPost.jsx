@@ -142,7 +142,7 @@ export default function FeedPost({ post, toggleLoader }) {
           )
         ) : (
           <button
-            className={`py-2 w-full bg-indigo-100 hover:bg-indigo-200 font-bold text-indigo-700`}
+            className={`py-2 w-full h-auto bg-indigo-100 hover:bg-indigo-200 font-bold text-indigo-700`}
             onClick={acceptTrade}
           >
             Trocar
