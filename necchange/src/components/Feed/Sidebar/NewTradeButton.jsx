@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Modal from "@/components/globals/Modal";
 import TradeEntry from "./NewTrade/popUp/TradeEntry";
 import { useSession } from "next-auth/react";
+import { CiCirclePlus } from "react-icons/ci";
 
 const emptyTrade = {
   id: 0,
@@ -44,13 +45,12 @@ export default function NewTrade({ toggleLoader }) {
   const [enrolledClasses, setEnrolledClasses] = useState({});
   const [availableClasses, setAvailableClasses] = useState({});
   const { data: session } = useSession();
-  
+
   useEffect(() => {
     axios
       .get(`/api/users/user_courses/${session?.user.number}`)
       .then((response) => {
         const data = response.data.student_ucs;
-        console.log(data);
         const parsed = data.reduce((acc, { lesson }) => {
           if (!acc[lesson.course.name]) {
             acc[lesson.course.name] = {
@@ -112,7 +112,7 @@ export default function NewTrade({ toggleLoader }) {
   };
 
   const removeTrade = (id) => {
-  //  console.log("Removing trade", id);
+    //  console.log("Removing trade", id);
     const newTrades = trades.filter((trade) => trade.id != id);
     setTrades(newTrades);
   };
@@ -139,10 +139,10 @@ export default function NewTrade({ toggleLoader }) {
     if (format_validator(trades) == true) {
       axios
         .post("/api/feed/feed_post/add_trade", {
-          params: { trades: trades, student_nr: session?.user.number},
+          params: { trades: trades, student_nr: session?.user.number },
         })
         .then((response) => {
-        //  console.log(response);
+          //  console.log(response);
           toggleLoader(false);
           toast.success("Pedido de troca realizado!");
         })
@@ -158,13 +158,23 @@ export default function NewTrade({ toggleLoader }) {
 
   return (
     <>
-      <button
-        className="w-full sm:w-auto py-1 px-3 rounded-md text-blue-600 font-semibold border hover:bg-gray-100"
+      <div
+        className="flex flex-row items-center justify-center bg-blue-600 hover:bg-blue-500 border py-3 px-3 gap-2 cursor-pointer text-white font-semibold rounded-lg"
         onClick={() => setShowModal(true)}
       >
-        Nova Troca
-      </button>
+        <div className="bg-white rounded-full">
+          <CiCirclePlus size={20} color="blue" />
+        </div>
+        <p>Nova Troca</p>
+      </div>
 
+      {/*    div
+          className="flex items-center justify-center gap-2 bg-gray-50 border-2 px-3 py-3 "
+          onClick={toggleIsOpen}
+        >
+          <FaFilter color="gray" size={20} />
+          <p className="font-semibold text-gray">Filtrar</p>
+ */}
       <Modal
         showModal={showModal}
         setShowModal={setShowModal}

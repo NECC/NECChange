@@ -8,13 +8,12 @@ import Badge from "../../globals/Badge";
 // há x tempo atrás
 import moment from "moment";
 import "moment/locale/pt";
-import Status from '@prisma/client'
 
 const statusMap = {
   ACCEPTED: ["Aceite", "green"],
   PENDING: ["Pendente", "yellow"],
   REMOVED: ["Removido", "red"],
-  ERROR: ["Não é possível", "red"]
+  ERROR: ["Não é possível", "red"],
 };
 
 const type_class = {
@@ -23,16 +22,15 @@ const type_class = {
   3: "PL",
 };
 
-
 export default function FeedPost({ post, toggleLoader }) {
   const { data: session } = useSession();
-  const isWatchingOwnPost = session.user.number === post.from_student.number;
+  const isWatchingOwnPost = session.user.number === post.from_student.number; 
   const fromStudentNr = post.from_student.number;
   const tradeId = post.id;
 
   /* variable status is an array */
-  const [status, setStatus] = useState(statusMap[post.status])
-  const [clicked, setClicked] = useState(false)
+  const [status, setStatus] = useState(statusMap[post.status]);
+  const [clicked, setClicked] = useState(false);
 
   const acceptTrade = () => {
     toggleLoader(true);
@@ -40,22 +38,21 @@ export default function FeedPost({ post, toggleLoader }) {
       .post(`/api/feed/feed_post/accept_trade`, {
         params: {
           fromStudentNr: fromStudentNr,
-          studentAcceptedNr: session?.user.number ,
+          studentAcceptedNr: session?.user.number,
           tradeId: tradeId,
         },
       })
       .then((res) => {
         if (res.data.response == true) {
           toast.success("Troca realizada com sucesso!");
-          post.status = "ACCEPTED"
-          setStatus(statusMap["ACCEPTED"])
-
+          post.status = "ACCEPTED";
+          setStatus(statusMap["ACCEPTED"]);
         } else {
           toast.error("Não é possível realizar a troca! Turnos incompatíveis.");
-          post.status = "ERROR"
-          setStatus(statusMap["ERROR"])
+          post.status = "ERROR";
+          setStatus(statusMap["ERROR"]);
         }
-        setClicked(!clicked)
+        setClicked(!clicked);
         toggleLoader(false);
       })
       .catch((err) => {
@@ -72,8 +69,8 @@ export default function FeedPost({ post, toggleLoader }) {
       .then((res) => {
         toggleLoader(false);
         toast.success("Pedido de troca removido!");
-        post.status = "ACCEPTED"
-        setStatus(statusMap["ACCEPTED"])
+        post.status = "ACCEPTED";
+        setStatus(statusMap["ACCEPTED"]);
       })
       .catch((err) => {
         toggleLoader(false);
@@ -81,32 +78,17 @@ export default function FeedPost({ post, toggleLoader }) {
         console.log(err);
       });
 
-      setClicked(!clicked)
+    setClicked(!clicked);
   };
-/*
-  useEffect(() => {
-    const cena = () => {
-      console.log("own post:", isWatchingOwnPost);
-      console.log("post_id: ", post.id);
-      console.log("status", status);
-    }
-
-    cena()
-  }, [])
-*/
   return (
-    <div className="rounded-md text-base bg-white p-6 border shadow w-full grid gap-8">
-      <div className="flex items-center justify-between gap-2">
-        <p className="">
-          Solicitado por{" "}
-          <strong className="text-lg font-semibold">{fromStudentNr}</strong> há{" "}
-          {moment(post.publish_time).fromNow(true)} atrás
-        </p>
-
-        { (isWatchingOwnPost || clicked) && <Badge variant={status[1]}>{status[0]}</Badge>}
+    <div className="rounded-[20px] text-base bg-white border shadow flex flex-col overflow-hidden">
+      <div className="flex items-center justify-between gap-2 p-6">
+        <p className="text-lg font-semibold">{fromStudentNr}</p> há{" "}
+        {moment(post.publish_time).fromNow(true)} atrás
+        {/*  { (isWatchingOwnPost || clicked) && <Badge variant={status[1]}>{status[0]}</Badge>} */}
       </div>
 
-      <div className="grid">
+      <div className="grid p-6">
         {post.trade_id.map((lesson_trade, i) => {
           const { year, name } = lesson_trade.lessonFrom.course;
           const type = type_class[lesson_trade.lessonFrom.type];
@@ -121,7 +103,7 @@ export default function FeedPost({ post, toggleLoader }) {
 
           return (
             <div
-              className="grid grid-cols-2 items-center py-1 w-full border-b last:border-none"
+              className="grid grid-cols-2 py-1"
               key={i}
             >
               <p className="font-semibold">
@@ -129,16 +111,18 @@ export default function FeedPost({ post, toggleLoader }) {
                 {name}
               </p>
               <div className="flex justify-end">
-                <div className="ml-2 flex items-baseline gap-3">
-                  <p className="">
-                    {fromStudentNr}{" "}
-                    <span className="font-semibold">{from}</span>
-                  </p>
+                <div className="ml-2 flex items-center gap-3">
+                  <div className="flex flex-col items-center justify-center">
+                    <p className="font-semibold">{from}</p>
+                    <p>{fromStudentNr} </p>
+                  </div>
+
                   <FaArrowRightArrowLeft className="text-[11px] text-blue-900" />
-                  <p className="">
-                    <span className="font-semibold">{to}</span>{" "}
-                    {isWatchingOwnPost ? "Axxxxx" : session?.user.number}
-                  </p>
+
+                  <div className="flex flex-col items-center justify-center">
+                    <p className="font-semibold">{to}</p>
+                    <p>{isWatchingOwnPost ? "Axxxxx" : session?.user.number}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -146,11 +130,11 @@ export default function FeedPost({ post, toggleLoader }) {
         })}
       </div>
 
-      <div className={`${clicked ? 'hidden': ''} flex justify-end`}>
+      <div className={`${clicked ? "hidden" : ""} h-full flex items-end `}>
         {isWatchingOwnPost ? (
           status[0] == "Pendente" && (
             <button
-              className={`py-2 px-4 bg-red-600 hover:bg-red-500 font-bold text-white rounded-lg`}
+              className={`py-2 w-full h-auto bg-red-100 hover:bg-red-200 font-bold text-red-700 `}
               onClick={removeTrade}
             >
               Remover Troca
@@ -158,7 +142,7 @@ export default function FeedPost({ post, toggleLoader }) {
           )
         ) : (
           <button
-            className={`py-2 px-4 bg-blue-500 hover:bg-blue-600 font-bold text-white rounded-lg`}
+            className={`py-2 w-full h-auto bg-indigo-100 hover:bg-indigo-200 font-bold text-indigo-700`}
             onClick={acceptTrade}
           >
             Trocar

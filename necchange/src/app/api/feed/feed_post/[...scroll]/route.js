@@ -54,7 +54,6 @@ export async function GET(req, context) {
     lesson_ids = query_lesson_ids.map((lesson_id) => lesson_id.id);
   }
 
-  console.log("status", status);
   const trades = await prisma.trade.findMany({
     where: {
       status: status,
@@ -72,10 +71,7 @@ export async function GET(req, context) {
     cursor: cursor,
     take: limit,
     skip: skip,
-    orderBy: {
-      id: "asc",
-    },
-
+    
     include: {
       from_student: {
         select: {
