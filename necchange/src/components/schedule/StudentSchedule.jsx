@@ -56,9 +56,9 @@ export default function StudentSchedule(props) {
         initialView={"timeGridWeek"}
         titleFormat={(info) => `Horário ${info.date.year}`}
         headerToolbar={{
-          start: isPhone ? "timeGridWeek,timeGridDay" : "",
-          center: "title",
-          end: isPhone ? "prev,next" : "",
+          left: "title",
+          center: isPhone ? "timeGridWeek,timeGridDay" : "",
+          right: isPhone ? "prev,today,next" : "",
         }}
         dayHeaderFormat={{
           weekday: isTablet ? "short" : "long",

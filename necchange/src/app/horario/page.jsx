@@ -30,8 +30,8 @@ export default function Home() {
   }, [session]);
 
   return (
-    <div className="flex justify-center pt-36 pb-20">
-      <div className="container mx-8">
+    <div className="flex justify-center pt-24">
+      <div className="container py-2 sm:py-8 px-2">
         <StudentSchedule events={classes} />
       </div>
       {loader && <Loader />}
