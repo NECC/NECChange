@@ -31,12 +31,17 @@
   --fc-button-hover-border-color: #f3f3f3;
   --fc-button-active-bg-color: #c5c5c5;
   --fc-button-active-border-color: #c5c5c5;
-  --fc-event-bg-color: #3b82f6;
-  --fc-event-border-color: #3b82f6;
-  --fc-event-text-color: #fff;
+  --fc-event-bg-color: #f3f3f3;
+  --fc-event-border-color: #f3f3f3;
+  --fc-event-text-color: #111;
+  --fc-today-bg-color: #018cca0b;
 
   .fc-button {
     box-shadow: none !important;
+  }
+
+  .fc-button:disabled {
+    opacity: 0.35 !important;
   }
 
   .fc-icon-chevron-left::before {
@@ -64,7 +69,9 @@
   }
 
   .fc-dayGridWeek-button,
-  .fc-dayGridMonth-button {
+  .fc-dayGridMonth-button,
+  .fc-timeGridWeek-button,
+  .fc-timeGridDay-button {
     --fc-button-hover-bg-color: #e5e7eb;
     --fc-button-hover-border-color: #e5e7eb;
     --fc-button-active-bg-color: #fff;
@@ -73,15 +80,12 @@
     @apply z-0 w-full px-3 py-1 flex relative justify-center items-center cursor-pointer transition-opacity tap-highlight-transparent h-8 text-small rounded-full !important;
   }
 
-  .fc-button-group:has(.fc-dayGridWeek-button) {
+  .fc-button-group:has(.fc-dayGridWeek-button),
+  .fc-button-group:has(.fc-timeGridWeek-button) {
     @apply flex p-0.5 h-fit gap-1 items-center flex-nowrap overflow-x-scroll scrollbar-hide bg-default-100 rounded-full;
   }
 
-  .fc .fc-toolbar-title {
-    @apply text-base text-gray-500;
-  }
-
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1023px) {
 
     .fc-icon-chevron-right::before,
     .fc-icon-chevron-left::before {
@@ -89,16 +93,28 @@
       height: 24px;
     }
 
+    .fc-toolbar-chunk:nth-child(1) {
+      @apply ml-4;
+    }
+
     .fc .fc-toolbar-title {
-      @apply ml-4 text-foreground text-lg;
+      @apply text-foreground text-lg font-medium !important;
     }
   }
 
-  @media screen and (max-width: 600px) {
+  @media (max-width: 639px) {
+    .fc-header-toolbar {
+      flex-wrap: wrap;
+    }
 
-    .fc-dayGridWeek-button,
-    .fc-dayGridMonth-button {
-      display: none !important;
+    .fc-toolbar-chunk:nth-child(1) {
+      flex: 1 1 100%;
+      /* First two boxes take 50% each */
+      @apply mb-4 ml-0 text-center !important;
+    }
+
+    .fc-toolbar-chunk:nth-child(2) {
+      @apply ml-3;
     }
   }
 
@@ -126,18 +142,30 @@
 }
 
 .schedule-container {
-  --fc-today-bg-color: #fff;
-
   th.fc-col-header-cell.fc-day.fc-day-today {
-    border-bottom: 3px solid #3b82f6;
+    @apply border-0 border-b-3 border-primary
   }
 
-  th.fc-col-header-cell.fc-day {
-    border-bottom: 3px solid #e5e7eb;
+  .fc .fc-toolbar-title {
+    @apply text-2xl font-bold;
   }
 
   .fc-direction-ltr .fc-timegrid-col-events {
     @apply ml-px mr-px;
+  }
+
+  .fc-event {
+    @apply shadow-small rounded-md p-2 m-1 !important;
+  }
+
+  .fc-event-time {
+    @apply text-xs text-gray-500;
+  }
+
+  @media screen and (max-width: 639px) {
+    .fc-timegrid-slot-label-cushion {
+      @apply text-xs;
+    }
   }
 }
 
@@ -159,6 +187,10 @@
 
   td.fc-day-today {
     color: #1d4ed8;
+  }
+
+  .fc .fc-toolbar-title {
+    @apply text-base text-gray-500;
   }
 }
 
