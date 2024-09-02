@@ -34,6 +34,7 @@
   --fc-event-bg-color: #3b82f6;
   --fc-event-border-color: #3b82f6;
   --fc-event-text-color: #fff;
+  --fc-today-bg-color: #018cca0b;
 
   .fc-button {
     box-shadow: none !important;
@@ -142,23 +143,20 @@
 }
 
 .calendar-container {
-  --fc-today-bg-color: #dbeafe;
-
   .fc .fc-daygrid-day-top {
     flex-direction: row;
   }
 
-  .fc .fc-day-other .fc-daygrid-day-top {
-    opacity: 1;
-    color: #4b5563;
+  td.fc-day-other {
+    background-color: #f3f3f3;
   }
 
-  td.fc-day-other {
-    background-color: #f3f4f6;
+  td.fc-day-other.fc-day-today {
+    @apply bg-primary-700/10 text-primary-600;
   }
 
   td.fc-day-today {
-    color: #1d4ed8;
+    @apply text-primary;
   }
 }
 
