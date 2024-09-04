@@ -69,7 +69,7 @@ export default function PopUpOnClick(props) {
             </ModalBody>
             <ModalFooter className="flex justify-center">
               <Button color="danger" variant="light" onPress={onClose}>
-                Close
+                Fechar
               </Button>
             </ModalFooter>
           </>
