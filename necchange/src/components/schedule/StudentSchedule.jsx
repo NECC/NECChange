@@ -10,7 +10,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import ptLocale from "@fullcalendar/core/locales/pt";
 
 export default function StudentSchedule(props) {
-  const { events } = props;
+  const { events, onEventClick } = props;
   const { innerWidth } = useWindowSize();
   const [currentDate, setCurrentDate] = useState(new Date());
   const calendarRef = useRef(null);
@@ -85,6 +85,7 @@ export default function StudentSchedule(props) {
             click: handleNextClick,
           },
         }}
+        eventClick={onEventClick}
       />
     </div>
   );
