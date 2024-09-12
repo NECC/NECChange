@@ -38,7 +38,9 @@ export default function ManageTrades() {
   const handleTrades = async () => {
     const date = startDate?.["$d"];
     if (date) {
-      const formattedDate = date.toISOString().split("T")[0];
+      const formattedDate = new Date(date.getTime() + 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0];
       setLoader(true);
       await axios
         .post("/api/calendar/getCalendar", {
