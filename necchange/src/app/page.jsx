@@ -9,6 +9,7 @@ import MobileFilter from "@/components/calendar/MobileFilter";
 import UCsObj from "../data/filters.json";
 import CheckboxTree from "@/components/calendar/CheckboxTree/CheckboxTree";
 import PopUpOnClick from "@/components/calendar/PopUpOnClick";
+import { ScrollShadow } from "@nextui-org/react";
 
 export default function CalendarPage() {
   const [isPopUpOpened, setIsPopUpOpened] = useState(false);
@@ -166,25 +167,19 @@ export default function CalendarPage() {
     };
     setNodes([
       ...convertToNodeTree(UCsObj),
+      { value: null }, // divider
       { value: `eventos`, label: `Eventos`, children: null },
     ]);
   }, []);
 
   const eventClickCallback = (info) => {
-    setIsPopUpOpened(!isPopUpOpened);
+    setIsPopUpOpened(true);
     setPopUpCalendarTime(info.event.startStr);
     setPopUpData(info.event.extendedProps);
   };
 
   return (
-    <div className="bg-white min-h-screen pt-24 flex w-full overflow-hidden relative">
-      <CheckboxTree
-        className={`w-[440px] ml-5 mt-5 lg:block hidden`}
-        nodes={nodes}
-        checked={checked}
-        onCheck={(checked) => setChecked(checked)}
-      />
-
+    <div className="bg-white h-screen pt-24 flex w-full overflow-hidden relative">
       <PopUpOnClick
         isOpened={isPopUpOpened}
         setIsOpened={setIsPopUpOpened}
@@ -199,32 +194,48 @@ export default function CalendarPage() {
         className="block lg:hidden"
       />
 
-      <div className="pt-8 px-2 md:px-8 overflow-y-scroll full-calendar calendar-container container mx-auto">
-        {isCalendarLoading ? (
-          <div className="flex justify-center items-center h-full bg-white">
-            <div className="border-t-4 border-blue-500 border-solid rounded-full w-12 h-12 animate-spin">
-              {" "}
+      <div className="flex flex-row justify-center w-full lg:divide-x divide-gray-200 overflow-hidden">
+        <aside className="w-[440px] hidden lg:block">
+          <ScrollShadow className="h-full">
+            <div className="mx-10 my-4">
+              <h2 className="text-2xl font-bold p-4">Filtros</h2>
+              <CheckboxTree
+                nodes={nodes}
+                checked={checked}
+                onCheck={(checked) => setChecked(checked)}
+              />
             </div>
-          </div>
-        ) : (
-          <FullCalendar
-            plugins={[dayGridPlugin, googleCalendarPlugin]}
-            locale={ptLocale}
-            firstDay={0}
-            eventClick={eventClickCallback}
-            headerToolbar={{
-              left: "prev,today,next",
-              center: "title",
-              right: "dayGridWeek,dayGridMonth",
-            }}
-            initialView="dayGridMonth"
-            displayEventTime={false}
-            events={finalArray}
-            eventColor="blue-sky-500"
-            event
-            height="80vh"
-          />
-        )}
+          </ScrollShadow>
+        </aside>
+
+        <div className="pt-2 px-2 lg:px-20 lg:pt-8 overflow-auto full-calendar calendar-container container">
+          <h1 className="text-2xl font-bold hidden lg:block">Calendário</h1>
+          {isCalendarLoading ? (
+            <div className="flex justify-center items-center h-full bg-white">
+              <div className="border-t-4 border-blue-500 border-solid rounded-full w-12 h-12 animate-spin">
+                {" "}
+              </div>
+            </div>
+          ) : (
+            <FullCalendar
+              plugins={[dayGridPlugin, googleCalendarPlugin]}
+              locale={ptLocale}
+              firstDay={0}
+              eventClick={eventClickCallback}
+              headerToolbar={{
+                left: "title",
+                center: "dayGridWeek,dayGridMonth",
+                right: "prev,today,next",
+              }}
+              initialView="dayGridMonth"
+              displayEventTime={false}
+              events={finalArray}
+              eventColor="blue-sky-500"
+              event
+              height="80vh"
+            />
+          )}
+        </div>
       </div>
     </div>
   );

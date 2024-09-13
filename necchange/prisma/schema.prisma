@@ -147,3 +147,12 @@ enum Role {
   CS_STUDENT // Student of Computer Science - Access to calendar, schedule, feed, profile
   OUTSIDER // Person from other course that is NECC partner - Access to profile
 }
+
+model Dates {
+  id    Int     @id @default(autoincrement())
+  title String
+  start String
+  color String?
+  local String?
+  time  String?
+}

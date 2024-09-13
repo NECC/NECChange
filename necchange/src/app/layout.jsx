@@ -1,11 +1,10 @@
 import "./globals.css";
-import "@radix-ui/themes/styles.css";
 import Navbar from "@/components/globals/navbar/Navbar";
 import Provider from "@/components/Provider";
 import { authOptions } from "@/lib/authOptions";
 import { getServerSession } from "next-auth/next";
 import { Inter } from "next/font/google";
-import { Theme, ThemePanel } from "@radix-ui/themes";
+import { NextUI } from "./nextui";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,14 +23,14 @@ export default async function RootLayout({ children }) {
       <head>
         <meta name="google-site-verification" content="HVpThFBdJ8PUXGD6k2itDm7qtdQvd9U0d4g3Is9qhr0" />
         <meta name="robots" content="index,follow" />
-        <meta name="keywords" content="necchange, NECChange, Universidade do Minho, University of Minho, Departamento de Informática, NECC, necc"/>
+        <meta name="keywords" content="necchange, NECChange, Universidade do Minho, University of Minho, Departamento de Informática, NECC, necc" />
       </head>
       <body className={inter.className}>
         <Provider>
-          <Theme appearance="light" accentColor="blue">
+          <NextUI>
             <Navbar session={session} />
             {children}
-          </Theme>
+          </NextUI>
         </Provider>
       </body>
     </html>
