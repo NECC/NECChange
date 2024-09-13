@@ -111,7 +111,7 @@ export async function POST(req, context) {
       })
       .catch((err) => {
         sheet_error = true;
-        console.log("Erro");
+        console.log("Erro", err);
       });
   }
 

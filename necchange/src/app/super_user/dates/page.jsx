@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { conforms } from "lodash";
 
 export default function ManageTrades() {
   const types = [
@@ -38,9 +39,15 @@ export default function ManageTrades() {
   const handleTrades = async () => {
     const date = startDate?.["$d"];
     if (date) {
-      const formattedDate = new Date(date.getTime() + 24 * 60 * 60 * 1000)
-        .toISOString()
-        .split("T")[0];
+      let dia = date.getDate().toString();
+      let mes = date.getMonth() + 1; 
+      let mescomzero = mes < 10 ? "0" + mes : mes.toString();
+      let ano = date.getFullYear().toString();
+      
+      dia = dia.length < 2 ? "0" + dia : dia;
+      
+      const formattedDate = ano + "-" + mescomzero + "-" + dia;
+      console.log(formattedDate);
       setLoader(true);
       await axios
         .post("/api/calendar/getCalendar", {
