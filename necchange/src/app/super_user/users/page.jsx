@@ -20,7 +20,7 @@ const AddUserForm = ({ showModal, setShowModal }) => {
     email: "",
     number: "",
     phone: "",
-    role: Role.CS_STUDENT,
+    role: Role.CS_STUDENT || Role.OUTSIDER,
     partner: true,
   });
   const [loader, setLoader] = useState(false);
@@ -122,6 +122,7 @@ const AddUserForm = ({ showModal, setShowModal }) => {
               onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
             >
               <option value={Role.CS_STUDENT}>CS_STUDENT</option>
+              <option value={Role.OUTSIDER}>OUTSIDER</option>
             </select>
           </div>
           <div>
@@ -232,9 +233,9 @@ export default function ManageUsers() {
       if (filter == "Nome") setFilterUsers(users.filter(user => included(user.name,value)));
       if (filter == "Email") setFilterUsers(users.filter(user => included(user.email,value)));
     } else {
-      setFilterUsers(users)
+      setFilterUsers(users);
     }
-  }
+  };
 
   if (!session) return <Loader />;
 

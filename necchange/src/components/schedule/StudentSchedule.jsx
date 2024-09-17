@@ -10,7 +10,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import ptLocale from "@fullcalendar/core/locales/pt";
 
 export default function StudentSchedule(props) {
-  const { events } = props;
+  const { events, onEventClick } = props;
   const { innerWidth } = useWindowSize();
   const [currentDate, setCurrentDate] = useState(new Date());
   const calendarRef = useRef(null);
@@ -56,9 +56,9 @@ export default function StudentSchedule(props) {
         initialView={"timeGridWeek"}
         titleFormat={(info) => `Horário ${info.date.year}`}
         headerToolbar={{
-          start: isPhone ? "timeGridWeek,timeGridDay" : "",
-          center: "title",
-          end: isPhone ? "prev,next" : "",
+          left: "title",
+          center: isPhone ? "timeGridWeek,timeGridDay" : "",
+          right: isPhone ? "prev,today,next" : "",
         }}
         dayHeaderFormat={{
           weekday: isTablet ? "short" : "long",
@@ -85,6 +85,7 @@ export default function StudentSchedule(props) {
             click: handleNextClick,
           },
         }}
+        eventClick={onEventClick}
       />
     </div>
   );

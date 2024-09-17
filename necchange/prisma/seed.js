@@ -243,10 +243,10 @@ async function populate_student_class() {
 const prisma = new PrismaClient();
 
 async function main() {
-  const ucs = await populate_ucs();
-  const classes = await populate_classes();
-  await populate_students();
-  const students_classes = await populate_student_class();
+  //const ucs = await populate_ucs();
+  //const classes = await populate_classes();
+  //await populate_students();
+  //const students_classes = await populate_student_class();
 
   const partners = await populate_partners();
 
@@ -270,12 +270,12 @@ async function main() {
   );
 
   
-  console.log("A introduzir courses");
-  ucs.map(async (uc) => {
-    await prisma.course.create({
-      data: uc,
-    });
-  });
+  // console.log("A introduzir courses");
+  // ucs.map(async (uc) => {
+  //   await prisma.course.create({
+  //     data: uc,
+  //   });
+  // });
 
   console.log("A introduzir users");
   await Promise.all(
@@ -286,23 +286,23 @@ async function main() {
     })
   );
   
-  console.log("A introduzir lessons");
-  await Promise.all(
-    classes.map(async (class_add) => {
-      await prisma.lesson.create({
-        data: class_add,
-      });
-    })
-  );
+  // console.log("A introduzir lessons");
+  // await Promise.all(
+  //   classes.map(async (class_add) => {
+  //     await prisma.lesson.create({
+  //       data: class_add,
+  //     });
+  //   })
+  // );
 
-  console.log("A introduzir student_lessons");
+  /* console.log("A introduzir student_lessons");
   await Promise.all(
     students_classes.map(async (student_class) => {
       await prisma.student_lesson.create({
         data: student_class,
       });
     })
-  );
+  ); */
   
 }
 
