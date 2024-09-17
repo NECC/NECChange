@@ -18,7 +18,7 @@ const AddUserForm = ({ showModal, setShowModal }) => {
     email: "",
     number: "",
     phone: "",
-    role: Role.CS_STUDENT,
+    role: Role.CS_STUDENT || Role.OUTSIDER,
     partner: true,
   });
   const [loader, setLoader] = useState(false);
@@ -120,6 +120,7 @@ const AddUserForm = ({ showModal, setShowModal }) => {
               onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
             >
               <option value={Role.CS_STUDENT}>CS_STUDENT</option>
+              <option value={Role.OUTSIDER}>OUTSIDER</option>
             </select>
           </div>
           <div>
@@ -170,7 +171,7 @@ const AddUserForm = ({ showModal, setShowModal }) => {
 export default function ManageUsers() {
   const { data: session } = useSession();
   const [users, setUsers] = useState([]);
-  const [filterUsers, setFilterUsers] = useState([])
+  const [filterUsers, setFilterUsers] = useState([]);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -190,12 +191,12 @@ export default function ManageUsers() {
 
   /* Future upgrade: Add a delay so that we don't make calls every time a key is pressed*/
   const handleSearch = (value) => {
-    if(value != "") {
-      setFilterUsers(users.filter(user => user.number == value))
+    if (value != "") {
+      setFilterUsers(users.filter((user) => user.number == value));
     } else {
-      setFilterUsers(users)
+      setFilterUsers(users);
     }
-  }
+  };
 
   if (!session) return <Loader />;
 
