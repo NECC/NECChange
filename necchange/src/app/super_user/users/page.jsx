@@ -243,38 +243,29 @@ export default function ManageUsers() {
       <div className="ml-auto mr-auto px-8 md:px-16">
         <AddUserForm showModal={showModal} setShowModal={setShowModal} />
         <div className="flex flex-row pb-4">
-          <div className="basis-1/2 flex flex-row">
+          <div className="basis-3/4 flex flex-row">
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-l-lg block w-1/2 p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900"
+              className="bg-white z-40 border border-gray-300 text-gray-900 text-sm rounded-l-lg block w-1/2 p-2.5 dark:bg-gray-200 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900"
               placeholder="Procura..."
             />
-            <div className="flex flex-row rounded-r-lg bg-gray-500 border border-l-0 border-gray-600 divide-x divide-inherit overflow-hidden">
-              <button 
-                onClick={() => setShowFilter(!showFilter)}
-                className="text-gray-900 text-md block p-2.5 gap-2.5 items-center text-white bg-blue-500 dark:border-gray-600 flex flex-row"
-                >
-                {filter} {showFilter && <FaAngleLeft />} {!showFilter && <FaAngleRight />}
-              </button>
-              {showFilter && 
-              <div className="flex flex-row text-white text-md divide-x divide-inherit">
-                <button onClick={() => changeFilter("Número")} className="px-2.5"> Número </button>
-                <button onClick={() => changeFilter("Nome")} className="px-5"> Nome </button>
-                <button onClick={() => changeFilter("Email")} className="px-5"> Email </button>
-              </div>}
+            <div className={`w-1/3 flex z-30 flex-row overflow-hidden rounded-r-lg bg-gray-400 border border-l-0 border-gray-600 text-white transition-all ease-in-out duration-400 ${showFilter ? "translate-x-0" : "-translate-x-3/4"}`}>
+                  <button onClick={() => changeFilter("Número")} className="basis-1/4 hover:bg-gray-500"> Número </button>
+                  <button onClick={() => changeFilter("Nome")} className="basis-1/4 hover:bg-gray-500"> Nome </button>
+                  <button onClick={() => changeFilter("Email")} className="basis-1/4 hover:bg-gray-500"> Email </button>
+                  <button onClick={() => setShowFilter(!showFilter)} className="gap-1.5 flex flex-row bg-blue-500 hover:bg-blue-600 basis-1/4 justify-center items-center"> {filter} {showFilter && <FaAngleLeft />} {!showFilter && <FaAngleRight />} </button>
             </div>
             
           </div>
-          <div className="basis-1/4"></div>
           <div className="basis-1/4">
             <div className="flex flex-row-reverse">
               <div className="flex-none w-auto">
                 <button
                   type="submit"
                   onClick={() => setShowModal(true)}
-                  className="w-full h-full px-3 py-1.5 float-right justify-end rounded-full leading-6 text-base text-white shadow-sm bg-blue-500 hover:bg-blue-600"
+                  className="w-full h-full px-5 py-2 float-right border border-gray-600 justify-end rounded-lg leading-6 text-base text-white shadow-sm bg-blue-500 hover:bg-blue-600"
                 >
                   Adicionar User
                 </button>
