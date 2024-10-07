@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function SuperUser() {
   const buttonStyles =
-    "p-6 m-2 text-xl border-2 border-sky-500 shadow-md rounded-md bg-white hover:bg-slate-50";
+    "p-6 m-2 text-xl text-white border-0 border-white shadow-md rounded-md bg-sky-500 hover:bg-sky-600";
 
   return (
     <div className="flex justify-center h-screen bg-white text-black">
