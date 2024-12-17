@@ -99,8 +99,7 @@ function html(params) {
     buttonText: theme.buttonText || "#fff",
   };
 
-  const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + url;
-  // console.log("Redirect", redirect);
+  const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + btoa(url);
   return `
 <body>
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
