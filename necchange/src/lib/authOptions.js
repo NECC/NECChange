@@ -14,6 +14,10 @@ export const authOptions = {
     EmailProvider({
       server: process.env.EMAIL_SERVER,
       from: process.env.EMAIL_FROM,
+      generateVerificationToken: () => {
+        const code = Math.floor(1000 + Math.random() * 9000); // random 6-digit code
+        return code.toString();
+      },
       sendVerificationRequest,
     }),
   ],
@@ -43,7 +47,7 @@ import { createTransport } from "nodemailer";
 async function sendVerificationRequest(params) {
   const file = process.cwd() + "/neccSticker.png";
 
-  const { identifier, url, provider, theme } = params;
+  const { identifier, url, token, provider, theme } = params;
   const { host } = new URL(url);
 
   // NOTE: You are not required to use `nodemailer`, use whatever you want.
@@ -51,7 +55,7 @@ async function sendVerificationRequest(params) {
   const result = await transport.sendMail({
     to: identifier,
     from: provider.from,
-    subject: `Sign in to ${host}`,
+    subject: `Authentication code: ${token}`,
     text: text({ url, host }),
     html: `
 <div style="background-color:#f9f9f9;display:flex;justify-content:center;flex-direction:column;align-items:center">
@@ -59,7 +63,7 @@ async function sendVerificationRequest(params) {
     <img style="height:150px; width:150px" src="cid:unique@nodemailer.com"/> 
   </div>
   <div style="width:70% ;background-color:#fff">
-    ${html({ url, host, theme })}
+    ${html({ url, token, host, theme })}
   </div>
 </div>
     `,
@@ -88,7 +92,7 @@ async function sendVerificationRequest(params) {
  * @note We don't add the email address to avoid needing to escape it, if you do, remember to sanitize it!
  */
 function html(params) {
-  const { url, host, theme } = params;
+  const { url, token, host, theme } = params;
 
   const brandColor = theme.brandColor || "#346df1";
   const color = {
@@ -107,28 +111,13 @@ function html(params) {
     <tr>
       <td style="font-size: 18px; font-family: Helvetica, Arial, sans-serif">
         <h5>Dear student,</h5>
-        To enhance your account security, we require a quick verification process.Please click the button below to proceed:
+        To enhance your account security, we require a quick verification process. Please type the following code into your sign in form to proceed:
       </td>
     </tr>
     <tr>
       <td align="center"
         style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
-        Sign in to <strong>necchange.necc.di.uminho.pt</strong>
-      </td>
-    </tr>
-    <tr>  
-      <td align="center" style="padding: 10px 0;">
-        <table border="0" cellspacing="0" cellpadding="0">
-          <tr>
-            <td align="center" style="border-radius: 5px;" bgcolor="${color.buttonBackground}">
-              <a href="${redirect}"
-                 target="_blank"
-                 style="font-size: 18px; font-family: Helvetica, Arial, sans-serif; color: ${color.buttonText}; text-decoration: none; border-radius: 5px; padding: 10px 20px; border: 1px solid ${color.buttonBorder}; display: inline-block; font-weight: bold;">
-                Sign in
-              </a>
-            </td>
-          </tr>
-        </table>
+        <strong>${token}</strong>
       </td>
     </tr>
     <tr>
