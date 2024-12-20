@@ -10,6 +10,7 @@ import UCsObj from "../data/filters.json";
 import CheckboxTree from "@/components/calendar/CheckboxTree/CheckboxTree";
 import PopUpOnClick from "@/components/calendar/PopUpOnClick";
 import { ScrollShadow } from "@nextui-org/react";
+import { add } from "lodash";
 
 export default function CalendarPage() {
   const [isPopUpOpened, setIsPopUpOpened] = useState(false);
@@ -66,10 +67,25 @@ export default function CalendarPage() {
     return result;
   };
 
+  const addColorToEvents = (events) => {
+    events.forEach((event) => {
+      const yearRegexp = event.title.match(/\((\d)º ano\)/);
+
+      if (yearRegexp[1] == 1) {
+        event.color = "#3b82f6"; 
+      } else if (yearRegexp[1] == 2) {
+        event.color = "#10b981";
+      } else if (yearRegexp[1] == 3) {
+        event.color = "#8b5cf6"; 
+      }
+    });
+    setFinalArray(events);
+  };
+
   useEffect(() => {
     axios.get("/api/calendar/getCalendar").then((res) => {
       setRawEvents(res.data.response);
-      setFinalArray(res.data.response);
+      addColorToEvents(res.data.response);
       setIsCalendarLoading(false);
     });
   }, []);
