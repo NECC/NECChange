@@ -1,17 +1,8 @@
-"use client";
-
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 
-export default function Home() {
-  const searchParams = useSearchParams();
-
-  const redirect_url = searchParams.get("redirect");
-  const token = searchParams.get("token");
-  const email = searchParams.get("email");
-  const newUrl = new URL(`${redirect_url}&token=${token}&email=${email}`);
-  //console.log(newUrl);
+export default function Home({ searchParams }) {
+  const redirect_url = atob(searchParams.redirect);
+  const newUrl = new URL(`${redirect_url}`);
 
   return (
     <main className="flex min-h-screen  items-center justify-between  bg-white">

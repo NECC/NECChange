@@ -1,15 +1,32 @@
 "use client";
 import Image from "next/image";
 import Loader from "@/components/globals/Loader";
-import { signIn } from "next-auth/react";
-import { useState } from "react";
-
+import Otp from "@/components/Otp";
 import axios from "axios";
+import { signIn } from "next-auth/react";
+import { useState, useCallback } from "react";
 
 export default function Home() {
   const [inputEmail, setInputEmail] = useState("");
   const [loader, setLoader] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [showVerificationStep, setShowVerificationStep] = useState(false);
+
+  const handleVerification = useCallback(
+    (code) => {
+      window.location.href = `/api/auth/callback/email?email=${encodeURIComponent(
+        inputEmail
+      )}&token=${code}`;
+    },
+    [inputEmail]
+  );
+
+  const setFinalOtp = useCallback(
+    (code) => {
+      handleVerification(code);
+    },
+    [handleVerification]
+  );
 
   const toggleLoader = (value) => {
     setLoader(value);
@@ -22,7 +39,8 @@ export default function Home() {
       const result = await email_validator();
       if (result == true) {
         setErrorMessage(false);
-        await signIn("email", { email: inputEmail, callbackUrl: "/" });
+        await signIn("email", { email: inputEmail, redirect: false });
+        setShowVerificationStep(true);
       } else {
         setErrorMessage(true);
         console.log("Invalid email");
@@ -51,47 +69,61 @@ export default function Home() {
     <main className="flex min-h-screen  items-center justify-between  bg-white">
       <aside className="h-screen border-r dark:border-gray-200 dark:bg-darker focus:outline-none sm:w-1/2 w-full tall:w-full">
         <div className="flex flex-col   min-h-full  justify-center items-center ">
-          <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          {showVerificationStep && (
+            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
               <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                Entra na tua conta
+                Introduz o código de verificação enviado para o teu email
               </h2>
+              <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                <Otp numberOfDigits={4} setFinalOtp={setFinalOtp}></Otp>
+              </div>
             </div>
+          )}
+          {!showVerificationStep && (
+            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+              <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                  Entra na tua conta
+                </h2>
+              </div>
 
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-              <form className="space-y-2" action="#" method="POST">
-                <div>
-                  <div className="mt-2">
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="aXXXXX@alunos.uminho.pt"
-                      autoComplete="email"
-                      required
-                      className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      onChange={(e) => setInputEmail(e.target.value.toLowerCase())}
-                    />
+              <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                <form className="space-y-2" action="#" method="POST">
+                  <div>
+                    <div className="mt-2">
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="aXXXXX@alunos.uminho.pt"
+                        autoComplete="email"
+                        required
+                        className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        onChange={(e) =>
+                          setInputEmail(e.target.value.toLowerCase())
+                        }
+                      />
+                    </div>
+                    {errorMessage && (
+                      <p className="text-red-600">Email inválido!</p>
+                    )}
                   </div>
-                  {errorMessage && (
-                    <p className="text-red-600">Email inválido!</p>
-                  )}
-                </div>
 
-                <div>
-                  <button
-                    type="submit"
-                    className="flex w-full justify-center rounded-md bg-[#018ccb]  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={(e) => {
-                      handleSignin(e);
-                    }}
-                  >
-                    Sign in
-                  </button>
-                </div>
-              </form>
+                  <div>
+                    <button
+                      type="submit"
+                      className="flex w-full justify-center rounded-md bg-[#018ccb]  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      onClick={(e) => {
+                        handleSignin(e);
+                      }}
+                    >
+                      Sign in
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </aside>
 
