@@ -53,12 +53,6 @@ export default function ManageTrades() {
         .post("/api/calendar/getCalendar", {
           title: `${uc.sigla} - ${type} (${uc.year}º ano)`,
           start: formattedDate,
-          color:
-            type === "Teste"
-              ? "#836FFF"
-              : type === "Entrega" /* estilizar as cores aqui */
-              ? "#40E0D0"
-              : "#3CB371",
         })
         .then((res) => {
           toast.success("Sucesso!");
