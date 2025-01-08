@@ -82,7 +82,6 @@ async function sendVerificationRequest(params) {
   }
 }
 
-
 /**
  * Email HTML body
  * Insert invisible space into domains from being turned into a hyperlink by email
@@ -103,7 +102,6 @@ function html(params) {
     buttonText: theme.buttonText || "#fff",
   };
 
-  const redirect = process.env.NEXTAUTH_URL + "/auth/captcha?redirect=" + btoa(url);
   return `
 <body>
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
@@ -136,4 +134,3 @@ function html(params) {
 function text({ url, host }) {
   return `Sign in to ${host}\n${url}\n\n`;
 }
-
