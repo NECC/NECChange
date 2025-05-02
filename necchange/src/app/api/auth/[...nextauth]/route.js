@@ -14,7 +14,7 @@ const handler = async (req, context) => {
   const url = new URL(req.url);
   const hasCallbackUrl = url.searchParams.has("callbackUrl");
 
-  if (hasCallbackUrl) {
+  if (url.pathname === "/api/auth/callback/email" && hasCallbackUrl) {
     console.warn("Blocked automated request with callbackUrl:", url.searchParams.get("callbackUrl"));
     return new Response(null, { status: 200 });
   }
