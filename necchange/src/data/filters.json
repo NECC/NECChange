@@ -2,7 +2,7 @@
   {
     "calendar": "Álgebra Linear CC",
     "name": "Álgebra Linear CC",
-    "sigla": "AL",
+    "sigla": "Álgebra Linear CC",
     "year": 1,
     "semester": 1,
     "shifts": ["TP1", "TP2"]
@@ -26,7 +26,7 @@
   {
     "calendar": "TFM",
     "name": "Tópicos Fundamentais de Matemática",
-    "sigla": "TM",
+    "sigla": "TFM",
     "year": 1,
     "semester": 1,
     "shifts": ["TP1", "TP2"]
@@ -42,7 +42,7 @@
   {
     "calendar": "Análise Matemática",
     "name": "Análise Matemática",
-    "sigla": "Análise",
+    "sigla": "Análise Matemática",
     "year": 1,
     "semester": 2,
     "shifts": ["TP1", "TP2"]
@@ -90,15 +90,15 @@
   {
     "calendar": "AeC",
     "name": "Algoritmos e Complexidade",
-    "sigla": "AC",
+    "sigla": "AeC",
     "year": 2,
     "semester": 1,
     "shifts": []
   },
   {
-    "calendar": "AN",
+    "calendar": "Análise Numérica",
     "name": "Análise Numérica",
-    "sigla": "AN",
+    "sigla": "Análise Numérica",
     "year": 2,
     "semester": 1,
     "shifts": []
@@ -106,7 +106,7 @@
   {
     "calendar": "Lógica CC",
     "name": "Lógica CC",
-    "sigla": "Lógica",
+    "sigla": "Lógica CC",
     "year": 2,
     "semester": 1,
     "shifts": []

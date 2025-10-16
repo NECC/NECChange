@@ -1,163 +1,183 @@
 {
-   "1º ano" :[ 
-    {
-        "uc" : "PF",
-        "day": "2025-10-22", 
-        "type" : "Teste"
-    },
-    {
-        "uc" : "TFM",
-        "day" : "2025-11-5",
-        "type" : "Teste"
-    },
-    {
-        "uc" : "Cálculo",
-        "day" : "2025-11-8",
-        "type" : "Teste"
-    },
-    {
-        "uc" : "Álgebra Linear CC",
-        "day" : "2025-11-19",
-        "type" : "Teste"
-    },
-    {
-        "uc" : "Cálculo",
-        "day" : "2025-12-16",
-        "type" : "Teste"
-    },
-    {
-        "uc" : "Álgebra Linear CC",
-        "day" : "2025-12-19",
-            "type" : "Teste"
-    },
-    {
-        "uc" : "PF",
-        "day" : "2026-1-6",
-        "type" : "Teste"
-    },
-    {
-        "uc" : "TFM",
-        "day" : "2026-1-9",
-        "type" : "Teste"
-    }
-    ],
-    "2º ano" :[
-        {
-            "uc" : "Lógica CC",
-            "day" : "2025-11-3",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "Álgebra",
-            "day" : "2025-11-6",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "AeC",
-            "day" : "2025-11-15",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "Álgebra",
-            "day" : "2025-12-18",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "SCR",
-            "day" : "2026-1-5",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "Lógica CC",
-            "day" : "2026-1-8",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "AeC",
-            "day" : "2026-1-10",
-            "type" : "Teste"
-        }
-    ],
-    "3º ano" :[
-        {
-            "uc" : "PA",
-            "day" : "2025-10-28",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "CP",
-            "day" : "2025-10-25",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "CC",
-            "day" : "2025-11-5",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "LC",
-            "day" : "2025-11-10",
-            "type" : "Entrega"
-        },
-        {
-            "uc" : "TNC",
-            "day" : "2025-11-10",
-            "type" : "Mini-Teste"
-        },
-        {
-            "uc" : "Estatística",
-            "day" : "2025-11-07",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "LC",
-            "day" : "2025-12-08",
-            "type" : "Entrega"
-        },
-        {
-            "uc" : "Estatística",
-            "day" : "2025-12-12",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "PLC",
-            "day" : "2025-12-16",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "PA",
-            "day" : "2025-12-17",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "CP",
-            "day" : "2025-12-20",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "LC",
-            "day" : "2026-1-5",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "TNC",
-            "day" : "2026-1-7",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "CC",
-            "day" : "2026-1-9",
-            "type" : "Teste"
-        },
-        {
-            "uc" : "TNC",
-            "day" : "2026-1-12",
-            "type" : "Mini-Teste"
-        },
-        {
-            "uc" : "PLC",
-            "day" : "2026-1-17",
-            "type" : "Entrega"
-        }
-    ]
-}
+    "1º ano" :[ 
+     {
+         "uc" : "PF",
+         "day": "2025-10-22", 
+         "type" : "Teste"
+     },
+     {
+         "uc" : "TFM",
+         "day" : "2025-11-5",
+         "type" : "Teste"
+     },
+     {
+         "uc" : "LP-I",
+         "day" : "2025-11-9",
+         "type" : "Entrega - (1ªParte)"
+     },
+     {
+         "uc" : "Cálculo",
+         "day" : "2025-11-8",
+         "type" : "Teste"
+     },
+     {
+         "uc" : "Álgebra Linear CC",
+         "day" : "2025-11-19",
+         "type" : "Teste"
+     },
+     {
+         "uc" : "Cálculo",
+         "day" : "2025-12-16",
+         "type" : "Teste"
+     },
+     {
+         "uc" : "Álgebra Linear CC",
+         "day" : "2025-12-19",
+         "type" : "Teste"
+     },
+     {
+         "uc" : "LP-I",
+         "day" : "2025-12-31",
+         "type" : "Entrega - (2ªParte)"
+     },
+     {
+         "uc" : "PF",
+         "day" : "2026-1-6",
+         "type" : "Teste"
+     },
+     {
+         "uc" : "TFM",
+         "day" : "2026-1-9",
+         "type" : "Teste"
+     }
+     ],
+     "2º ano" :[
+         {
+             "uc" : "Lógica CC",
+             "day" : "2025-11-3",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "Álgebra",
+             "day" : "2025-11-6",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "Análise Numérica",
+             "day" : "2025-11-11",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "AeC",
+             "day" : "2025-11-15",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "Álgebra",
+             "day" : "2025-12-18",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "SCR",
+             "day" : "2026-1-5",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "Análise Numérica",
+             "day" : "2026-1-7",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "Lógica CC",
+             "day" : "2026-1-8",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "AeC",
+             "day" : "2026-1-10",
+             "type" : "Teste"
+         }
+     ],
+     "3º ano" :[
+         {
+             "uc" : "PA",
+             "day" : "2025-10-28",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "CP",
+             "day" : "2025-10-25",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "CC",
+             "day" : "2025-11-5",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "LC",
+             "day" : "2025-11-10",
+             "type" : "Entrega"
+         },
+         {
+             "uc" : "TNC",
+             "day" : "2025-11-10",
+             "type" : "Mini-Teste"
+         },
+         {
+             "uc" : "Estatística",
+             "day" : "2025-11-07",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "LC",
+             "day" : "2025-12-08",
+             "type" : "Entrega"
+         },
+         {
+             "uc" : "Estatística",
+             "day" : "2025-12-12",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "PLC",
+             "day" : "2025-12-16",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "PA",
+             "day" : "2025-12-17",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "CP",
+             "day" : "2025-12-20",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "LC",
+             "day" : "2026-1-5",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "TNC",
+             "day" : "2026-1-7",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "CC",
+             "day" : "2026-1-9",
+             "type" : "Teste"
+         },
+         {
+             "uc" : "TNC",
+             "day" : "2026-1-12",
+             "type" : "Mini-Teste"
+         },
+         {
+             "uc" : "PLC",
+             "day" : "2026-1-17",
+             "type" : "Entrega"
+         }
+     ]
+ }
