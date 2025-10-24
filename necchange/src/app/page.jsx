@@ -61,7 +61,7 @@ export default function CalendarPage() {
   const mapEventsForCalendar = (events) => {
     if (!Array.isArray(events)) return [];
     return events.map((event) => ({
-      title: event.UC || "Evento",
+      title: event.UC + ' - ' + event.type || "Evento",
       start: new Date(event.day),
       end: new Date(event.day),
       color: event.color || "#9ca3af",
