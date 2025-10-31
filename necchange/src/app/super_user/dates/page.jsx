@@ -6,12 +6,15 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from "@/components/globals/Loader";
 import UcsInput from "@/components/admin/datatable/UcsInput";
+//import YearInput from "@/components/admin/datatable/YearsInput";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { conforms } from "lodash";
+
+
 
 export default function ManageTrades() {
   const types = [
@@ -27,6 +30,22 @@ export default function ManageTrades() {
       value: "exame",
       label: "Exame",
     },
+    
+  ];
+
+  const YearInput = [
+    {
+      value: "1º ano",
+      label: "1º ano",
+    },
+    {
+      value: "2º ano",
+      label: "2º ano",
+    },
+    {
+      value: "3º ano",
+      label: "3º ano",
+    },
   ];
   const buttonStyle = "w-full col-span-2 text-white font-bold";
 
@@ -35,32 +54,57 @@ export default function ManageTrades() {
   const [uc, setUC] = useState(null);
   const [type, setType] = useState(null);
   const [events, setEvents] = useState([]);
+  const [ano,setAno] = useState(null);
 
   const handleTrades = async () => {
     const date = startDate?.["$d"];
-    if (date) {
-      let dia = date.getDate().toString();
-      let mes = date.getMonth() + 1; 
-      let mescomzero = mes < 10 ? "0" + mes : mes.toString();
-      let ano = date.getFullYear().toString();
+    
+    if (!uc || !type || !date || !ano) {
+      toast.error("Por favor, preencha todos os campos!");
+      return;
+    }
+ 
+     let dia = date.getDate().toString().padStart(2, "0");
+    let mes = (date.getMonth() + 1).toString().padStart(2, "0");
+    let year = date.getFullYear().toString();
+
+    const formattedDate = `${year}-${mes}-${dia}`;
+  
+    const eventData = {
+      uc: uc.sigla,
+      ano: ano,
+      day: formattedDate,
+      type: type,
+      start: "00:00",
+      end: "01:00",
+    };
+    toast.info(eventData)
+  
+    setLoader(true);
+    try {
+      const res = await axios.post("/api/calendar/getCalendar", eventData);
+      toast.success(`Evento criado para ${uc.sigla} (${ano})`);
       
-      dia = dia.length < 2 ? "0" + dia : dia;
+      // Add to events state - need to handle grouped structure
+      const newEvent = res.data.response;
+      setEvents((prevEvents) => {
+        const updatedEvents = { ...prevEvents };
+        if (!updatedEvents[ano]) {
+          updatedEvents[ano] = [];
+        }
+        updatedEvents[ano].push(newEvent);
+        return updatedEvents;
+      });
       
-      const formattedDate = ano + "-" + mescomzero + "-" + dia;
-      console.log(formattedDate);
-      setLoader(true);
-      await axios
-        .post("/api/calendar/getCalendar", {
-          title: `${uc.sigla} - ${type} (${uc.year}º ano)`,
-          start: formattedDate,
-        })
-        .then((res) => {
-          toast.success("Sucesso!");
-          setEvents([...events, res.data.response]);
-        })
-        .catch((err) => {
-          toast.error("Erro!");
-        });
+      // Clear form
+      setUC(null);
+      setType(null);
+      setStartDate(null);
+      setAno(null);
+    } catch (err) {
+      toast.error("Erro ao criar evento!");
+      console.log("Erro ->", err);
+    } finally {
       setLoader(false);
     }
   };
@@ -83,7 +127,7 @@ export default function ManageTrades() {
       </div>
       <div className="flex flex-col justify-center items-center gap-4">
         <div className="text-xl font-bold">Definir Datas de Eventos</div>
-        <UcsInput setValue={setUC} />
+      
         <Box
           component="form"
           sx={{
@@ -92,6 +136,28 @@ export default function ManageTrades() {
           noValidate
           autoComplete="off"
         >
+            <div>
+              <TextField
+                select
+                label="Ano UC"
+                onChange={(event) => {
+                  const selectedValue = event.target.value;
+                  const selectedOption = YearInput.find(
+                    (option) => option.value === selectedValue
+                  );
+                  setAno(selectedOption.label);
+                }}
+              >
+                {YearInput.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+
+            <UcsInput setValue={setUC} ano={ano} />
+
           <div>
             <TextField
               select

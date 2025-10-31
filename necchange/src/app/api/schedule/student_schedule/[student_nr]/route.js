@@ -1,38 +1,41 @@
-import { NextResponse, NextRequest } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
+import axios from "axios";
+import { supabase } from "@/utils/supabase";
+// Inicializar Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-const prisma = new PrismaClient();
-
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Missing Supabase environment variables");
+}
 
 export async function GET(request, context) {
   const student_nr = context.params.student_nr;
 
-  const studentClasses = await prisma.user.findUnique({
-    where: {
-      number: student_nr,
-    },
-    select: {
-      student_lesson: {
-        select: {
-          lesson: {
-            select: {
-              weekday: true,
-              start_time: true,
-              end_time: true,
-              local: true,
-              shift: true,
-              type: true,
-              course: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
+  const { data: studentClasses, error } = await supabase
+  .from('student_class')
+  .select(`
+    *,
+    student_lesson (
+      lesson (
+        weekday,
+        start_time,
+        end_time,
+        local,
+        shift,
+        type,
+        course (
+          name
+        )
+      )
+    )
+  `)
+  .eq('number', student_nr);
+
+if (error) {
+  console.error('Error:', error);
+  return;
+}
 
   let classes = [];
   studentClasses.student_lesson.map((studentClass) => {
@@ -97,6 +100,5 @@ export async function GET(request, context) {
     }
   });
 
-  await prisma.$disconnect()
   return new NextResponse(JSON.stringify({ response: classes }));
 }

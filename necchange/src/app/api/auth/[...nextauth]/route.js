@@ -12,3 +12,4 @@ const handler = async (req, context) => {
 };
 
 export { handler as GET, handler as POST, handler as HEAD };
+  
