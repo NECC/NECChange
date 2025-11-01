@@ -1,11 +1,17 @@
 import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
+import { createClient } from "@supabase/supabase-js";
 
 const prisma = new PrismaClient();
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY 
+);
+
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
-
   pages: {
     signIn: "/auth/signin",
     signOut: "/",
@@ -15,7 +21,7 @@ export const authOptions = {
       server: process.env.EMAIL_SERVER,
       from: process.env.EMAIL_FROM,
       generateVerificationToken: () => {
-        const code = Math.floor(1000 + Math.random() * 9000); // random 6-digit code
+        const code = Math.floor(1000 + Math.random() * 9000);
         return code.toString();
       },
       sendVerificationRequest,
@@ -26,21 +32,66 @@ export const authOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      return { ...token, ...user };
+      console.log("=== JWT CALLBACK ===");
+      console.log("User object:", user ?? "undefined");
+
+      if (user && user.email) {
+        try {
+          console.log("Fetching from Supabase for email:", user.email);
+  
+          const { data: userData, error } = await supabase
+            .from("user")
+            .select("*")
+            .eq("email", user.email)
+            .single();
+  
+          console.log("Supabase response:", { userData, error });
+  
+          if (!error && userData) {
+            console.log("Raw role from DB:", userData.role);
+            console.log("Trimmed role:", userData.role?.trim());
+  
+            token.id = userData.uniqueid;
+            token.uniqueId = userData.uniqueid;
+            token.partnerNumber = userData.partnernumber;
+            token.number = userData.number;
+            token.phone = userData.phone;
+            token.partner = userData.partner;
+            token.role = userData.role?.trim() || "OUTSIDER";
+            token.name = userData.name;
+          } else {
+            console.error("Error fetching user from Supabase:", error);
+          }
+        } catch (err) {
+          console.error("Exception fetching user data:", err);
+        }
+      } else {
+        console.log("Skipping Supabase fetch — no user (session refresh).");
+      }
+  
+      console.log("Final token:", token);
+      return token;
     },
-
+  
     async session({ session, token }) {
-      // Add role to session provided from useSession
-      session.user = token;
-      //session.user.role = token.role
-      //session.user.number = token.number
-
+      session.user = {
+        id: token.id,
+        uniqueId: token.uniqueId,
+        name: token.name,
+        email: token.email,
+        role: token.role,
+        partner: token.partner,
+        partnerNumber: token.partnerNumber,
+        number: token.number,
+        phone: token.phone,
+        emailVerified: token.emailVerified,
+      };
+  
       return session;
     },
   },
   session: { strategy: "jwt" },
-  events: {},
-};
+};  
 
 import { createTransport } from "nodemailer";
 
@@ -50,7 +101,6 @@ async function sendVerificationRequest(params) {
   const { identifier, url, token, provider, theme } = params;
   const { host } = new URL(url);
 
-  // NOTE: You are not required to use `nodemailer`, use whatever you want.
   const transport = createTransport(provider.server);
   const result = await transport.sendMail({
     to: identifier,
@@ -71,7 +121,7 @@ async function sendVerificationRequest(params) {
       {
         filename: "image.png",
         path: file,
-        cid: "unique@nodemailer.com", //same cid value as in the html img src
+        cid: "unique@nodemailer.com",
         contentDisposition: "inline",
       },
     ],
@@ -82,14 +132,6 @@ async function sendVerificationRequest(params) {
   }
 }
 
-/**
- * Email HTML body
- * Insert invisible space into domains from being turned into a hyperlink by email
- * clients like Outlook and Apple mail, as this is confusing because it seems
- * like they are supposed to click on it to sign in.
- *
- * @note We don't add the email address to avoid needing to escape it, if you do, remember to sanitize it!
- */
 function html(params) {
   const { url, token, host, theme } = params;
 
@@ -130,7 +172,6 @@ function html(params) {
   `;
 }
 
-/** Email Text body (fallback for email clients that don't render HTML, e.g. feature phones) */
 function text({ url, host }) {
   return `Sign in to ${host}\n${url}\n\n`;
 }

@@ -2,7 +2,7 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import ptLocale from "@fullcalendar/core/locales/pt";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import MobileFilter from "@/components/calendar/MobileFilter";
 import UCsObj from "../data/filters.json";
@@ -61,7 +61,10 @@ export default function CalendarPage() {
   const mapEventsForCalendar = (events) => {
     if (!Array.isArray(events)) return [];
     return events.map((event) => ({
-      title: event.UC + ' - ' + event.type || "Evento",
+      title: event.UC+ ' - ' + event.type|| "Evento",
+      //start: new Date(`${event.day}T${event.start}`),
+      //end: new Date(`${event.day}T${event.end}`),
+
       start: new Date(event.day),
       end: new Date(event.day),
       color: event.color || "#9ca3af",
@@ -79,7 +82,7 @@ export default function CalendarPage() {
     const fetchEvents = async () => {
       try {
         const res = await axios.get("/api/calendar/getCalendar");
-        const rawData = res.data.response || {};
+        const rawData = res.data.response || [];
         
         const processed = processEvents(rawData);
 

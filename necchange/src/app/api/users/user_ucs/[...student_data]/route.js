@@ -1,34 +1,38 @@
-import { PrismaClient } from "@prisma/client";
+import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
 export async function GET(req, context) {
   const student_nr = context.params.student_data[0];
+  
+  // Supabase query syntax
+  const { data: student_classes_uc, error } = await supabase
+    .from('student_lesson')
+    .select(`
+      lesson:lessons (
+        course:courses (
+          name
+        )
+      )
+    `)
+    .eq('user.number', student_nr);
 
-  const student_classes_uc = await prisma.student_lesson.findMany({
-    where: {
-      User: {
-        number: student_nr,
-      },
-    },
-    select: {
-      lesson: {
-        select: {
-          course: true,
-        },
-      },
-    },
-  });
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 
+ 
   let student_ucs = [];
-
-  student_classes_uc.map((student_class_uc) => {
-    if (!student_ucs.includes(student_class_uc.lesson?.course?.name) && student_class_uc.lesson != null ) {
-      student_ucs.push(student_class_uc.lesson?.course?.name);
+  student_classes_uc?.forEach((student_class_uc) => {
+    const courseName = student_class_uc.lesson?.course?.name;
+    if (courseName && !student_ucs.includes(courseName)) {
+      student_ucs.push(courseName);
     }
   });
 
-  await prisma.$disconnect()
-  return new NextResponse(JSON.stringify({ student_classes: student_ucs }));
+  return NextResponse.json({ student_classes: student_ucs });
 }

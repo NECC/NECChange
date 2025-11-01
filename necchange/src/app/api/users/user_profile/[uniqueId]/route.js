@@ -1,25 +1,32 @@
-import { PrismaClient } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error(
+    `Missing Supabase environment variables: ${!supabaseUrl ? 'URL' : ''} ${!supabaseKey ? 'KEY' : ''}`
+  );
+}
+
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function GET(req, context) {
-  const uniqueId = parseInt(context.params.uniqueId)
-
-  const user_profile = await prisma.user.findFirst({
-    where:{
-      uniqueId: uniqueId
-    },
-    select:{
-      name: true,
-      role: true,
-      phone: true,
-      partner: true,
-      email: true
-    }
-  })
-    
-  await prisma.$disconnect()
-  return new NextResponse(JSON.stringify({ profile:user_profile }));
-}
+  const uniqueId = parseInt(context.params.uniqueId);
   
+  const { data: user_profile, error } = await supabase
+    .from("user")
+    .select("name, role, phone, partner, email")
+    .eq("uniqueid", uniqueId) 
+    .single();
+
+  if (error) {
+    return NextResponse.json(
+      { error: error.message }, 
+      { status: 404 }
+    );
+  }
+
+  return NextResponse.json({ profile: user_profile });
+}

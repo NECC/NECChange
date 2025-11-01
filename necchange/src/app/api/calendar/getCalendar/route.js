@@ -1,120 +1,145 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
-const filePath = path.join(process.cwd(), "./public/data/input", "testes.json");
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-async function readData() {
-  try {
-    const data = await fs.readFile(filePath, "utf-8");
-    return JSON.parse(data);
-  } catch (err) {
-    if (err.code === "ENOENT") {
-      await fs.writeFile(filePath, "{}", "utf-8");
-      return {};
-    }
-    throw err;
-  }
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Missing Supabase environment variables");
 }
 
-async function writeData(data) {
-  await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
-}
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function GET(req) {
-  const { searchParams } = new URL(req.url);
-  const groupId = searchParams.get("group");
-  const allData = await readData();
+  try {
+    const { searchParams } = new URL(req.url);
+    let query = supabase.from("testes").select("*");
 
-  if (groupId) {
-    return NextResponse.json({ response: { [groupId]: allData[groupId] || [] } });
+    const { data, error } = await query;
+
+    if (error) {
+      console.error("Supabase error:", error);
+      return NextResponse.json(
+        { error: "Failed to fetch events" },
+        { status: 500 }
+      );
+    }
+
+    const groupedData = {};
+    data?.forEach((event) => {
+      const ano = event.ano;
+      if (!groupedData[ano]) {
+        groupedData[ano] = [];
+      }
+      groupedData[ano].push({
+        id: event.id, 
+        uc: event.uc,
+        day: event.day,
+        type: event.type,
+        start: event.start || "00:00",
+        end: event.end || "01:00",
+      });
+    });
+
+    return NextResponse.json({ response: groupedData });
+  } catch (err) {
+    console.error("Error in GET:", err);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
-  return NextResponse.json({ response: allData });
 }
 
 export async function POST(req) {
-  const data = await req.json();
-  const { group, uc, day, type,start,end } = data;
+  try {
+    const data = await req.json();
+    const { uc, ano, day, type, start,end} = data;
 
-  if (!group || !uc || !day || !type || !start || !end) {
+    if (!uc || !day || !type) {
+      return NextResponse.json(
+        { error: "Campos obrigatórios: uc, day, type" },
+        { status: 400 }
+      );
+    }
+
+    const { data: newEvent, error } = await supabase
+      .from("testes")
+      .insert([
+        {
+          ano,
+          uc,
+          day,
+          type,
+          start: start || "00:00",
+          end: end || "01:00",
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase error:", error);
+      return NextResponse.json(
+        { error: "Failed to create event" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ 
+      response: {
+        id: newEvent.id,
+        uc: newEvent.uc,
+        day: newEvent.day,
+        type: newEvent.type,
+        start: newEvent.start,
+        end: newEvent.end,
+      }
+    });
+  } catch (err) {
+    console.error("Error in POST:", err);
     return NextResponse.json(
-      { error: "Campos obrigatórios: group, uc, day, type" },
-      { status: 400 }
+      { error: "Internal server error" },
+      { status: 500 }
     );
   }
-
-  const allData = await readData();
-  if (!allData[group]) allData[group] = [];
-  
-  allData[group].push({ uc, day, type,start,end });
-  
-  await writeData(allData);
-  return NextResponse.json({ response: allData[group] });
 }
 
 export async function DELETE(req) {
-  const { searchParams } = new URL(req.url);
-  const group = searchParams.get("group");
-  const index = parseInt(searchParams.get("index"));
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
 
-  if (!group || isNaN(index)) {
+    if (!id) {
+      return NextResponse.json(
+        { error: "Parâmetro obrigatório: id" },
+        { status: 400 }
+      );
+    }
+
+    // Delete event by ID
+    const { data: deletedEvent, error } = await supabase
+      .from("testes")
+      .delete()
+      .eq("id", parseInt(id))
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Supabase error:", error);
+      return NextResponse.json(
+        { error: "Event not found or failed to delete" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ response: deletedEvent });
+  } catch (err) {
+    console.error("Error in DELETE:", err);
     return NextResponse.json(
-      { error: "Parâmetros obrigatórios: group e index" },
-      { status: 400 }
+      { error: "Internal server error" },
+      { status: 500 }
     );
   }
-
-  const allData = await readData();
-  
-  if (!allData[group] || !allData[group][index]) {
-    return NextResponse.json({ error: "Evento não encontrado" }, { status: 404 });
-  }
-
-  const deleted = allData[group].splice(index, 1);
-  await writeData(allData);
-  
-  return NextResponse.json({ response: deleted[0] });
 }
 
-
-/*import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
-
-export async function GET(req, res) {
-  const avaliacoes_eventos = await prisma.dates.findMany();
-
-  await prisma.$disconnect();
-  return NextResponse.json({ response: avaliacoes_eventos });
-}
-
-export async function POST(req, res) {
-  const data = await req.json();
-  const { title, start, color } = data;
-
-  const newDate = await prisma.dates.create({
-    data: {
-      title: title,
-      start: start,
-      color: color,
-    },
-  });
-
-  await prisma.$disconnect();
-  return NextResponse.json({ response: newDate });
-}
-
-export async function DELETE(req) {
-  const { searchParams } = new URL(req.url);
-  const id = searchParams.get("id");
-
-  const deletedDate = await prisma.dates.delete({
-    where: {
-      id: parseInt(id),
-    },
-  });
-
-  await prisma.$disconnect();
-  return NextResponse.json({ response: deletedDate });
-}*/

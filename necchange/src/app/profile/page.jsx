@@ -12,9 +12,6 @@ export default function Perfil() {
 
     if (status !== "authenticated") return
 
-    //console.log(session.user.partner);
-
-    /* We do this because at login the callback sends every user to this page, but a super_user don't want to be redirected to profile */
     if (session?.user.role == "SUPER_USER") return redirect("/super_user")
     
     if (session.user.partner == false) return redirect("/")

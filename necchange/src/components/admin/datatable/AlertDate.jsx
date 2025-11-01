@@ -21,16 +21,23 @@ export default function AlertDate(props) {
 
   const delete_data = async (id) => {
     setOpen(false);
-    axios
-      .delete(`/api/calendar/getCalendar/?id=${id}`)
-      .then((res) => {
-        setdata((prev) => {
-          return prev.filter((item) => item.id !== id);
-        });
-      })
-      .catch((err) => {
-        console.error(err);
+  
+    try {
+      await axios.delete(`/api/calendar/getCalendar/?id=${id}`);
+  
+      setdata((prev) => {
+        const updated = { ...prev };
+  
+        for (const ano in updated) {
+          updated[ano] = updated[ano].filter((item) => item.id !== id);
+        }
+  
+        return updated;
       });
+  
+    } catch (err) {
+      console.error("Erro ao apagar evento:", err);
+    }
   };
 
   return (
