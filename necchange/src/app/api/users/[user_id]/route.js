@@ -15,17 +15,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export async function PUT(req, { params }) {
   try {
     const { user_id } = params;
-
-    const { data: currentUser, error: fetchError } = await supabase
-      .from("user")
-      .select("email, partner")
-      .eq("uniqueid", parseInt(user_id))
-      .single();
-
     const data = await req.json();
     const is_partner = data.partner === "true" || data.partner === true;
-    const wasPartner = currentUser.partner;
-    const emailChanged = currentUser.email !== data.email;
 
     const { data: updatedUser, error } = await supabase
       .from("user")
@@ -41,116 +32,6 @@ export async function PUT(req, { params }) {
 
     if (error) {
       throw error;
-    }
-
-    let sheetDbStatus = null;
-
-    try {
-      if (is_partner && !wasPartner) {
-        await axios.post(
-          `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}`,
-          {
-            data: {
-              Email: data.email,
-              Name: data.name,
-              Role: data.role,
-              Phone: data.phone || "",
-            },
-          },
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization:
-                "Basic " +
-                btoa(
-                  `${process.env.NEXT_PUBLIC_SHEETDB_LOGIN}:${process.env.NEXT_PUBLIC_SHEETDB_PASSWORD}`
-                ),
-            },
-          }
-        );
-        sheetDbStatus = "added";
-      }
-      else if (!is_partner && wasPartner) {
-        await axios.delete(
-          `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}/Email/${encodeURIComponent(currentUser.email)}`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization:
-                "Basic " +
-                btoa(
-                  `${process.env.NEXT_PUBLIC_SHEETDB_LOGIN}:${process.env.NEXT_PUBLIC_SHEETDB_PASSWORD}`
-                ),
-            },
-          }
-        );
-        sheetDbStatus = "removed";
-      }
-      else if (is_partner && wasPartner) {
-        if (emailChanged) {
-          await axios.delete(
-            `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}/Email/${encodeURIComponent(currentUser.email)}`,
-            {
-              headers: {
-                Accept: "application/json",
-                Authorization:
-                  "Basic " +
-                  btoa(
-                    `${process.env.NEXT_PUBLIC_SHEETDB_LOGIN}:${process.env.NEXT_PUBLIC_SHEETDB_PASSWORD}`
-                  ),
-              },
-            }
-          );
-          await axios.post(
-            `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}`,
-            {
-              data: {
-                Email: data.email,
-                Name: data.name,
-                Role: data.role,
-                Phone: data.phone || "",
-              },
-            },
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization:
-                  "Basic " +
-                  btoa(
-                    `${process.env.NEXT_PUBLIC_SHEETDB_LOGIN}:${process.env.NEXT_PUBLIC_SHEETDB_PASSWORD}`
-                  ),
-              },
-            }
-          );
-        } else {
-          await axios.patch(
-            `https://sheetdb.io/api/v1/${process.env.NEXT_PUBLIC_SHEETDB_ID}/Email/${encodeURIComponent(data.email)}`,
-            {
-              data: {
-                Name: data.name,
-                Role: data.role,
-                Phone: data.phone || "",
-              },
-            },
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization:
-                  "Basic " +
-                  btoa(
-                    `${process.env.NEXT_PUBLIC_SHEETDB_LOGIN}:${process.env.NEXT_PUBLIC_SHEETDB_PASSWORD}`
-                  ),
-              },
-            }
-          );
-        }
-        sheetDbStatus = "updated";
-      }
-    } catch (sheetError) {
-      sheetDbStatus = "error";
     }
 
     return NextResponse.json({
