@@ -1,28 +1,44 @@
-import { PrismaClient } from "@prisma/client";
+import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Missing Supabase environment variables");
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 
 export async function GET(req, context) {
   const email = context.params.email;
+  
+  const { data: student, error } = await supabase
+    .from('user') 
+    .select('*')
+    .eq('email', email)
+    .maybeSingle();
 
-  const student = await prisma.user.findFirst({
-    where: {
-      email: email,
-    },
-    select: {
-      uniqueId: true,
-    },
-  });
-
-  console.log(email);
-
-  await prisma.$disconnect()
-  if (student) {
-    return new NextResponse(
-      JSON.stringify({ response: "success", unique_id: student.uniqueId })
-    );
-  } else {
-    return new NextResponse(JSON.stringify({ response: "error" }));
+  console.log(student)
+  console.log("Email -> %s",email)
+  if (error) {
+    console.error('Supabase error:', error);
+    return NextResponse.json({ 
+      response: "error", 
+      message: error.message 
+    }, { status: 500 });
   }
+
+  if (!student) {
+    return NextResponse.json({ 
+      response: "not_found",
+      message: "User not found" 
+    }, { status: 200 }); 
+  }
+  
+  return NextResponse.json({ 
+    response: "success", 
+    unique_id: student.uniqueId 
+  }, { status: 200 });
 }
