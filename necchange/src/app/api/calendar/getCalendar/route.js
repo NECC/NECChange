@@ -10,6 +10,7 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+//Teste
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
