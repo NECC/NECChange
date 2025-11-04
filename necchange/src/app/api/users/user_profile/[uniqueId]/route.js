@@ -1,18 +1,19 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error(
-    `Missing Supabase environment variables: ${!supabaseUrl ? 'URL' : ''} ${!supabaseKey ? 'KEY' : ''}`
-  );
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Missing Supabase environment variables");
+  }
+  
+  return createClient(supabaseUrl, supabaseKey);
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
-
 export async function GET(req, context) {
+  const supabase = getSupabaseClient();
   const uniqueId = parseInt(context.params.uniqueId);
   
   const { data: user_profile, error } = await supabase

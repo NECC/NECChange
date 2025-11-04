@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();

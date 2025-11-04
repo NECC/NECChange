@@ -1,12 +1,19 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Missing Supabase environment variables");
+  }
+  
+  return createClient(supabaseUrl, supabaseKey);
+}
 
 export async function GET(req, context) {
+  const supabase = getSupabaseClient();
   const student_nr = context.params.student_data[0];
   
   // Supabase query syntax
@@ -25,7 +32,6 @@ export async function GET(req, context) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
- 
   let student_ucs = [];
   student_classes_uc?.forEach((student_class_uc) => {
     const courseName = student_class_uc.lesson?.course?.name;

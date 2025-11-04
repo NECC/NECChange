@@ -1,22 +1,24 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error("Missing Supabase environment variables");
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Missing Supabase environment variables");
+  }
+  
+  return createClient(supabaseUrl, supabaseKey);
 }
-
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function GET(req) {
   try {
+    const supabase = getSupabaseClient();
     const { searchParams } = new URL(req.url);
     let query = supabase.from("testes").select("*");
-
     const { data, error } = await query;
-
+    
     if (error) {
       console.error("Supabase error:", error);
       return NextResponse.json(
@@ -24,7 +26,7 @@ export async function GET(req) {
         { status: 500 }
       );
     }
-
+    
     const groupedData = {};
     data?.forEach((event) => {
       const ano = event.ano;
@@ -40,7 +42,7 @@ export async function GET(req) {
         end: event.end || "01:00",
       });
     });
-
+    
     return NextResponse.json({ response: groupedData });
   } catch (err) {
     console.error("Error in GET:", err);
@@ -53,16 +55,17 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
+    const supabase = getSupabaseClient();
     const data = await req.json();
-    const { uc, ano, day, type, start,end} = data;
-
+    const { uc, ano, day, type, start, end } = data;
+    
     if (!uc || !day || !type) {
       return NextResponse.json(
         { error: "Campos obrigatórios: uc, day, type" },
         { status: 400 }
       );
     }
-
+    
     const { data: newEvent, error } = await supabase
       .from("testes")
       .insert([
@@ -77,7 +80,7 @@ export async function POST(req) {
       ])
       .select()
       .single();
-
+    
     if (error) {
       console.error("Supabase error:", error);
       return NextResponse.json(
@@ -85,7 +88,7 @@ export async function POST(req) {
         { status: 500 }
       );
     }
-
+    
     return NextResponse.json({ 
       response: {
         id: newEvent.id,
@@ -107,24 +110,24 @@ export async function POST(req) {
 
 export async function DELETE(req) {
   try {
+    const supabase = getSupabaseClient();
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-
+    
     if (!id) {
       return NextResponse.json(
         { error: "Parâmetro obrigatório: id" },
         { status: 400 }
       );
     }
-
-    // Delete event by ID
+    
     const { data: deletedEvent, error } = await supabase
       .from("testes")
       .delete()
       .eq("id", parseInt(id))
       .select()
       .single();
-
+    
     if (error) {
       console.error("Supabase error:", error);
       return NextResponse.json(
@@ -132,7 +135,7 @@ export async function DELETE(req) {
         { status: 404 }
       );
     }
-
+    
     return NextResponse.json({ response: deletedEvent });
   } catch (err) {
     console.error("Error in DELETE:", err);
@@ -142,4 +145,3 @@ export async function DELETE(req) {
     );
   }
 }
-
