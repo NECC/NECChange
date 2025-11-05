@@ -2,18 +2,23 @@ import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error("Missing Supabase environment variables");
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Missing Supabase environment variables");
+  }
+  
+  return createClient(supabaseUrl, supabaseKey);
 }
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+//const supabase = createClient(supabaseUrl, supabaseKey);
 
 /* Update user */
 export async function PUT(req, { params }) {
   try {
+    const supabase = getSupabaseClient();
     const { user_id } = params;
     const data = await req.json();
     const is_partner = data.partner === "true" || data.partner === true;
@@ -51,6 +56,7 @@ export async function PUT(req, { params }) {
 /* Delete user */
 export async function DELETE(req, { params }) {
   try {
+    const supabase = getSupabaseClient();
     const { user_id } = params;
     
     const { data: userData, error: fetchError } = await supabase

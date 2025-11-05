@@ -2,19 +2,21 @@ import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-// Inicializar Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error("Missing Supabase environment variables");
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Missing Supabase environment variables");
+  }
+  
+  return createClient(supabaseUrl, supabaseKey);
 }
-
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 /* Get all users */
 export async function GET(req, context) {
   try {
+    const supabase = getSupabaseClient();
     const { data: users, error } = await supabase
       .from("user")
       .select("uniqueid, partnernumber, number, name, email, phone, partner, role")
@@ -37,6 +39,7 @@ export async function GET(req, context) {
 /* Add a user */
 export async function POST(req, context) {
   try {
+    const supabase = getSupabaseClient();
     const data = await req.json();
     const is_partner = data.partner === true;
 
@@ -155,6 +158,7 @@ export async function POST(req, context) {
 /* Update user */
 export async function PUT(req, context) {
   try {
+    const supabase = getSupabaseClient();
     const data = await req.json();
     const userId = parseInt(data.userId);
     const is_partner = data.partner === "true" || data.partner === true;
