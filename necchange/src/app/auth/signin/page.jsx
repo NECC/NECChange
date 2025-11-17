@@ -12,6 +12,11 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState(""); 
   const [showVerificationStep, setShowVerificationStep] = useState(false);
 
+  /*const getStudentNumber = (email) => {
+    const match = email.match(/a(\d)+@alunos.uminho.pt/);
+    return match;
+  };*/
+
   const handleVerification = useCallback(
     (code) => {
       window.location.href = `/api/auth/callback/email?email=${encodeURIComponent(

@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
+"use client";
+import React, { useState, useMemo } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import Badge from "../../globals/Badge";
-// há x tempo atrás
 import moment from "moment";
 import "moment/locale/pt";
-import Status from '@prisma/client'
 
 const statusMap = {
   ACCEPTED: ["Aceite", "green"],
@@ -23,101 +21,128 @@ const type_class = {
   3: "PL",
 };
 
-
-export default function FeedPost({ post, toggleLoader }) {
+export default function FeedPost({ post, toggleLoader, isPersonalFeed = false, onTradeComplete }) {
   const { data: session } = useSession();
-  const isWatchingOwnPost = session.user.number === post.from_student.number;
-  const fromStudentNr = post.from_student.number;
-  const tradeId = post.id;
+  const requester = post?.from_student;
+  const accepter = post?.to_student;
+  const trades = post?.trade_id || [];
+  const isOwner = requester?.number === session?.user.number;
+  const isAccepter = accepter?.number === session?.user.number;
+  
+  const [status, setStatus] = useState(statusMap[post.status]);
+  const [clicked, setClicked] = useState(false);
 
-  /* variable status is an array */
-  const [status, setStatus] = useState(statusMap[post.status])
-  const [clicked, setClicked] = useState(false)
+  const groupedTrades = useMemo(() => {
+    const grouped = {};
+    
+    trades.forEach((trade) => {
+      const courseId = trade.lessonFrom?.course?.id;
+      const courseName = trade.lessonFrom?.course?.name;
+      const year = trade.lessonFrom?.course?.year;
+      const type = trade.lessonFrom?.type;
+      const fromShift = trade.lessonFrom?.shift;
+      const toShift = trade.lessonTo?.shift;
 
-  const acceptTrade = () => {
+      const key = `${courseId}-${type}-${fromShift}-${toShift}`;
+
+      if (!grouped[key]) {
+        grouped[key] = {
+          course: { id: courseId, name: courseName, year },
+          type,
+          fromShift,
+          toShift,
+          trades: []
+        };
+      }
+      
+      grouped[key].trades.push(trade);
+    });
+
+    return Object.values(grouped);
+  }, [trades]);
+
+  const acceptTrade = async () => {
     toggleLoader(true);
-    axios
-      .post(`/api/feed/feed_post/accept_trade`, {
+    try {
+      const res = await axios.post('/api/feed/feed_post/accept_trade', {
         params: {
-          fromStudentNr: fromStudentNr,
-          studentAcceptedNr: session?.user.number ,
-          tradeId: tradeId,
+          fromStudentNr: requester?.number,
+          studentAcceptedNr: session?.user.number,
+          tradeId: post?.id,
         },
-      })
-      .then((res) => {
-        if (res.data.response == true) {
-          toast.success("Troca realizada com sucesso!");
-          post.status = "ACCEPTED"
-          setStatus(statusMap["ACCEPTED"])
-
-        } else {
-          toast.error("Não é possível realizar a troca! Turnos incompatíveis.");
-          post.status = "ERROR"
-          setStatus(statusMap["ERROR"])
+      });
+      if (res.data.response === true) {
+        toast.success("Troca realizada com sucesso!");
+        setStatus(statusMap.ACCEPTED);
+        setClicked(true);
+        
+        // Refresh the feed after successful trade
+        if (onTradeComplete) {
+          setTimeout(() => {
+            onTradeComplete();
+          }, 1000); // Small delay to let the user see the success message
         }
-        setClicked(!clicked)
-        toggleLoader(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const removeTrade = () => {
-    toggleLoader(true);
-    axios
-      .put(`/api/feed/feed_post/remove_trade`, {
-        params: { tradeId: tradeId },
-      })
-      .then((res) => {
-        toggleLoader(false);
-        toast.success("Pedido de troca removido!");
-        post.status = "ACCEPTED"
-        setStatus(statusMap["ACCEPTED"])
-      })
-      .catch((err) => {
-        toggleLoader(false);
-        toast.error("Erro ao remover o pedido de troca!");
-        console.log(err);
-      });
-
-      setClicked(!clicked)
-  };
-/*
-  useEffect(() => {
-    const cena = () => {
-      console.log("own post:", isWatchingOwnPost);
-      console.log("post_id: ", post.id);
-      console.log("status", status);
+      } else {
+        toast.error("Não é possível realizar a troca!");
+        setStatus(statusMap.ERROR);
+        setClicked(true);
+      }
+    } finally {
+      toggleLoader(false);
     }
+  };
 
-    cena()
-  }, [])
-*/
+  const removeTrade = async () => {
+    toggleLoader(true);
+    try {
+      await axios.put('/api/feed/feed_post/remove_trade', {
+        params: { tradeId: post.id },
+      });
+      toast.success("Pedido de troca removido!");
+      setStatus(statusMap.REMOVED);
+      setClicked(true);
+      
+      // Refresh the feed after removing trade
+      if (onTradeComplete) {
+        setTimeout(() => {
+          onTradeComplete();
+        }, 1000);
+      }
+    } catch {
+      toast.error("Erro ao remover o pedido de troca!");
+    } finally {
+      toggleLoader(false);
+    }
+  };
+
+  const otherStudent = isOwner ? accepter : requester;
+  const showOtherStudentNumber = isPersonalFeed && post.status === 'ACCEPTED';
+
   return (
     <div className="rounded-md text-base bg-white p-6 border shadow w-full grid gap-8">
       <div className="flex items-center justify-between gap-2">
-        <p className="">
+        <p>
           Solicitado por{" "}
-          <strong className="text-lg font-semibold">{fromStudentNr}</strong> há{" "}
-          {moment(post.publish_time).fromNow(true)} atrás
+          <strong className="text-lg font-semibold">
+            {requester?.name || requester?.number || "Aluno"}
+          </strong>{" "}
+          há {moment(post.publish_time).fromNow(true)} atrás
         </p>
-
-        { (isWatchingOwnPost || clicked) && <Badge variant={status[1]}>{status[0]}</Badge>}
+        {(isOwner || isAccepter || clicked) && (
+          <Badge variant={status[1]}>{status[0]}</Badge>
+        )}
       </div>
 
       <div className="grid">
-        {post.trade_id.map((lesson_trade, i) => {
-          const { year, name } = lesson_trade.lessonFrom.course;
-          const type = type_class[lesson_trade.lessonFrom.type];
-          const from = `${type}${lesson_trade.lessonFrom.shift}`;
-          const to = `${type}${lesson_trade.lessonTo.shift}`;
-          const yearColor = [
-            "text-cyan-500",
-            "text-teal-500",
-            "text-violet-500",
-          ];
-          const color = yearColor[year - 1];
+        {groupedTrades.map((groupedTrade, i) => {
+          const { course, type, fromShift, toShift } = groupedTrade;
+          const typeStr = type_class[type];
+          const from = `${typeStr}${fromShift}`;
+          const to = `${typeStr}${toShift}`;
+          const year = course?.year;
+          
+          const colors = ["text-cyan-500", "text-teal-500", "text-violet-500"];
+          const yearColor = colors[year - 1] || "text-gray-600";
 
           return (
             <div
@@ -125,19 +150,22 @@ export default function FeedPost({ post, toggleLoader }) {
               key={i}
             >
               <p className="font-semibold">
-                <span className={`mr-1 font-bold ${color}`}>({year}º Ano)</span>{" "}
-                {name}
+                <span className={`mr-1 font-bold ${yearColor}`}>
+                  ({year}º Ano)
+                </span>
+                {course?.name}
               </p>
               <div className="flex justify-end">
                 <div className="ml-2 flex items-baseline gap-3">
-                  <p className="">
-                    {fromStudentNr}{" "}
+                  <p>
+                    {requester?.number}{" "}
                     <span className="font-semibold">{from}</span>
                   </p>
                   <FaArrowRightArrowLeft className="text-[11px] text-blue-900" />
-                  <p className="">
+                  <p>
                     <span className="font-semibold">{to}</span>{" "}
-                    {isWatchingOwnPost ? "Axxxxx" : session?.user.number}
+                    {showOtherStudentNumber ? otherStudent?.number : 
+                     (!isOwner && post.status === 'PENDING') ? session?.user.number : "—"}
                   </p>
                 </div>
               </div>
@@ -146,25 +174,33 @@ export default function FeedPost({ post, toggleLoader }) {
         })}
       </div>
 
-      <div className={`${clicked ? 'hidden': ''} flex justify-end`}>
-        {isWatchingOwnPost ? (
-          status[0] == "Pendente" && (
+      {!clicked && post.status === 'PENDING' && (
+        <div className="flex justify-end">
+          {isOwner ? (
             <button
-              className={`py-2 px-4 bg-red-600 hover:bg-red-500 font-bold text-white rounded-lg`}
+              className="py-2 px-4 bg-red-600 hover:bg-red-500 font-bold text-white rounded-lg"
               onClick={removeTrade}
             >
               Remover Troca
             </button>
-          )
-        ) : (
-          <button
-            className={`py-2 px-4 bg-blue-500 hover:bg-blue-600 font-bold text-white rounded-lg`}
-            onClick={acceptTrade}
-          >
-            Trocar
-          </button>
-        )}
-      </div>
+          ) : (
+            <button
+              className="py-2 px-4 bg-blue-500 hover:bg-blue-600 font-bold text-white rounded-lg"
+              onClick={acceptTrade}
+            >
+              Aceitar Troca
+            </button>
+          )}
+        </div>
+      )}
+
+      {isPersonalFeed && post.status === 'ACCEPTED' && (
+        <div className="flex justify-end">
+          <p className="text-sm text-green-600 font-semibold">
+            ✓ Troca concluída com {otherStudent?.name || otherStudent?.number}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

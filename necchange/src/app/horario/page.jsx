@@ -10,7 +10,7 @@ export default function Home() {
   const [classes, setClasses] = useState([]);
   const [loader, setLoader] = useState(false);
   const [isPopUpOpened, setIsPopUpOpened] = useState(false);
-  const [popUpEvent, setPopUpEvent] = useState();
+  const [popUpEvent, setPopUpEvent] = useState(null);
   const { data: session } = useSession();
 
   const toggleLoader = (value) => {
@@ -19,26 +19,28 @@ export default function Home() {
 
   useEffect(() => {
     if (!session) return;
-    toggleLoader(true)
+    
+    toggleLoader(true);
+    
     axios
       .get(`/api/schedule/student_schedule/${session.user?.number}`)
       .then((response) => {
         setClasses(response.data.response);
-        toggleLoader(false)
+        toggleLoader(false);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
-        toggleLoader(false)
+        toggleLoader(false);
       });
   }, [session]);
 
   const parseTime = (time) => {
     return time.toLocaleTimeString('pt-PT', { hour: "2-digit", minute: "2-digit", hour12: false });
-  }
+  };
 
   const weekday = (date) => {
     return date.toLocaleDateString('pt-PT', { weekday: 'short' });
-  }
+  };
 
   return (
     <div className="flex justify-center pt-24">
@@ -47,11 +49,15 @@ export default function Home() {
           {(onClose) => (
             <>
               <ModalBody>
-                <div className="flex justify-center mt-2 text-md text-gray-500">
-                  {weekday(popUpEvent.start)}, {parseTime(popUpEvent.start)} - {parseTime(popUpEvent.end)}
-                </div>
+                {popUpEvent && (
+                  <div className="flex justify-center mt-2 text-md text-gray-500">
+                    {weekday(popUpEvent.start)}, {parseTime(popUpEvent.start)} - {parseTime(popUpEvent.end)}
+                  </div>
+                )}
               </ModalBody>
-              <ModalHeader className="flex flex-col gap-1 items-center">{popUpEvent.title}</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 items-center">
+                {popUpEvent?.title}
+              </ModalHeader>
               <ModalFooter className="flex justify-center">
                 <Button color="danger" variant="light" onPress={onClose}>
                   Fechar
@@ -62,10 +68,13 @@ export default function Home() {
         </ModalContent>
       </Modal>
       <div className="container py-2 sm:py-8 px-2">
-        <StudentSchedule events={classes} onEventClick={(info) => {
-          setPopUpEvent(info.event);
-          setIsPopUpOpened(true);
-        }} />
+        <StudentSchedule 
+          events={classes} 
+          onEventClick={(info) => {
+            setPopUpEvent(info.event);
+            setIsPopUpOpened(true);
+          }} 
+        />
       </div>
       {loader && <Loader />}
     </div>

@@ -59,7 +59,7 @@ const customAdapter = {
 
     const tokenExpires = new Date(data.expires);
     const now = new Date();
-    
+
     console.log("Token expiry check:", {
       tokenExpires: tokenExpires.toISOString(),
       now: now.toISOString(),
@@ -162,7 +162,7 @@ export const authOptions = {
       // If token doesn't have email yet, fetch user data by ID
       if (!token.email && token.sub) {
         console.log("Fetching user data by ID:", token.sub);
-        
+
         const { data, error } = await supabase
           .from("user")
           .select("*")
@@ -190,14 +190,14 @@ export const authOptions = {
       // On sign in or update, fetch user data from your custom table
       if (account || user?.email || trigger === "update") {
         const email = user?.email || token.email;
-        
+
         if (!email) {
           console.error("No email found in token or user");
           return token;
         }
 
         console.log("Fetching user data for:", email);
-        
+
         const { data, error } = await supabase
           .from("user")
           .select("*")
@@ -226,7 +226,7 @@ export const authOptions = {
     async session({ session, token }) {
       // Pass user data to the session
       console.log("Session callback - token:", token);
-      
+
       session.user = {
         id: token.id,
         name: token.name,
@@ -236,7 +236,7 @@ export const authOptions = {
         partnernumber: token.partnernumber,
         number: token.number,
       };
-      
+
       console.log("Session callback - session.user:", session.user);
       return session;
     },
@@ -248,7 +248,7 @@ async function sendVerificationRequest(params) {
   const file = process.cwd() + "/neccSticker.png";
   const { identifier, token, provider, theme } = params;
   const transport = createTransport(provider.server);
-  
+
   const result = await transport.sendMail({
     to: identifier,
     from: provider.from,
@@ -326,7 +326,7 @@ async function sendVerificationRequest(params) {
       },
     ],
   });
-  
+
   const failed = result.rejected.concat(result.pending).filter(Boolean);
   if (failed.length) {
     throw new Error(`Email(s) (${failed.join(", ")}) could not be sent`);
@@ -334,4 +334,4 @@ async function sendVerificationRequest(params) {
 }
 
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST }; 

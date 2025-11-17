@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef} from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -28,6 +28,7 @@ export default function UserPage() {
     email: "",
   });
   const [loader, setLoader] = useState(false);
+  const previousEmailRef = useRef("");
 
   useEffect(() => {
     console.log("useEffect triggered, user_id:", user_id);
@@ -44,6 +45,7 @@ export default function UserPage() {
         const res = await axios.get(`/api/users/user_profile/${user_id}`);
         console.log("Profile data received:", res.data);
         setUserProfile(res.data.profile);
+        previousEmailRef.current = res.data.profile.email;
       } catch (err) {
         console.error("Erro ao carregar perfil:", err);
         toast.error("Erro ao carregar perfil do utilizador.");
@@ -154,20 +156,25 @@ export default function UserPage() {
               <option value="true">Sim</option>
               <option value="false">Não</option>
             </select>
-          </div>
-          <div className="col-span-2">
-            <label className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+            </div>
+          <div className="mb-6 col-span-2">
+            <label className="block mb-2 text-sm font-medium text-gray-900">
               Email
             </label>
             <input
               type="email"
               id="email"
-              name="email"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-              placeholder="john.doe@company.com"
+              placeholder="aXXXXXX@alunos.uminho.pt"
               value={userProfile.email}
-              onChange={(e) => {
-                setUserProfile({ ...userProfile, email: e.target.value });
+              onChange={(e) =>
+                setUserProfile({ ...userProfile, email: e.target.value.toLowerCase() })
+              }
+              onBlur={(e) => {
+                if (!e.target.value.trim()) {
+                  setUserProfile({ ...userProfile, email: previousEmailRef.current });
+                  toast.error('Email não pode ser um campo vazio');
+                }
               }}
               required
             />
@@ -194,6 +201,7 @@ export default function UserPage() {
           <button
             className="px-5 py-2.5 w-full rounded-lg text-sm text-white font-semibold text-center bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
             onClick={updateUser}
+            disabled={!userProfile.email?.trim()}
           >
             Update
           </button>

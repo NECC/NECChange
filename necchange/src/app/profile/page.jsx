@@ -19,7 +19,7 @@ export default function Perfil() {
     return (
         <section className="min-h-screen grow flex flex-col justify-center items-center bg-zinc-50">
             <article className="grid grid-cols-1 md:grid-cols-2 gap-8 place-items-center px-12">
-                <VirtualCard name={session.user.name} partnerNumber={session.user.partnerNumber} studentNumber={session.user.number.toUpperCase()}/>
+                <VirtualCard name={session.user.name} partnerNumber={session.user.partnernumber} studentNumber={session.user.number.toUpperCase()}/>
                 <Code data={session.user} />
 
             </article>
@@ -50,8 +50,8 @@ const VirtualCard = ({ name, partnerNumber, studentNumber }) => {
 
 const Code = ({ data }) => {
     const qrcode = useRef(null)
-    const text = "Sócio número " + data.partnerNumber + "\n" + data.name 
-
+    const text = "Sócio número " + data.partnernumber + "\n" + data.name 
+    
     useEffect(() => {
         // Options
         var options = {

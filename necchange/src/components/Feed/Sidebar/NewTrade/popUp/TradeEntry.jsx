@@ -11,8 +11,10 @@ const classMap = {
 
 export default function TradeEntry(props) {
   const { removeTrade, updateTrade, enrolledClasses, availableClasses } = props;
+  
   // selection controls
   const [ucSelection, setUcSelection] = useState("");
+  
   // selection options
   const [fromOptions, setFromOptions] = useState({
     options: [],
@@ -26,18 +28,30 @@ export default function TradeEntry(props) {
   const classToText = ({ type, shift }) => `${classMap[type]}${shift}`;
 
   const handleUcSelection = (selected) => {
-    //console.log("Uc selected", selected);
+    /*
+    console.log("UC selected:", selected);
+    console.log("Enrolled classes:", enrolledClasses);
+    console.log("Available classes:", availableClasses);
+    */
     setUcSelection(selected);
+    
+    if (!enrolledClasses[selected]) {
+      console.error("Selected UC not found in enrolledClasses:", selected);
+      return;
+    }
+    
     updateTrade({
       ucId: enrolledClasses[selected].ucId,
       type: 0,
       fromShift: 0,
       toShift: 0,
     });
+    
     setFromOptions({
       options: enrolledClasses[selected].classes,
       key: fromOptions.key + 1,
     });
+    
     setToOptions({
       options: [],
       key: toOptions.key + 1,
@@ -45,16 +59,39 @@ export default function TradeEntry(props) {
   };
 
   const handleFromSelection = (selected) => {
-    //console.log("From selected", selected);
+    /*
+    console.log("From selected:", selected);
+    console.log("UC Selection:", ucSelection);
+    console.log("Available classes for UC:", availableClasses[ucSelection]);
+    */
+
+    if (!ucSelection) {
+      console.error("No UC selected");
+      return;
+    }
+    
+    if (!availableClasses[ucSelection]) {
+      console.error("UC not found in availableClasses:", ucSelection);
+      toast.warning(`Não há turmas disponíveis para troca em "${ucSelection}"`);
+      return;
+    }
+    
     updateTrade({
       type: selected.type,
       fromShift: selected.shift,
       toShift: 0,
     });
-
+    
     const available = availableClasses[ucSelection].classes.filter(
       ({ type, shift }) => type === selected.type && shift !== selected.shift
     );
+    
+    //console.log("Available options for 'to':", available);
+    
+    if (available.length === 0) {
+      toast.info(`Não há outras turmas de ${classMap[selected.type]} disponíveis para troca`);
+    }
+    
     setToOptions({
       options: available,
       key: toOptions.key + 1,
@@ -62,7 +99,7 @@ export default function TradeEntry(props) {
   };
 
   const handleToSelection = (selected) => {
-    //console.log("To selected", selected);
+    //console.log("To selected:", selected);
     updateTrade({ toShift: selected.shift });
   };
 
@@ -75,13 +112,11 @@ export default function TradeEntry(props) {
               options={Object.keys(enrolledClasses)}
               getOptionLabel={(option) => option}
               changeHandler={handleUcSelection}
-              selected={"-1"}
+              selected={ucSelection || "-1"}
               placeholder="Selecione a UC"
             />
           </div>
-
           <FaMinus className="text-2xl text-blue-500 w-12" />
-
           <div className="col-span-2">
             <Select
               key={fromOptions.key}
@@ -90,11 +125,10 @@ export default function TradeEntry(props) {
               changeHandler={handleFromSelection}
               selected={"-1"}
               placeholder="TP*"
+              disabled={!ucSelection}
             />
           </div>
-
           <FaArrowRightArrowLeft className="text-2xl text-blue-500 w-12" />
-
           <div className="col-span-2">
             <Select
               key={toOptions.key}
@@ -103,10 +137,10 @@ export default function TradeEntry(props) {
               changeHandler={handleToSelection}
               selected={"-1"}
               placeholder="TP*"
+              disabled={toOptions.options.length === 0}
             />
           </div>
         </div>
-
         <button
           className="text-xl text-gray-600 hover:text-gray-700 ml-5"
           onClick={removeTrade}
