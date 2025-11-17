@@ -1,29 +1,48 @@
-import { PrismaClient } from "@prisma/client";
-export const dynamic = 'force-dynamic';
+import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+export const dynamic = 'force-dynamic';
 
-export async function GET(req, context) {
-
-  const trades_status = await prisma.tradePeriods.findFirst({
-    select: {
-      isOpen: true,
-      openDate: true,
-      closeDate: true,
-    },
-  });
-
-  if (trades_status.openDate && trades_status?.closeDate) {
-    const date = new Date();
-    const is_open =
-      date > trades_status.openDate && date < trades_status.closeDate
-        ? true
-        : false;
-
-    return new NextResponse(JSON.stringify({ open: is_open }));
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Missing Supabase environment variables");
   }
-
-  await prisma.$disconnect()
-  return new NextResponse(JSON.stringify({ open: false }));
+  
+  return createClient(supabaseUrl, supabaseKey);
 }
+
+export async function GET() {
+  try {
+    const supabase = getSupabaseClient();
+    const { data, error } = await supabase
+      .from("TradePeriods")
+      .select("isOpen, openDate, closeDate")
+      .limit(1);
+
+
+    console.log(data)
+    if (error) {
+      console.error("Supabase query error:", error);
+      return NextResponse.json({ error: "Failed to fetch trade period" }, { status: 500 });
+    }
+
+    if (!data || data.length === 0) {
+      // Nenhum registro encontrado
+      return NextResponse.json({ error: "No trade period found" }, { status: 404 });
+    }
+
+    const tradePeriod = data[0];
+
+    return NextResponse.json({
+      response: "Success",
+      status: tradePeriod,
+    });
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 501 });
+  }
+}
+

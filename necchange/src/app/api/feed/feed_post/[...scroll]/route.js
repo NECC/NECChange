@@ -1,127 +1,78 @@
-import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient, Status } from "@prisma/client";
+import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-const removeDuplicates = (post) => {
-  const filteredArray = [];
-  const seenObjects = new Set();
-
-  post.map((trade) => {
-    const stringified = JSON.stringify(trade);
-    if (!seenObjects.has(stringified)) {
-      seenObjects.add(stringified);
-      filteredArray.push(trade);
-    }
-  });
-
-  return filteredArray;
-};
-
-export async function GET(req, context) {
-  const limit = parseInt(context.params.scroll[0]);
-  const skip = context.params.scroll[1] === "landing" ? 0 : 1;
-  const cursor =
-    context.params.scroll[1] === "landing"
-      ? undefined
-      : { id: parseInt(context.params.scroll[1]) };
-  let studentNr =
-    context.params.scroll[2] === "undefined"
-      ? undefined
-      : context.params.scroll[2];
-  let status = studentNr == undefined ? Status.PENDING : undefined;
-  let ucsFilter =
-    context.params.scroll.length === 4
-      ? context.params.scroll[3].split("&")
-      : undefined;
-
-  let lesson_ids = undefined;
-
-  if (ucsFilter != undefined) {
-    const query_lesson_ids = await prisma.lesson.findMany({
-      where: {
-        course: {
-          name: {
-            in: ucsFilter,
-          },
-        },
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    lesson_ids = query_lesson_ids.map((lesson_id) => lesson_id.id);
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Missing Supabase environment variables");
   }
+  
+  return createClient(supabaseUrl, supabaseKey);
+}
 
-  console.log("status", status);
-  const trades = await prisma.trade.findMany({
-    where: {
-      status: status,
-      from_student: {
-        number: studentNr,
-      },
-      
-      trade_id: {
-        some: {
-          lesson_from_id: { in: lesson_ids },
-          lesson_to_id: { in: lesson_ids },
+export async function GET(req, { params }) {
+  try {
+    const supabase = getSupabaseClient();
+
+    const student_nr = params?.student_data?.[0];
+    
+    if (!student_nr) {
+      return NextResponse.json(
+        { error: "Student number is required" },
+        { status: 400 }
+      );
+    }
+    
+    //console.log("Fetching UCs for student:", student_nr);
+
+    const { data: student_classes_uc, error } = await supabase
+      .from('student_lesson')
+      .select(`
+        lesson:lesson (
+          course:course (
+            name
+          )
+        )
+      `)
+      .eq('student_number', student_nr); 
+ 
+    //console.log("Query result:", student_classes_uc);
+    
+    if (error) {
+      console.error("Supabase error:", error);
+      return NextResponse.json(
+        { error: error.message },
+        { status: 500 }
+      );
+    }
+    
+    let student_ucs = [];
+    student_classes_uc?.forEach((student_class_uc) => {
+      const courseName = student_class_uc.lesson?.course?.name;
+      if (courseName && !student_ucs.includes(courseName)) {
+        student_ucs.push(courseName);
+      }
+    });
+    
+    return NextResponse.json(
+      { student_classes: student_ucs },
+      {
+        headers: {
+          'Cache-Control': 'no-store, max-age=0',
         },
-      },
-    },
-    cursor: cursor,
-    take: limit,
-    skip: skip,
-    orderBy: {
-      id: "asc",
-    },
-
-    include: {
-      from_student: {
-        select: {
-          id: true,
-          number: true,
-        },
-      },
-      trade_id: {
-        select: {
-          lessonFrom: {
-            select: {
-              course: {
-                select: {
-                  name: true,
-                  year: true,
-                },
-              },
-              type: true,
-              shift: true,
-            },
-          },
-          lessonTo: {
-            select: {
-              course: {
-                select: {
-                  name: true,
-                  year: true,
-                },
-              },
-              type: true,
-              shift: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  let new_cursor = 0;
-  trades.forEach((trade) => {
-    trade.trade_id = removeDuplicates(trade.trade_id);
-    if (trade.id > new_cursor) new_cursor = trade.id;
-  });
-
-  await prisma.$disconnect()
-  return new NextResponse(
-    JSON.stringify({ response: trades, cursor: new_cursor })
-  );
+      }
+    );
+    
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    return NextResponse.json(
+      { error: "Internal server error", details: err.message },
+      { status: 500 }
+    );
+  }
 }

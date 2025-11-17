@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 
 const handler = async (req, context) => {
-  console.log("NextAuth handler ->", req.url);
+  //console.log("NextAuth handler ->", req.url);
 
   if (req.method === "HEAD") {
     return new Response(null, { status: 200 });
