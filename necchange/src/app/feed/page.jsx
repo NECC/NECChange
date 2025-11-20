@@ -34,8 +34,8 @@ const Posts = ({ filteredPosts, toggleLoader, getMorePosts, hasMore, onTradeComp
             : "Nenhuma troca disponível no momento."}
         </div>
       )}
-
-      {hasMore && filteredPosts.length > 0 && (
+  
+      {/* {hasMore && filteredPosts.length > 0 && (
         <div className="flex justify-center">
           <button
             className="flex items-center gap-2 rounded-full bg-blue-500 py-2 px-4 text-base capitalize font-semibold text-white hover:bg-blue-600 transition"
@@ -44,7 +44,7 @@ const Posts = ({ filteredPosts, toggleLoader, getMorePosts, hasMore, onTradeComp
             <FaPlus /> carregar mais
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
