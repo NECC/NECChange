@@ -31,7 +31,8 @@ export async function GET(request, context) {
             shift,
             type,
             course (
-              name
+              name,
+              year
             )
           )
         )
@@ -103,10 +104,12 @@ export async function GET(request, context) {
         const shift = studentClass.class.shift;
         const type = type_class[studentClass.class.type];
         const uc_name = studentClass.class.course.name;
+        const ano = studentClass.class.course.year;
 
         classes.push({
           title: `${uc_name} - ${type}${shift} - ${studentClass.class.local}`,
           uc_name: uc_name,
+          ano: ano,
           type: type,
           shift: shift,
           start: start,
