@@ -45,17 +45,23 @@ export async function GET() {
         .from("student_lesson")
         .select(
           `
-          user:user_id(number),
+          user:user(number),
           lesson:lesson_id(type, shift, course(name))
         `
         )
-        .eq("lesson.course.name", uc.name)
-        .order("lesson.shift", { ascending: true });
+        .eq("lesson.course.name", uc.name);
+       // .order("lesson.shift", { ascending: true });
 
       if (studentError) {
         console.error("Error fetching students for", uc.name, studentError);
         continue;
       }
+
+      students_of_uc.sort((a, b) => {
+        const shiftA = String(a.lesson?.shift || "");
+        const shiftB = String(b.lesson?.shift || "");
+        return shiftA.localeCompare(shiftB);
+      });
 
       if (!students_of_uc.length) continue;
 
