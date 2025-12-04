@@ -49,6 +49,26 @@
          "uc" : "TFM",
          "day" : "2026-1-9",
          "type" : "Teste"
+     },
+     {
+         "uc" : "Álgebra Linear CC",
+         "day" : "2026-1-22",
+         "type" : "Recurso"
+     },
+     {
+         "uc" : "Cálculo",
+         "day" : "2026-1-19",
+         "type" : "Recurso"
+     },
+     {
+        "uc" : "PF",
+        "day" : "2026-1-26",
+        "type" : "Recurso"
+     },
+     {
+        "uc" : "TFM",
+        "day" : "2026-1-28",
+        "type" : "Recurso"
      }
      ],
      "2º ano" :[
@@ -96,6 +116,31 @@
              "uc" : "AeC",
              "day" : "2026-1-10",
              "type" : "Teste"
+         },
+         {
+            "uc" : "Álgebra",
+            "day" : "2026-1-20",
+            "type" : "Recurso"
+         },
+         {
+            "uc" : "AeC",
+            "day" : "2026-1-24",
+            "type" : "Recurso"
+         },
+         {
+            "uc" : "Análise Numérica",
+            "day" : "2026-1-29",
+            "type" : "Recurso"
+         },
+         {
+            "uc" : "Lógica CC",
+            "day" : "2026-1-27",
+            "type" : "Recurso"
+         },
+         {
+            "uc" : "SCR",
+            "day" : "2026-1-31",
+            "type" : "Recurso"
          }
      ],
      "3º ano" :[
@@ -178,6 +223,41 @@
              "uc" : "PLC",
              "day" : "2026-1-17",
              "type" : "Entrega"
+         },
+         {
+            "uc" : "CP",
+            "day" : "2026-1-22",
+            "type" : "Recurso"
+         },
+         {
+            "uc" : "CC",
+            "day" : "2026-1-30",
+            "type" : "Recurso"
+         },
+         {
+            "uc" : "PLC",
+            "day" : "2026-1-21",
+            "type" : "Recurso"
+         },
+         {
+            "uc" : "Estatística",
+            "day" : "2026-1-23",
+            "type" : "Recurso"
+         },
+         {
+            "uc" : "LC",
+            "day" : "2026-1-29",
+            "type" : "Recurso"
+         },
+         {
+            "uc" : "TNC",
+            "day" : "2026-1-28",
+            "type" : "Recurso"
+         },
+         {
+            "uc" : "PA",
+            "day" : "2026-1-19",
+            "type" : "Recurso"
          }
      ]
  }
