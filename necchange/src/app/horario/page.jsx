@@ -5,7 +5,6 @@ import axios from "axios";
 import StudentSchedule from "@/components/schedule/StudentSchedule";
 import Loader from "@/components/globals/Loader";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from "@nextui-org/react";
-import { white } from "tailwindcss/colors";
 
 export default function Home() {
   const [classes, setClasses] = useState([]);
@@ -20,18 +19,19 @@ export default function Home() {
 
   useEffect(() => {
     if (!session) return;
+    
     toggleLoader(true);
     axios
       .get(`/api/schedule/student_schedule/${session.user?.number}`)
       .then((response) => {
-        //console.log("Começa Aqui",response);
         const colors = { 1: "#3b82f6", 2: "#10b981", 3: "#8b5cf6" };
-        //const year = response.data.
+        
         const classesWithColor = response.data.response.map((item) => ({
           ...item,
           color: colors[item.ano],
-          textColor: "white"
+          textColor: "white",
         }));
+        
         setClasses(classesWithColor);
         toggleLoader(false);
       })
@@ -46,24 +46,34 @@ export default function Home() {
   };
 
   const weekday = (date) => {
-    return date.toLocaleDateString('pt-PT', { weekday: 'short' });
+    return date.toLocaleDateString('pt-PT', { weekday: 'long' });
   };
 
   return (
     <div className="flex justify-center pt-24">
+      <style jsx global>{`
+        .fc-event-time {
+          color: rgba(255, 255, 255, 0.95) !important;
+          font-weight: 600;
+          font-size: 11px;
+        }
+      `}</style>
+
       <Modal isOpen={isPopUpOpened} onOpenChange={(isOpen) => setIsPopUpOpened(isOpen)}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalBody>
                 {popUpEvent && (
-                  <div className="flex justify-center mt-2 text-md text-gray-500">
+                  <div className="flex justify-center mt-2 text-md text-black">
                     {weekday(popUpEvent.start)}, {parseTime(popUpEvent.start)} - {parseTime(popUpEvent.end)}
                   </div>
                 )}
               </ModalBody>
               <ModalHeader className="flex flex-col gap-1 items-center">
-                {popUpEvent?.title}
+                <span style={{color: 'black' }} className="font-bold text-lg">
+                  {popUpEvent?.title}
+                </span>
               </ModalHeader>
               <ModalFooter className="flex justify-center">
                 <Button color="danger" variant="light" onPress={onClose}>
@@ -76,13 +86,11 @@ export default function Home() {
       </Modal>
       <div className="container py-2 sm:py-8 px-2">
         <StudentSchedule 
-          events={classes} 
-          //eventsTextColor="white"
-          //color = {yearColor}
-          onEventClick={(info) => {
+          events={classes}
+          /*onEventClick={(info) => {
             setPopUpEvent(info.event);
             setIsPopUpOpened(true);
-          }} 
+          }} */
         />
       </div>
       {loader && <Loader />}
