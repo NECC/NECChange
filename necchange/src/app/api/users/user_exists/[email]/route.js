@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import { createClient } from "@supabase/supabase-js";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -12,7 +15,7 @@ function getSupabaseClient() {
 }
 
 
-export async function GET(req, context) {
+export async function GET(req, context)  {
   const supabase = getSupabaseClient();
   const email = context.params.email;
   
