@@ -160,6 +160,14 @@
     "shifts": []
   },
   {
+    "calendar": "PA",
+    "name": "Probabilidades Aplicadas",
+    "sigla": "PA",
+    "year": 2,
+    "semester": 2,
+    "shifts": []
+  },
+  {
     "calendar": "Estatística",
     "name": "Aprendizagem Estatística CC",
     "sigla": "Estatística",
@@ -179,14 +187,6 @@
     "calendar": "LC",
     "name": "Lógica Computacional",
     "sigla": "LC",
-    "year": 3,
-    "semester": 1,
-    "shifts": []
-  },
-  {
-    "calendar": "PA",
-    "name": "Probabilidades e Aplicações",
-    "sigla": "PA",
     "year": 3,
     "semester": 1,
     "shifts": []
