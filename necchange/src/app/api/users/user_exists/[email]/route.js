@@ -20,7 +20,7 @@ export async function GET(req, context)  {
   const email = context.params.email;
   
   const { data: student, error } = await supabase
-    .from('user') 
+    .from('user_auth_check')
     .select('*')
     .eq('email', email)
     .maybeSingle();
