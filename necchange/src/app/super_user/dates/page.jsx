@@ -30,7 +30,10 @@ export default function ManageTrades() {
       value: "exame",
       label: "Exame",
     },
-    
+    {
+      value: "miniteste",
+      label: "Mini-Teste",
+    },
   ];
 
   const YearInput = [
