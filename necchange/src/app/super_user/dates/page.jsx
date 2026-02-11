@@ -55,6 +55,7 @@ export default function ManageTrades() {
   const [type, setType] = useState(null);
   const [events, setEvents] = useState([]);
   const [ano,setAno] = useState(null);
+  const [formKey, setFormKey] = useState(0);
 
   const handleTrades = async () => {
     const date = startDate?.["$d"];
@@ -96,11 +97,11 @@ export default function ManageTrades() {
         return updatedEvents;
       });
       
-      // Clear form
-      setUC(null);
-      setType(null);
-      setStartDate(null);
-      setAno(null);
+      // setUC(null);
+      // setType(null);
+      // setStartDate(null);
+      // setAno(null);
+      // setFormKey(prev => prev + 1); 
     } catch (err) {
       toast.error("Erro ao criar evento!");
       console.log("Erro ->", err);
@@ -162,6 +163,7 @@ export default function ManageTrades() {
             <TextField
               select
               label="Tipo de evento"
+              
               onChange={(event) => {
                 const selectedValue = event.target.value;
                 const selectedOption = types.find(
