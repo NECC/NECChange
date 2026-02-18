@@ -34,6 +34,10 @@ export default function ManageTrades() {
       value: "miniteste",
       label: "Mini-Teste",
     },
+    {
+      value: "miniteste_pi",
+      label: "Mini-Teste a decorrer nas aulas TP na semana",
+    },
   ];
 
   const YearInput = [
@@ -54,6 +58,7 @@ export default function ManageTrades() {
 
   const [loader, setLoader] = useState(false);
   const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [uc, setUC] = useState(null);
   const [type, setType] = useState(null);
   const [events, setEvents] = useState([]);
@@ -68,7 +73,7 @@ export default function ManageTrades() {
       return;
     }
  
-     let dia = date.getDate().toString().padStart(2, "0");
+    let dia = date.getDate().toString().padStart(2, "0");
     let mes = (date.getMonth() + 1).toString().padStart(2, "0");
     let year = date.getFullYear().toString();
 
@@ -185,11 +190,18 @@ export default function ManageTrades() {
         </Box>
         <div>
           <BasicDatePicker
-            label={"Data do Evento"}
+            label={"Início do Evento"}
             value={startDate}
             setValue={setStartDate}
           />
         </div>
+         {/* <div>
+          <BasicDatePicker
+            label={"Fim do Evento"}
+            value={endDate}
+            setValue={setEndDate}
+          />
+        </div> */}
         <div className={buttonStyle}>
           <button
             className="border w-full p-2 rounded-lg bg-blue-500 hover:bg-blue-600"

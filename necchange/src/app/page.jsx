@@ -58,15 +58,20 @@ export default function CalendarPage() {
     return processed;
   };
 
-  const mapEventsForCalendar = (events) => {
-    if (!Array.isArray(events)) return [];
-    return events.map((event) => ({
-      title: event.UC+ ' - ' + event.type|| "Evento",
-      //start: new Date(`${event.day}T${event.start}`),
-      //end: new Date(`${event.day}T${event.end}`),
+const mapEventsForCalendar = (events) => {
+  if (!Array.isArray(events)) return [];
 
+  return events.map((event) => {
+    const examTypes = ["Teste", "Exame", "Mini-Teste"];
+    const isExam = examTypes.includes(event.type);
+
+    const endDate = new Date(event.day);
+    endDate.setDate(endDate.getDate() + (isExam ? 1 : 5));
+
+    return {
+      title: (event.UC + " - " + event.type) || "Evento",
       start: new Date(event.day),
-      end: new Date(event.day),
+      end: endDate,
       color: event.color || "#9ca3af",
       extendedProps: {
         type: event.type,
@@ -74,9 +79,9 @@ export default function CalendarPage() {
         UC: event.UC,
         semester: event.semester,
       },
-    }));
-  };
-
+    };
+  });
+};
   // 1. Fetch inicial dos eventos
   useEffect(() => {
     const fetchEvents = async () => {
@@ -246,6 +251,7 @@ export default function CalendarPage() {
               events={filteredEvents}
               eventTextColor="white"
               eventDisplay="block" 
+              eventClassNames="text-center"
               height="80vh"
             />
           )}
