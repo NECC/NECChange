@@ -62,11 +62,11 @@ const mapEventsForCalendar = (events) => {
   if (!Array.isArray(events)) return [];
 
   return events.map((event) => {
-    const examTypes = ["Teste", "Exame", "Mini-Teste"];
+    const examTypes = ["Teste", "Exame", "Mini-Teste","Entrega","Evento"];
     const isExam = examTypes.includes(event.type);
 
     const endDate = new Date(event.day);
-    endDate.setDate(endDate.getDate() + (isExam ? 1 : 5));
+    endDate.setDate(endDate.getDate() + (isExam ? 0 : 5));
 
     return {
       title: (event.UC + " - " + event.type) || "Evento",
