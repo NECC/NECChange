@@ -66,7 +66,10 @@ const mapEventsForCalendar = (events) => {
     const isExam = examTypes.includes(event.type);
 
     const endDate = new Date(event.day);
-    endDate.setDate(endDate.getDate() + (isExam ? 0 : 5));
+    endDate.setDate(endDate.getDate() + (isExam ? 0 : 4));
+    endDate.setHours(endDate.getHours() + 1);
+    // if(!isExam)
+    //   console.log("End date: ",endDate);
 
     return {
       title: (event.UC + " - " + event.type) || "Evento",
