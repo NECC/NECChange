@@ -13,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { conforms } from "lodash";
+import BasicDateTimePicker from "@/components/globals/BasicDateTimePicker";
 
 
 
@@ -67,6 +68,7 @@ export default function ManageTrades() {
 
   const handleTrades = async () => {
     const date = startDate?.["$d"];
+    //console.log("DATA :",startDate);
     
     if (!uc || !type || !date || !ano) {
       toast.error("Por favor, preencha todos os campos!");
@@ -76,18 +78,23 @@ export default function ManageTrades() {
     let dia = date.getDate().toString().padStart(2, "0");
     let mes = (date.getMonth() + 1).toString().padStart(2, "0");
     let year = date.getFullYear().toString();
+    let hours = date.getHours().toString();
+    let minutes = date.getMinutes().toString();
+    let seconds = date.getSeconds().toString();
+  
 
     const formattedDate = `${year}-${mes}-${dia}`;
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
   
     const eventData = {
       uc: uc.sigla,
       ano: ano,
       day: formattedDate,
       type: type,
-      start: "00:00",
-      end: "01:00",
+      start: formattedTime,
+      end: formattedTime,
     };
-    toast.info(eventData)
+    //toast.info(eventData)
   
     setLoader(true);
     try {
@@ -187,16 +194,17 @@ export default function ManageTrades() {
               ))}
             </TextField>
           </div>
-        </Box>
+        
         <div>
-          <BasicDatePicker
-            label={"Início do Evento"}
+          <BasicDateTimePicker
+            label={"Data e Hora"}
             value={startDate}
             setValue={setStartDate}
           />
         </div>
-         {/* <div>
-          <BasicDatePicker
+        </Box>
+        {/* <div>
+          <BasicDateTimePicker
             label={"Fim do Evento"}
             value={endDate}
             setValue={setEndDate}

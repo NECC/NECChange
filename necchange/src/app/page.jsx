@@ -64,12 +64,14 @@ const mapEventsForCalendar = (events) => {
   return events.map((event) => {
     const examTypes = ["Teste", "Exame", "Mini-Teste","Entrega","Evento"];
     const isExam = examTypes.includes(event.type);
+    
 
     const endDate = new Date(event.day);
     endDate.setDate(endDate.getDate() + (isExam ? 0 : 4));
     endDate.setHours(endDate.getHours() + 1);
     // if(!isExam)
     //   console.log("End date: ",endDate);
+    console.log("Horas: ",event.start);
 
     return {
       title: (event.UC + " - " + event.type) || "Evento",
@@ -77,6 +79,7 @@ const mapEventsForCalendar = (events) => {
       end: endDate,
       color: event.color || "#9ca3af",
       extendedProps: {
+        time: event.start,
         type: event.type,
         year: event.year,
         UC: event.UC,

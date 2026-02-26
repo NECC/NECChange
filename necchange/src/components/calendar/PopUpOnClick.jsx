@@ -30,7 +30,8 @@ export default function PopUpOnClick(props) {
     time: data?.time != "" ? data?.time : null,
     year: data?.year,
     data: calendarData,
-    eventTime: calendarTime.slice(0, -4),
+    //eventTime: calendarTime.slice(0, -4),
+    eventTime: data?.time ? data.time.split(":").slice(0, 2).join(":") : null
   };
 
   console.log(UC);
@@ -47,11 +48,11 @@ export default function PopUpOnClick(props) {
                   <FaMapPin className="mt-1 mr-1 text-red-500" /> {UC.local}
                 </div>
               )}
-              {UC.time && (
+              {/* {UC.time && (
                 <div className="flex justify-center mb-2">
                   <FcClock className="mt-[3px] mr-1 text-xl" /> {UC.time}
                 </div>
-              )}
+              )} */}
               <div className={`flex justify-center text-black mb-2`}>
                 <FcCalendar className="mt-[3px] mr-1 text-xl" /> {transformedDate}
               </div>
