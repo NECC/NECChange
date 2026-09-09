@@ -270,5 +270,13 @@
     "year": 3,
     "semester": 2,
     "shifts": []
+  },
+  {
+    "calendar": "40 Anos LCC",
+    "name": "40 Anos LCC",
+    "sigla": "40 LCC",
+    "year": 0,
+    "semester": 0,
+    "shifts": []
   }
 ]

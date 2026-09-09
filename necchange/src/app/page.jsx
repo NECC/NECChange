@@ -62,7 +62,7 @@ const mapEventsForCalendar = (events) => {
   if (!Array.isArray(events)) return [];
 
   return events.map((event) => {
-    const examTypes = ["Teste", "Exame", "Mini-Teste","Entrega","Evento"];
+    const examTypes = ["Teste", "Exame", "Mini-Teste","Entrega","Evento",'WORKSHOP','TALK','TERTULIA','OTHER'];
     const isExam = examTypes.includes(event.type);
     
 

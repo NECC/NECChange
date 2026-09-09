@@ -10,6 +10,7 @@ function getSupabaseClient() {
   
   if (!supabaseUrl || !supabaseKey) {
     throw new Error("Missing Supabase environment variables");
+    
   }
   
   return createClient(supabaseUrl, supabaseKey, {
