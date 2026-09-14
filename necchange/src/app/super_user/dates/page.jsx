@@ -28,6 +28,7 @@ export default function ManageTrades() {
     { value: "TALK", label: "TALK" },
     { value: "TERTULIA", label: "TERTULIA" },
     { value: "OTHER", label: "OTHER" },
+    { value: "Instalar Linux", label: "Instalar Linux" },
 
   ];
 
@@ -35,7 +36,7 @@ export default function ManageTrades() {
     { value: "1º ano", label: "1º ano" },
     { value: "2º ano", label: "2º ano" },
     { value: "3º ano", label: "3º ano" },
-    { value: "0º ano", label: "Evento" },
+    { value: "0º ano", label: "Eventos" },
   ];
   const buttonStyle = "w-full col-span-2 text-white font-bold";
 

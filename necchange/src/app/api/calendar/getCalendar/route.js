@@ -1,24 +1,54 @@
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/authOptions";
 
-function getSupabaseClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error("Missing Supabase environment variables");
+async function getSupabaseRouteClient() {
+  const cookieStore = await cookies();
+
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            );
+          } catch {
+            // Ignorado em contextos de leitura apenas
+          }
+        },
+      },
+    }
+  );
+}
+
+async function validateSuperUser(req) {
+  const session = await getServerSession(authOptions);
+
+  console.log("- ",session)
+  if (!session || !session.user) {
+    return { error: "Não autorizado: Sessão inválida ou expirada", status: 401 };
   }
-  
-  return createClient(supabaseUrl, supabaseKey);
+
+  if (session.user.role !== "SUPER_USER") {
+    return { error: "Acesso negado: Permissões insuficientes", status: 403 };
+  }
+
+  return { session };
 }
 
 export async function GET(req) {
   try {
-    const supabase = getSupabaseClient();
-    const { searchParams } = new URL(req.url);
-    let query = supabase.from("testes").select("*");
-    const { data, error } = await query;
-    
+    const supabase = await getSupabaseRouteClient();
+    const { data, error } = await supabase.from("testes").select("*");
+
     if (error) {
       console.error("Supabase error:", error);
       return NextResponse.json(
@@ -26,7 +56,7 @@ export async function GET(req) {
         { status: 500 }
       );
     }
-    
+
     const groupedData = {};
     data?.forEach((event) => {
       const ano = event.ano;
@@ -34,7 +64,7 @@ export async function GET(req) {
         groupedData[ano] = [];
       }
       groupedData[ano].push({
-        id: event.id, 
+        id: event.id,
         uc: event.uc,
         day: event.day,
         type: event.type,
@@ -42,7 +72,7 @@ export async function GET(req) {
         end: event.end || "01:00",
       });
     });
-    
+
     return NextResponse.json({ response: groupedData });
   } catch (err) {
     console.error("Error in GET:", err);
@@ -55,17 +85,24 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseRouteClient();
+
+    const authCheck = await validateSuperUser(req);
+    if (authCheck.error) {
+      return NextResponse.json({ error: authCheck.error }, { status: authCheck.status });
+    }
+
+    
     const data = await req.json();
     const { uc, ano, day, type, start, end } = data;
-    
+
     if (!uc || !day || !type) {
       return NextResponse.json(
         { error: "Campos obrigatórios: uc, day, type" },
         { status: 400 }
       );
     }
-    
+
     const { data: newEvent, error } = await supabase
       .from("testes")
       .insert([
@@ -80,7 +117,7 @@ export async function POST(req) {
       ])
       .select()
       .single();
-    
+
     if (error) {
       console.error("Supabase error:", error);
       return NextResponse.json(
@@ -88,8 +125,8 @@ export async function POST(req) {
         { status: 500 }
       );
     }
-    
-    return NextResponse.json({ 
+
+    return NextResponse.json({
       response: {
         id: newEvent.id,
         uc: newEvent.uc,
@@ -97,7 +134,7 @@ export async function POST(req) {
         type: newEvent.type,
         start: newEvent.start,
         end: newEvent.end,
-      }
+      },
     });
   } catch (err) {
     console.error("Error in POST:", err);
@@ -110,24 +147,30 @@ export async function POST(req) {
 
 export async function DELETE(req) {
   try {
-    const supabase = getSupabaseClient();
+    const supabase = await getSupabaseRouteClient();
+
+    const authCheck = await validateSuperUser(req);
+    if (authCheck.error) {
+      return NextResponse.json({ error: authCheck.error }, { status: authCheck.status });
+    }
+
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    
+
     if (!id) {
       return NextResponse.json(
         { error: "Parâmetro obrigatório: id" },
         { status: 400 }
       );
     }
-    
+
     const { data: deletedEvent, error } = await supabase
       .from("testes")
       .delete()
       .eq("id", parseInt(id))
       .select()
       .single();
-    
+
     if (error) {
       console.error("Supabase error:", error);
       return NextResponse.json(
@@ -135,7 +178,7 @@ export async function DELETE(req) {
         { status: 404 }
       );
     }
-    
+
     return NextResponse.json({ response: deletedEvent });
   } catch (err) {
     console.error("Error in DELETE:", err);
