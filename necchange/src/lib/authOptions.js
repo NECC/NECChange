@@ -158,71 +158,116 @@ export const authOptions = {
       return true;
     },
 
-    async jwt({ token, user, trigger, account }) {
-      // If token doesn't have email yet, fetch user data by ID
-      if (!token.email && token.sub) {
-        console.log("Fetching user data by ID:", token.sub);
+    // async jwt({ token, user, trigger, account }) {
+    //   // If token doesn't have email yet, fetch user data by ID
+    //   if (!token.email && token.sub) {
+    //     console.log("Fetching user data by ID:", token.sub);
 
-        const { data, error } = await supabase
-          .from("user")
-          .select("*")
-          .eq("uniqueid", parseInt(token.sub))
-          .single();
+    //     const { data, error } = await supabase
+    //       .from("user")
+    //       .select("*")
+    //       .eq("uniqueid", parseInt(token.sub))
+    //       .single();
 
-        if (error) {
-          console.error("Error fetching user data by ID:", error);
-          return token;
+    //     if (error) {
+    //       console.error("Error fetching user data by ID:", error);
+    //       return token;
+    //     }
+
+    //     if (data) {
+    //       console.log("User data loaded by ID:", data);
+    //       token.id = data.uniqueid;
+    //       token.role = data.role || "OUTSIDER";
+    //       token.name = data.name;
+    //       token.email = data.email;
+    //       token.partner = data.partner;
+    //       token.partnernumber = data.partnernumber;
+    //       token.number = data.number;
+    //     }
+    //     return token;
+    //   }
+
+    //   // On sign in or update, fetch user data from your custom table
+    //   if (account || user?.email || trigger === "update") {
+    //     const email = user?.email || token.email;
+
+    //     if (!email) {
+    //       console.error("No email found in token or user");
+    //       return token;
+    //     }
+
+    //     console.log("Fetching user data for:", email);
+
+    //     const { data, error } = await supabase
+    //       .from("user")
+    //       .select("*")
+    //       .eq("email", email)
+    //       .single();
+
+    //     if (error) {
+    //       console.error("Error fetching user data:", error);
+    //       return token;
+    //     }
+
+    //     if (data) {
+    //       console.log("User data loaded:", data);
+    //       token.id = data.uniqueid;
+    //       token.role = data.role || "OUTSIDER";
+    //       token.name = data.name;
+    //       token.email = data.email;
+    //       token.partner = data.partner;
+    //       token.partnernumber = data.partnernumber;
+    //       token.number = data.number;
+    //     }
+    //   }
+    //   return token;
+    // },
+    async jwt({ token, user, trigger }) {
+        // 1. No primeiro login ou em atualizações explícitas
+        if (user?.email || trigger === "update") {
+          const email = user?.email || token.email;
+
+          if (email) {
+            const { data } = await supabase
+              .from("user")
+              .select("*")
+              .eq("email", email)
+              .single();
+
+            if (data) {
+              token.id = data.uniqueid;
+              token.role = data.role || "OUTSIDER";
+              token.name = data.name;
+              token.email = data.email;
+              token.partner = data.partner;
+              token.partnernumber = data.partnernumber;
+              token.number = data.number;
+            }
+          }
         }
 
-        if (data) {
-          console.log("User data loaded by ID:", data);
-          token.id = data.uniqueid;
-          token.role = data.role || "OUTSIDER";
-          token.name = data.name;
-          token.email = data.email;
-          token.partner = data.partner;
-          token.partnernumber = data.partnernumber;
-          token.number = data.number;
+        // 2. Fallback por ID se o token ainda não tiver role
+        if (!token.role && token.sub) {
+          const { data } = await supabase
+            .from("user")
+            .select("*")
+            .eq("uniqueid", parseInt(token.sub))
+            .single();
+
+          if (data) {
+            token.id = data.uniqueid;
+            token.role = data.role || "OUTSIDER";
+            token.name = data.name;
+            token.email = data.email;
+            token.partner = data.partner;
+            token.partnernumber = data.partnernumber;
+            token.number = data.number;
+          }
         }
+
         return token;
-      }
-
-      // On sign in or update, fetch user data from your custom table
-      if (account || user?.email || trigger === "update") {
-        const email = user?.email || token.email;
-
-        if (!email) {
-          console.error("No email found in token or user");
-          return token;
-        }
-
-        console.log("Fetching user data for:", email);
-
-        const { data, error } = await supabase
-          .from("user")
-          .select("*")
-          .eq("email", email)
-          .single();
-
-        if (error) {
-          console.error("Error fetching user data:", error);
-          return token;
-        }
-
-        if (data) {
-          console.log("User data loaded:", data);
-          token.id = data.uniqueid;
-          token.role = data.role || "OUTSIDER";
-          token.name = data.name;
-          token.email = data.email;
-          token.partner = data.partner;
-          token.partnernumber = data.partnernumber;
-          token.number = data.number;
-        }
-      }
-      return token;
-    },
-
+      },
+      
     async session({ session, token }) {
       // Pass user data to the session
       console.log("Session callback - token:", token);

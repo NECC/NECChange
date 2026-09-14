@@ -1,0 +1,19 @@
+### Obter eventos (GET)
+GET http://localhost:3000/api/calendar/getCalendar
+
+### Criar novo evento (POST)
+POST http://localhost:3000/api/calendar/getCalendar
+Content-Type: application/json
+#Cookie: next-auth.session-token=TEU_TOKEN_AQUI
+{
+  "uc": "Física",
+  "day": "2026-09-14",
+  "type": "Teste",
+  "ano": "1º ano",
+  "start": "09:00",
+  "end": "11:00"
+}
+
+### Criar novo evento (DELETE)
+DELETE http://localhost:3000/api/calendar/getCalendar?id=179
+#Cookie: next-auth.session-token=TEU_TOKEN_AQUI

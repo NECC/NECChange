@@ -4,8 +4,8 @@ import UCsObj from "@/data/filters.json";
 
 export default function UcsInput({ setValue, ano }) {
   const year = ano?.[0] ?? null;
-  console.log("Este é o ano reconhecido -> " ,year)
-  console.log(UCsObj.filter[year])
+  // console.log("Este é o ano reconhecido -> " ,year)
+  // console.log(UCsObj.filter[year])
   const ucs = React.useMemo(
     () =>
       

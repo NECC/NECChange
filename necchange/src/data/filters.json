@@ -272,11 +272,19 @@
     "shifts": []
   },
   {
-    "calendar": "40 Anos LCC",
+    "calendar": "40 LCC",
     "name": "40 Anos LCC",
     "sigla": "40 LCC",
     "year": 0,
-    "semester": 0,
+    "shifts": []
+  },
+  {
+    "calendar": "LIP",
+    "name": "Linux Installation Party",
+    "sigla": "LIP",
+    "year": 0,
     "shifts": []
   }
 ]
+
+
