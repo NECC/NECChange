@@ -169,7 +169,7 @@ const groupConsecutiveDays = (days) => {
 const mapEventsForCalendar = (events) => {
   if (!Array.isArray(events)) return [];
 
-  const examTypes = ["Teste", "Exame", "Mini-Teste", "Entrega", "Evento", "WORKSHOP", "TALK", "TERTULIA", "OTHER"];
+  const examTypes = ["Teste", "Exame", "Mini-Teste", "Entrega", "Evento", "WORKSHOP", "TALK", "TERTULIA", "OTHER","Lanche"];
 
   return events.flatMap((event) => {
     const isExam = examTypes.includes(event.type);
