@@ -49,7 +49,7 @@ export default function CalendarPage() {
   };
 
   const processEvents = (rawData) => {
-    const colors = { 1: "#3b82f6", 2: "#10b981", 3: "#8b5cf6", 0: "#008cff" };
+    const colors = { 1: "#3b82f6", 2: "#10b981", 3: "#8b5cf6", 0: "#ff0000" };
     const processed = [];
 
     Object.entries(rawData).forEach(([groupName, events]) => {
