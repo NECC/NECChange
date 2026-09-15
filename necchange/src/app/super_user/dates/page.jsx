@@ -29,7 +29,7 @@ export default function ManageTrades() {
     { value: "TERTULIA", label: "TERTULIA" },
     { value: "OTHER", label: "OTHER" },
     { value: "Instalar Linux", label: "Instalar Linux" },
-
+    { value: "LANCHE", label: "LANCHE" },
   ];
 
   const YearInput = [
