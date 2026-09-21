@@ -284,6 +284,13 @@
     "sigla": "LIP",
     "year": 0,
     "shifts": []
+  },
+  {
+    "calendar": "50 anos DI",
+    "name": "A Festa dos 50 Anos",
+    "sigla": "50DI",
+    "year": 0,
+    "shifts": []
   }
 ]
 
