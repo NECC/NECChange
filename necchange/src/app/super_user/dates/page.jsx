@@ -19,15 +19,18 @@ export default function ManageTrades() {
     { value: "entrega", label: "Entrega" },
     { value: "exame", label: "Exame" },
     { value: "miniteste", label: "Mini-Teste" },
+    { value: "apresentacao", label: "Apresentação" },
     { value: "miniteste_pi", label: "Mini-Teste a decorrer nas aulas TP na semana" },
   ];
 
   //'WORKSHOP','TALK','TERTULIA','OTHER']
+  //Boa cenas
   const EventTypes = [
     { value: "WORKSHOP", label: "WORKSHOP" },
     { value: "TALK", label: "TALK" },
     { value: "TERTULIA", label: "TERTULIA" },
     { value: "OTHER", label: "OTHER" },
+    { value: "lanche", label: "Lanche" },
     { value: "Instalar Linux", label: "Instalar Linux" },
     { value: "Lanche", label: "Lanche" },
   ];

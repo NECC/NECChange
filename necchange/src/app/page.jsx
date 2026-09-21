@@ -87,137 +87,77 @@ export default function CalendarPage() {
     return processed;
   };
 
-  // const mapEventsForCalendar = (events) => {
-  //   if (!Array.isArray(events)) return [];
-
-  //   return events.map((event) => {
-  //     const examTypes = ["Teste", "Exame", "Mini-Teste", "Entrega", "Evento", "WORKSHOP", "TALK", "TERTULIA", "OTHER"];
-  //     const eventSpecial = ["Instalar Linux"];
-
-  //     const isExam = examTypes.includes(event.type);
-  //     const isLip = eventSpecial.includes(event.type);
-
-  //     // Adds `days` business days to a date, skipping Saturdays and Sundays
-  //     const addBusinessDays = (startDate, days) => {
-  //       const result = new Date(startDate);
-  //       let added = 0;
-  //       while (added < days) {
-  //         result.setDate(result.getDate() + 1);
-  //         const dayOfWeek = result.getDay(); // 0 = Sunday, 6 = Saturday
-  //         if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-  //           added++;
-  //         }
-  //       }
-  //       return result;
-  //     };
-
-  //     const endDate = isExam
-  //       ? new Date(event.day)
-  //       : isLip
-  //       ? addBusinessDays(new Date(event.day), /* your custom count */ 4)
-  //       : addBusinessDays(new Date(event.day), 4);
-
-  //     return {
-  //       id: event.id,
-  //       title: (event.UC + " - " + event.type) || "Evento",
-  //       start: new Date(event.day),
-  //       end: endDate,
-  //       color: event.color || "#9ca3af",
-  //       extendedProps: {
-  //         time: event.start,
-  //         type: event.type,
-  //         year: event.year,
-  //         UC: event.UC,
-  //         semester: event.semester,
-  //         isGeneral: event.isGeneral,
-  //       },
-  //     };
-  //   });
-  // };
-
-
-const getBusinessDaysRange = (startDate, count) => {
-  const result = [new Date(startDate)];
-  const cursor = new Date(startDate);
-  let added = 0;
-  while (added < count) {
-    cursor.setDate(cursor.getDate() + 1);
-    const dayOfWeek = cursor.getDay(); // 0 = Sunday, 6 = Saturday
-    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-      result.push(new Date(cursor));
-      added++;
-    }
-  }
-  return result;
+const isNextDay = (dateA, dateB) => {
+  const d1 = new Date(dateA);
+  const d2 = new Date(dateB);
+  d1.setHours(0, 0, 0, 0);
+  d2.setHours(0, 0, 0, 0);
+  
+  const diffInMs = d2.getTime() - d1.getTime();
+  const diffInDays = Math.round(diffInMs / (1000 * 60 * 60 * 24));
+  return diffInDays === 1;
 };
-const groupConsecutiveDays = (days) => {
-  if (days.length === 0) return [];
-  const runs = [[days[0]]];
-  for (let i = 1; i < days.length; i++) {
-    const lastRun = runs[runs.length - 1];
-    const prevDay = lastRun[lastRun.length - 1];
-    const diffDays = Math.round((days[i] - prevDay) / (1000 * 60 * 60 * 24));
-    if (diffDays === 1) {
-      lastRun.push(days[i]);
+
+const groupConsecutiveEvents = (events) => {
+  if (!events || events.length === 0) return [];
+  const sorted = [...events].sort((a, b) => new Date(a.day) - new Date(b.day));
+
+  const mergedGroups = [];
+
+  sorted.forEach((event) => {
+    const lastGroup = mergedGroups[mergedGroups.length - 1];
+    if (
+      lastGroup &&
+      lastGroup.type === event.type &&
+      lastGroup.UC === event.UC &&
+      isNextDay(lastGroup.endDate, event.day)
+    ) {
+      lastGroup.endDate = event.day;
+      lastGroup.events.push(event);
     } else {
-      runs.push([days[i]]);
+      mergedGroups.push({
+        id: event.id,
+        type: event.type,
+        UC: event.UC,
+        color: event.color,
+        startDate: event.day,
+        endDate: event.day,
+        events: [event],
+      });
     }
-  }
-  return runs;
+  });
+
+  return mergedGroups;
 };
 
 const mapEventsForCalendar = (events) => {
   if (!Array.isArray(events)) return [];
+  const groupedEvents = groupConsecutiveEvents(events);
 
-  const examTypes = ["Teste", "Exame", "Mini-Teste", "Entrega", "Evento", "WORKSHOP", "TALK", "TERTULIA", "OTHER","Lanche"];
+  return groupedEvents.map((group) => {
+    const title = `${group.UC} - ${group.type}`;
+    const start = new Date(group.startDate);
+    const end = new Date(group.endDate);
+    end.setHours(end.getHours() + 1);
 
-  return events.flatMap((event) => {
-    const isExam = examTypes.includes(event.type);
+    const firstEvent = group.events[0];
 
-    const title = (event.UC + " - " + event.type) || "Evento";
-    const extendedProps = {
-      time: event.start,
-      type: event.type,
-      year: event.year,
-      UC: event.UC,
-      semester: event.semester,
-      isGeneral: event.isGeneral,
+    return {
+      id: group.id,
+      title,
+      start,
+      end,
+      color: group.color || "#9ca3af",
+      extendedProps: {
+        time: firstEvent.start,
+        type: group.type,
+        year: firstEvent.year,
+        UC: group.UC,
+        semester: firstEvent.semester,
+        isGeneral: firstEvent.isGeneral,
+        mergedCount: group.events.length, 
+      },
     };
-    const color = event.color || "#9ca3af";
-
-    if (isExam) {
-      const end = new Date(event.day);
-      end.setHours(end.getHours() + 1);
-      return [
-        {
-          id: event.id,
-          title,
-          start: new Date(event.day),
-          end,
-          color,
-          extendedProps,
-        },
-      ];
-    }
-
-    const days = getBusinessDaysRange(new Date(event.day), 4);
-    const runs = groupConsecutiveDays(days);
-
-    return runs.map((run, idx) => {
-      const start = new Date(run[0]);
-      const end = new Date(run[run.length - 1]);
-      end.setDate(end.getDate());
-      end.setHours(end.getHours() + 1);
-
-      return {
-        id: `${event.id}-run${idx}`,
-        title,
-        start,
-        end,
-        color,
-        extendedProps,
-      };
-    });
   });
 };
 
